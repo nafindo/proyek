@@ -583,7 +583,7 @@
       }
 
       // Klien memiliki link resmi yang valid: Tampilkan dashboard khusus proyek ini saja!
-      currentProject = projParam.replace(/\+/g, " ");
+      currentProject = decodeURIComponent(projParam).replace(/_/g, " ").replace(/\+/g, " ").trim();
       if (noProjectEl) noProjectEl.classList.add("hidden");
       if (dashboardEl) dashboardEl.classList.remove("hidden");
       if (titleEl) titleEl.textContent = currentProject.replace(/_/g, " ");
