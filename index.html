@@ -1317,22 +1317,58 @@
       ctx.drawImage(img, 0, 0, width, height);
 
       // 2. Gambar Banner Watermark di Bagian Bawah
-      const bannerHeight = Math.max(70, Math.round(height * 0.10));
-      ctx.fillStyle = "rgba(15, 23, 42, 0.88)"; // Slate Dark
+      const bannerHeight = Math.max(78, Math.round(height * 0.11));
+      ctx.fillStyle = "rgba(15, 23, 42, 0.90)"; // Slate Dark 900
       ctx.fillRect(0, height - bannerHeight, width, bannerHeight);
 
-      // Aksen garis biru Nafindo di atas banner
-      ctx.fillStyle = "#0056b3";
-      ctx.fillRect(0, height - bannerHeight, width, Math.max(4, Math.round(bannerHeight * 0.06)));
+      // Aksen garis emas di atas banner
+      ctx.fillStyle = "#F59E0B";
+      ctx.fillRect(0, height - bannerHeight, width, Math.max(4, Math.round(bannerHeight * 0.05)));
+
+      // Gambar Lambang / Logo Resmi Nafindo di Kiri
+      const logoSize = Math.round(bannerHeight * 0.65);
+      const logoX = 20;
+      const logoY = height - bannerHeight + Math.round((bannerHeight - logoSize) / 2);
+
+      // Background Badge Biru Nafindo
+      ctx.fillStyle = "#0056B3";
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(logoX, logoY, logoSize, logoSize, 6);
+      } else {
+        ctx.rect(logoX, logoY, logoSize, logoSize);
+      }
+      ctx.fill();
+
+      // Border Emas
+      ctx.strokeStyle = "#F59E0B";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Huruf Monogram 'N' Putih di Tengah
+      ctx.fillStyle = "#FFFFFF";
+      ctx.font = `bold ${Math.round(logoSize * 0.58)}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("N", logoX + (logoSize / 2), logoY + (logoSize / 2));
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
 
       // 3. Tulis Teks Watermark
-      ctx.fillStyle = "#FFFFFF";
-      ctx.font = `bold ${Math.round(bannerHeight * 0.30)}px "Plus Jakarta Sans", sans-serif`;
-      ctx.fillText(`CV. NAFINDO GROUP  |  LAPORAN KOMPLAIN PROYEK`, 20, height - (bannerHeight * 0.55));
+      const textX = logoX + logoSize + 16;
+      ctx.fillStyle = "#FBBF24"; // Gold Yellow
+      ctx.font = `bold ${Math.round(bannerHeight * 0.28)}px "Plus Jakarta Sans", sans-serif`;
+      ctx.fillText(`CV. NAFINDO GROUP`, textX, height - (bannerHeight * 0.55));
 
-      ctx.fillStyle = "#93C5FD"; // Blue 300
+      ctx.fillStyle = "#FFFFFF";
       ctx.font = `bold ${Math.round(bannerHeight * 0.22)}px "Plus Jakarta Sans", sans-serif`;
-      ctx.fillText(`PROYEK: ${currentProject.replace(/_/g, ' ')}   •   WAKTU: ${timeStr}`, 20, height - (bannerHeight * 0.22));
+      const nameWidth = ctx.measureText("CV. NAFINDO GROUP ").width;
+      ctx.fillStyle = "#93C5FD";
+      ctx.fillText(`• LAPORAN RESMI PROYEK`, textX + nameWidth + 10, height - (bannerHeight * 0.55));
+
+      ctx.fillStyle = "#E2E8F0"; // Slate 200
+      ctx.font = `600 ${Math.round(bannerHeight * 0.20)}px "Plus Jakarta Sans", sans-serif`;
+      ctx.fillText(`PROYEK: ${currentProject.replace(/_/g, ' ')}   •   WAKTU: ${timeStr} [VERIFIED]`, textX, height - (bannerHeight * 0.22));
 
       // 4. Konversi ke Base64 JPEG
       selectedMediaBase64 = canvas.toDataURL("image/jpeg", 0.85);
