@@ -612,10 +612,22 @@
 
       const targetHariVal = (data.targetHari !== undefined && data.targetHari !== null && data.targetHari !== 0) ? data.targetHari : (data.sisaHari || "--");
       document.getElementById("metricTargetDays").textContent = targetHariVal;
-      document.getElementById("metricRemainingDays").textContent = "Sisa: " + (data.sisaHari || "--") + " hari";
+
+      // Filter tanggal deadline: cegah tanggal 1970 (karena sel kosong di spreadsheet)
+      let dl = data.deadline;
+      const isInvalidDate = !dl || dl.includes("1970") || dl === "0" || dl === "--" || dl.toLowerCase().includes("undefined");
+      
+      let sisa = data.sisaHari;
+      if (isInvalidDate || sisa === "0" || sisa === 0 || sisa === "--") {
+        if (targetHariVal && targetHariVal !== "--") {
+          sisa = targetHariVal;
+        }
+      }
+
+      document.getElementById("metricRemainingDays").textContent = "Sisa: " + (sisa || "--") + " hari";
 
       if (document.getElementById("metricDeadlineText")) {
-        document.getElementById("metricDeadlineText").textContent = data.deadline || "Belum Ditentukan";
+        document.getElementById("metricDeadlineText").textContent = isInvalidDate ? "Belum Ditentukan" : dl;
       }
       document.getElementById("metricLastUpdate").textContent = data.waktuUpdate || "--:--";
 
@@ -632,7 +644,9 @@
       document.getElementById("metricProgressText").textContent = p + "%";
       document.getElementById("metricProgressBar").style.width = p + "%";
       document.getElementById("metricTargetDays").textContent = d.targetHari || "--";
-      document.getElementById("metricDeadlineText").textContent = d.deadline || "Belum Ditentukan";
+      let dl = d.deadline;
+      const isInvalid = !dl || dl.includes("1970") || dl === "0" || dl === "--";
+      document.getElementById("metricDeadlineText").textContent = isInvalid ? "Belum Ditentukan" : dl;
 
       if (d.tasks) {
         renderTaskItems(d.tasks);
