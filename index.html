@@ -306,114 +306,84 @@
         </div>
 
         <form id="complaintForm" onsubmit="submitComplaint(event)" class="space-y-5">
-          <!-- 1. Identitas Klien -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Nama Klien / Pelapor <span class="text-rose-500">*</span>
+          <!-- 1. LAMPIRAN MEDIA (FOTO / VIDEO) -->
+          <div class="border-2 border-dashed border-rose-200 rounded-2xl p-4 sm:p-5 bg-rose-50/20">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+                <i class="fa-solid fa-camera-retro text-rose-600 mr-1.5"></i> Lampirkan Bukti Foto atau Video <span class="text-rose-500">*</span>
               </label>
-              <input type="text" id="complaintClientName" required placeholder="Contoh: Bpk. Hendra" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
+              <span id="mediaTypeBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Lampiran Siap</span>
             </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Nomor WhatsApp <span class="text-rose-500">*</span>
-              </label>
-              <input type="tel" id="complaintClientPhone" required placeholder="08xxxxxxxxxx" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
-            </div>
-          </div>
-
-          <!-- 2. Kategori Masalah -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Kategori Masalah <span class="text-rose-500">*</span>
-              </label>
-              <select id="complaintCategory" required class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
-                <option value="Kualitas Hasil Kerja">Kualitas Pekerjaan (Retak, Miring, Tidak Rata, Cat Belang)</option>
-                <option value="Keterlambatan Progres">Keterlambatan Progres Kerja / Tukang Kurang</option>
-                <option value="Kebersihan & Kerapian">Kebersihan & Kerapian Area Lapangan</option>
-                <option value="Material & Spesifikasi">Material / Bahan Bangunan Tidak Sesuai</option>
-                <option value="Perilaku / Komunikasi">Komunikasi / Pelayanan Tukang & Mandor</option>
-                <option value="Lainnya">Lainnya / Catatan Khusus</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-                Terkait Pekerjaan (Opsional)
-              </label>
-              <select id="complaintTaskSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
-                <option value="Umum">Umum (Seluruh Area Proyek)</option>
-              </select>
-            </div>
-          </div>
-
-          <!-- 3. Uraian Masalah -->
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-              Uraian Kendala / Masukan Detail <span class="text-rose-500">*</span>
-            </label>
-            <textarea id="complaintDescription" required rows="3" placeholder="Jelaskan secara rinci bagian mana yang perlu diperbaiki, lokasi spesifik, atau ekspektasi Anda..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition"></textarea>
-          </div>
-
-          <!-- 4. LAMPIRAN FOTO: KAMERA LANGSUNG ATAU UPLOAD GALERI -->
-          <div class="border border-dashed border-slate-300 rounded-2xl p-4 sm:p-5 bg-slate-50/50">
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">
-              <i class="fa-solid fa-camera text-rose-600 mr-1"></i> Bukti Foto Masalah (Disarankan):
-            </label>
             <p class="text-xs text-slate-500 mb-3">
-              Ambil foto langsung melalui kamera HP Anda di lokasi atau pilih foto dari galeri. Sistem akan mencap watermark otomatis.
+              Ambil foto/video langsung di lokasi proyek atau pilih file dari galeri HP Anda.
             </p>
 
-            <!-- Action buttons for Photo -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <!-- Tombol Kamera Langsung -->
-              <label class="cursor-pointer bg-white border border-slate-300 hover:border-rose-400 hover:bg-rose-50/30 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+            <!-- Tombol Pilihan Media -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <!-- Kamera Foto -->
+              <label class="cursor-pointer bg-white border border-slate-300 hover:border-rose-400 hover:bg-rose-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
                 <i class="fa-solid fa-camera text-rose-600 text-lg"></i>
-                <span class="text-xs font-bold">📸 Ambil Foto Langsung (Kamera)</span>
-                <!-- Hidden camera file input with capture="environment" -->
-                <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handlePhotoSelected(this)" class="hidden">
+                <span class="text-xs font-bold">📸 Foto Langsung</span>
+                <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handleMediaSelected(this, 'photo')" class="hidden">
               </label>
 
-              <!-- Tombol Pilih Galeri -->
-              <label class="cursor-pointer bg-white border border-slate-300 hover:border-blue-400 hover:bg-blue-50/30 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
-                <i class="fa-solid fa-images text-blue-600 text-lg"></i>
-                <span class="text-xs font-bold">🖼️ Pilih Foto dari Galeri</span>
-                <input type="file" id="galleryPhotoInput" accept="image/*" onchange="handlePhotoSelected(this)" class="hidden">
+              <!-- Kamera Video -->
+              <label class="cursor-pointer bg-white border border-slate-300 hover:border-rose-400 hover:bg-rose-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-video text-rose-600 text-lg"></i>
+                <span class="text-xs font-bold">🎥 Rekam Video</span>
+                <input type="file" id="cameraVideoInput" accept="video/*" capture="environment" onchange="handleMediaSelected(this, 'video')" class="hidden">
+              </label>
+
+              <!-- Galeri / File -->
+              <label class="cursor-pointer bg-white border border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+                <i class="fa-solid fa-folder-open text-blue-600 text-lg"></i>
+                <span class="text-xs font-bold">📁 Pilih Galeri / File</span>
+                <input type="file" id="galleryMediaInput" accept="image/*,video/*" onchange="handleMediaSelected(this, 'auto')" class="hidden">
               </label>
             </div>
 
-            <!-- Preview Box -->
-            <div id="photoPreviewContainer" class="hidden mt-4 relative">
-              <div class="relative inline-block rounded-xl overflow-hidden border border-slate-300 shadow-md">
-                <img id="photoPreviewImg" src="" alt="Preview Bukti Foto" class="max-h-64 rounded-xl object-contain bg-black">
-                <div class="absolute bottom-0 inset-x-0 bg-slate-900/80 text-white text-[10px] px-3 py-1 font-mono flex items-center justify-between">
-                  <span><i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Watermark Applied</span>
-                  <span id="photoPreviewTimestamp"></span>
+            <!-- Preview Media Box -->
+            <div id="mediaPreviewContainer" class="hidden mt-4 relative">
+              <div class="relative inline-block rounded-xl overflow-hidden border border-slate-300 shadow-md max-w-full bg-black">
+                <!-- Preview Gambar -->
+                <img id="photoPreviewImg" src="" alt="Preview Bukti Foto" class="max-h-72 max-w-full object-contain mx-auto hidden">
+                <!-- Preview Video -->
+                <video id="videoPreviewPlayer" controls class="max-h-72 max-w-full mx-auto hidden"></video>
+                <div class="bg-slate-900/90 text-white text-[10px] px-3 py-1 font-mono flex items-center justify-between">
+                  <span id="mediaPreviewLabel"><i class="fa-solid fa-paperclip text-amber-400 mr-1"></i> Lampiran Terpasang</span>
+                  <span id="mediaPreviewTimestamp"></span>
                 </div>
               </div>
-              <div class="mt-2 flex items-center space-x-2">
-                <button type="button" onclick="removeSelectedPhoto()" class="text-xs text-rose-600 hover:text-rose-800 font-bold flex items-center space-x-1">
+              <div class="mt-2 flex items-center space-x-3">
+                <button type="button" onclick="removeSelectedMedia()" class="text-xs text-rose-600 hover:text-rose-800 font-bold flex items-center space-x-1">
                   <i class="fa-solid fa-trash-can"></i>
-                  <span>Hapus Foto</span>
+                  <span>Hapus Media</span>
                 </button>
+                <span id="mediaFileName" class="text-xs text-slate-500 truncate max-w-xs"></span>
               </div>
             </div>
 
-            <!-- Hidden canvas for rendering watermark -->
+            <!-- Canvas untuk watermark foto -->
             <canvas id="watermarkCanvas" class="hidden"></canvas>
           </div>
 
-          <!-- Submit Buttons -->
+          <!-- 2. KETERANGAN MASALAH -->
+          <div>
+            <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+              <i class="fa-solid fa-pen-to-square text-rose-600 mr-1"></i> Keterangan Komplain / Keluhan Lapangan <span class="text-rose-500">*</span>
+            </label>
+            <textarea id="complaintDescription" required rows="4" placeholder="Tuliskan keterangan komplain, bagian yang kurang rapi / perlu diperbaiki, atau instruksi untuk tim mandor..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition"></textarea>
+          </div>
+
+          <!-- Submit Button -->
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
             <span class="text-xs text-slate-500 italic">
-              <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Data laporan dijamin langsung masuk ke manajemen pusat CV. Nafindo Group.
+              <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Laporan langsung diterima mandor dan manajemen pusat CV. Nafindo Group.
             </span>
 
-            <button type="submit" id="btnSubmitComplaint" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm px-6 py-3 rounded-xl shadow-lg shadow-rose-600/20 hover:shadow-rose-600/30 transition flex items-center justify-center space-x-2">
+            <button type="submit" id="btnSubmitComplaint" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm px-7 py-3 rounded-xl shadow-lg shadow-rose-600/20 hover:shadow-rose-600/30 transition flex items-center justify-center space-x-2">
               <i class="fa-solid fa-paper-plane"></i>
-              <span>Kirim Laporan Komplain</span>
+              <span>Kirim Komplain</span>
             </button>
           </div>
         </form>
@@ -636,11 +606,17 @@
       document.getElementById("projectNameHeading").textContent = (data.nama || currentProject).replace(/_/g, " ");
 
       // Metrik Utama
-      const persen = data.persen || 0;
+      const persen = (data.persen !== undefined && data.persen !== null) ? data.persen : 0;
       document.getElementById("metricProgressText").textContent = persen + "%";
       document.getElementById("metricProgressBar").style.width = persen + "%";
-      document.getElementById("metricTargetDays").textContent = data.sisaHari ? (data.sisaHari + 20) : "--";
+
+      const targetHariVal = (data.targetHari !== undefined && data.targetHari !== null && data.targetHari !== 0) ? data.targetHari : (data.sisaHari || "--");
+      document.getElementById("metricTargetDays").textContent = targetHariVal;
       document.getElementById("metricRemainingDays").textContent = "Sisa: " + (data.sisaHari || "--") + " hari";
+
+      if (document.getElementById("metricDeadlineText")) {
+        document.getElementById("metricDeadlineText").textContent = data.deadline || "Belum Ditentukan";
+      }
       document.getElementById("metricLastUpdate").textContent = data.waktuUpdate || "--:--";
 
       // Foto Dokumentasi
@@ -791,24 +767,67 @@
     }
 
     // =========================================================================
-    // FITUR FOTO LANGSUNG / UPLOAD & WATERMARKING PADA CANVAS
+    // FITUR LAMPIRAN MEDIA (FOTO/VIDEO) & WATERMARKING PADA CANVAS
     // =========================================================================
-    function handlePhotoSelected(input) {
+    let selectedMediaBase64 = null;
+    let selectedMediaType = "image"; // "image" or "video"
+    let selectedMediaFileName = "";
+
+    function handleMediaSelected(input, typeHint) {
       if (!input.files || !input.files[0]) return;
       const file = input.files[0];
+      selectedMediaFileName = file.name || "Lampiran Media";
+
+      const isVideo = file.type.startsWith("video/") || typeHint === "video";
+      selectedMediaType = isVideo ? "video" : "image";
 
       const reader = new FileReader();
       reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          applyWatermarkToCanvas(img);
-        };
-        img.src = e.target.result;
+        const result = e.target.result;
+        const now = new Date();
+        const timeStr = now.toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' }) + " " +
+                        now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
+
+        const badge = document.getElementById("mediaTypeBadge");
+        const container = document.getElementById("mediaPreviewContainer");
+        const imgEl = document.getElementById("photoPreviewImg");
+        const videoEl = document.getElementById("videoPreviewPlayer");
+        const labelEl = document.getElementById("mediaPreviewLabel");
+        const timeEl = document.getElementById("mediaPreviewTimestamp");
+        const nameEl = document.getElementById("mediaFileName");
+
+        if (isVideo) {
+          // Video Preview
+          selectedMediaBase64 = result;
+          imgEl.classList.add("hidden");
+          videoEl.src = result;
+          videoEl.classList.remove("hidden");
+
+          if (badge) {
+            badge.textContent = "🎥 Video Terpasang";
+            badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-700";
+            badge.classList.remove("hidden");
+          }
+          if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-video text-purple-400 mr-1"></i> Video Siap Dikirim`;
+          if (timeEl) timeEl.textContent = timeStr;
+          if (nameEl) nameEl.textContent = selectedMediaFileName;
+          if (container) container.classList.remove("hidden");
+
+        } else {
+          // Image Preview with Watermark
+          videoEl.classList.add("hidden");
+          try { videoEl.pause(); } catch(e) {}
+          const img = new Image();
+          img.onload = function() {
+            applyWatermarkToCanvas(img, timeStr);
+          };
+          img.src = result;
+        }
       };
       reader.readAsDataURL(file);
     }
 
-    function applyWatermarkToCanvas(img) {
+    function applyWatermarkToCanvas(img, timeStr) {
       const canvas = document.getElementById("watermarkCanvas");
       const ctx = canvas.getContext("2d");
 
@@ -842,33 +861,66 @@
       ctx.fillRect(0, height - bannerHeight, width, Math.max(4, Math.round(bannerHeight * 0.06)));
 
       // 3. Tulis Teks Watermark
-      const now = new Date();
-      const timeStr = now.toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' }) + " " +
-                      now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
-      const clientName = document.getElementById("complaintClientName").value.trim() || "KLIEN";
-
       ctx.fillStyle = "#FFFFFF";
       ctx.font = `bold ${Math.round(bannerHeight * 0.30)}px "Plus Jakarta Sans", sans-serif`;
       ctx.fillText(`CV. NAFINDO GROUP  |  LAPORAN KOMPLAIN PROYEK`, 20, height - (bannerHeight * 0.55));
 
       ctx.fillStyle = "#93C5FD"; // Blue 300
       ctx.font = `bold ${Math.round(bannerHeight * 0.22)}px "Plus Jakarta Sans", sans-serif`;
-      ctx.fillText(`PROYEK: ${currentProject.replace(/_/g, ' ')}   •   PELAPOR: ${clientName}   •   WAKTU: ${timeStr}`, 20, height - (bannerHeight * 0.22));
+      ctx.fillText(`PROYEK: ${currentProject.replace(/_/g, ' ')}   •   WAKTU: ${timeStr}`, 20, height - (bannerHeight * 0.22));
 
       // 4. Konversi ke Base64 JPEG
-      selectedPhotoBase64 = canvas.toDataURL("image/jpeg", 0.85);
+      selectedMediaBase64 = canvas.toDataURL("image/jpeg", 0.85);
 
       // Tampilkan Preview
-      document.getElementById("photoPreviewImg").src = selectedPhotoBase64;
-      document.getElementById("photoPreviewTimestamp").textContent = timeStr;
-      document.getElementById("photoPreviewContainer").classList.remove("hidden");
+      const badge = document.getElementById("mediaTypeBadge");
+      const container = document.getElementById("mediaPreviewContainer");
+      const imgEl = document.getElementById("photoPreviewImg");
+      const videoEl = document.getElementById("videoPreviewPlayer");
+      const labelEl = document.getElementById("mediaPreviewLabel");
+      const timeEl = document.getElementById("mediaPreviewTimestamp");
+      const nameEl = document.getElementById("mediaFileName");
+
+      videoEl.classList.add("hidden");
+      imgEl.src = selectedMediaBase64;
+      imgEl.classList.remove("hidden");
+
+      if (badge) {
+        badge.textContent = "📸 Foto Terpasang";
+        badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.classList.remove("hidden");
+      }
+      if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Watermark Applied`;
+      if (timeEl) timeEl.textContent = timeStr;
+      if (nameEl) nameEl.textContent = selectedMediaFileName;
+      if (container) container.classList.remove("hidden");
     }
 
-    function removeSelectedPhoto() {
-      selectedPhotoBase64 = null;
-      document.getElementById("photoPreviewContainer").classList.add("hidden");
-      document.getElementById("cameraPhotoInput").value = "";
-      document.getElementById("galleryPhotoInput").value = "";
+    function removeSelectedMedia() {
+      selectedMediaBase64 = null;
+      selectedMediaType = "image";
+      selectedMediaFileName = "";
+
+      const container = document.getElementById("mediaPreviewContainer");
+      const badge = document.getElementById("mediaTypeBadge");
+      const videoEl = document.getElementById("videoPreviewPlayer");
+      const imgEl = document.getElementById("photoPreviewImg");
+
+      if (container) container.classList.add("hidden");
+      if (badge) badge.classList.add("hidden");
+      if (videoEl) {
+        try { videoEl.pause(); } catch(e) {}
+        videoEl.src = "";
+        videoEl.classList.add("hidden");
+      }
+      if (imgEl) {
+        imgEl.src = "";
+        imgEl.classList.add("hidden");
+      }
+
+      if (document.getElementById("cameraPhotoInput")) document.getElementById("cameraPhotoInput").value = "";
+      if (document.getElementById("cameraVideoInput")) document.getElementById("cameraVideoInput").value = "";
+      if (document.getElementById("galleryMediaInput")) document.getElementById("galleryMediaInput").value = "";
     }
 
     // =========================================================================
@@ -878,14 +930,11 @@
       e.preventDefault();
 
       const btn = document.getElementById("btnSubmitComplaint");
-      const clientName = document.getElementById("complaintClientName").value.trim();
-      const clientPhone = document.getElementById("complaintClientPhone").value.trim();
-      const category = document.getElementById("complaintCategory").value;
-      const relatedTask = document.getElementById("complaintTaskSelect").value;
       const desc = document.getElementById("complaintDescription").value.trim();
 
-      if (!clientName || !clientPhone || !desc) {
-        alert("Mohon lengkapi Nama, No. WhatsApp, dan Uraian Komplain!");
+      if (!desc) {
+        alert("Mohon tuliskan keterangan komplain / bagian yang perlu diperbaiki!");
+        document.getElementById("complaintDescription").focus();
         return;
       }
 
@@ -896,12 +945,12 @@
       const payload = {
         action: "kirimKomplainOwner",
         proyek: currentProject,
-        nama: clientName,
-        kontak: clientPhone,
-        kategori: category,
-        taskName: relatedTask,
         pesan: desc,
-        foto: selectedPhotoBase64 || ""
+        keterangan: desc,
+        catatan: desc,
+        foto: selectedMediaBase64 || "",
+        media: selectedMediaBase64 || "",
+        fileType: selectedMediaType || "image"
       };
 
       try {
@@ -915,26 +964,27 @@
         const ticketId = (result && result.idKomplain) ? result.idKomplain : "KMP-" + Date.now().toString().slice(-6);
 
         // Buka Modal Sukses
-        openSuccessModal(ticketId, clientName, clientPhone, category, desc);
+        openSuccessModal(ticketId, desc);
         document.getElementById("complaintForm").reset();
-        removeSelectedPhoto();
+        removeSelectedMedia();
         fetchComplaintHistory();
 
       } catch (err) {
-        // Jika fetch POST terbentur izin Google, simpan lokal dan tawarkan forward WhatsApp
-        console.warn("Gagal POST ke Google Script, menggunakan jalur pesan langsung:", err);
+        console.warn("Gagal POST ke Google Script, menggunakan jalur fallback pesan:", err);
         const ticketId = "KMP-" + Date.now().toString().slice(-6);
-        openSuccessModal(ticketId, clientName, clientPhone, category, desc);
+        openSuccessModal(ticketId, desc);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Kirim Laporan Komplain</span>`;
+        btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Kirim Komplain</span>`;
       }
     }
 
-    function openSuccessModal(ticketId, name, phone, cat, desc) {
+    function openSuccessModal(ticketId, desc) {
       document.getElementById("modalTicketId").textContent = ticketId;
       document.getElementById("modalProjectName").textContent = currentProject.replace(/_/g, " ");
-      document.getElementById("modalCategory").textContent = cat;
+      if (document.getElementById("modalCategory")) {
+        document.getElementById("modalCategory").textContent = selectedMediaType === "video" ? "Komplain Video" : "Komplain Lapangan";
+      }
       document.getElementById("modalDesc").textContent = desc;
 
       // Format WhatsApp Pre-filled message
@@ -943,9 +993,7 @@
         `----------------------------------------\n` +
         `📌 *No. Tiket:* ${ticketId}\n` +
         `🏗️ *Proyek:* ${currentProject.replace(/_/g, ' ')}\n` +
-        `👤 *Nama Klien:* ${name}\n` +
-        `📱 *No. Kontak:* ${phone}\n` +
-        `🏷️ *Kategori:* ${cat}\n` +
+        `📁 *Media:* ${selectedMediaType === 'video' ? 'Video terlampir' : (selectedMediaBase64 ? 'Foto terlampir' : 'Keterangan tertulis')}\n` +
         `📝 *Uraian Kendala:*\n${desc}\n` +
         `----------------------------------------\n` +
         `Mohon segera ditindaklanjuti oleh tim manajemen CV. Nafindo Group. Terima kasih.`
