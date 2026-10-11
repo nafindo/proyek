@@ -218,8 +218,8 @@
       </button>
 
       <button onclick="switchTab('tab-dokumentasi')" id="btn-tab-dokumentasi" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
-        <i class="fa-solid fa-camera"></i>
-        <span>Foto Lapangan</span>
+        <i class="fa-solid fa-photo-film"></i>
+        <span>Foto & Video</span>
         <span id="badgeFotoCount" class="bg-slate-200 text-slate-700 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ml-1">0</span>
       </button>
 
@@ -262,27 +262,46 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- TAB 2: DOKUMENTASI FOTO LAPANGAN (WATERMARKED) -->
+    <!-- TAB 2: DOKUMENTASI FOTO & VIDEO LAPANGAN (TERKELOMPOK PER TUGAS) -->
     <!-- ========================================================================= -->
     <section id="tab-dokumentasi" class="tab-content hidden space-y-4">
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-        <div class="flex items-center justify-between mb-4">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+        <!-- Header Galeri -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
           <div>
-            <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Galeri Dokumentasi Lapangan</h3>
-            <p class="text-xs text-slate-500">Foto dan video langsung dari kamera Mandor & Tukang di lokasi</p>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Dokumentasi Foto & Video Lapangan</h3>
+              <span id="badgeMediaTotalHeader" class="bg-blue-100 text-blue-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">0 Media</span>
+            </div>
+            <p class="text-xs text-slate-500 mt-0.5">Dikelompokkan rapi per rincian tugas & area kerja dengan stempel watermark resmi.</p>
           </div>
-          <span class="text-xs font-semibold text-nafindo-blue bg-blue-50 px-2.5 py-1 rounded-lg">
-            Watermarked by Nafindo System
-          </span>
+          <div class="flex items-center space-x-2 shrink-0">
+            <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-shield-check text-emerald-500"></i> GPS & Waktu Terverifikasi
+            </span>
+          </div>
         </div>
 
-        <div id="photoGalleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <!-- Photos injected here -->
+        <!-- Filter Chips Per Tugas (Horizontal Scrollable) -->
+        <div id="taskMediaFilterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          <!-- Filter buttons dynamically inserted here -->
         </div>
 
+        <!-- Container Kelompok Tugas -->
+        <div id="taskGroupedGalleryContainer" class="space-y-4">
+          <!-- Dynamic Task Cards with Photos & Videos -->
+        </div>
+
+        <!-- Flat Gallery Fallback Container (Jika format log bebas) -->
+        <div id="photoGalleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 hidden">
+          <!-- Fallback Photos injected here -->
+        </div>
+
+        <!-- Placeholder Jika Belum Ada Media -->
         <div id="noPhotosPlaceholder" class="hidden text-center py-12 text-slate-400">
-          <i class="fa-regular fa-image text-4xl mb-2"></i>
-          <p class="text-sm">Belum ada dokumentasi foto yang diunggah untuk proyek ini.</p>
+          <i class="fa-regular fa-images text-4xl mb-2 text-slate-300"></i>
+          <p class="text-sm font-semibold text-slate-600">Belum ada dokumentasi foto atau video untuk proyek ini.</p>
+          <p class="text-xs text-slate-400 mt-0.5">Foto dan video yang dikirim tukang/mandor akan otomatis muncul di sini dikelompokkan per tugas.</p>
         </div>
       </div>
     </section>
@@ -500,6 +519,26 @@
   </div>
 
   <!-- ========================================================================= -->
+  <!-- VIDEO PLAYER MODAL UNTUK PREVIEW VIDEO LAPANGAN -->
+  <!-- ========================================================================= -->
+  <div id="videoModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden" onclick="closeVideoModal()">
+    <div class="relative max-w-3xl w-full bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between p-3.5 bg-slate-800 text-white text-xs border-b border-slate-700">
+        <span class="font-bold flex items-center gap-2">
+          <i class="fa-solid fa-circle-play text-emerald-400 text-base"></i>
+          <span id="videoModalTitle">Video Dokumentasi Lapangan</span>
+        </span>
+        <button onclick="closeVideoModal()" class="text-slate-400 hover:text-white text-lg p-1 transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="relative bg-black flex items-center justify-center">
+        <video id="modalVideoPlayer" controls playsinline class="w-full max-h-[75vh] object-contain bg-black"></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
   <!-- FOOTER -->
   <!-- ========================================================================= -->
   <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
@@ -631,8 +670,8 @@
       }
       document.getElementById("metricLastUpdate").textContent = data.waktuUpdate || "--:--";
 
-      // Foto Dokumentasi
-      renderGallery(data.listFoto || []);
+      // Foto & Video Dokumentasi (Dikelompokkan per Tugas)
+      fetchGroupedMedia(data.listFoto || [], data.mediaPerTugas || []);
 
       // Ambil Task Rincian
       fetchTasksList();
@@ -666,10 +705,343 @@
       }
     }
 
+    let tasksCache = [];
+    let allMediaGroupsCache = [];
+    let currentTaskFilter = "ALL";
+
+    function parseLogDescription(rawDesc) {
+      let worker = "Pekerja Lapangan";
+      let task = rawDesc || "Dokumentasi Tugas";
+      let volume = "";
+      let catatan = "";
+      let gps = "";
+
+      if (!rawDesc) return { worker, task, volume, catatan, gps };
+
+      let text = String(rawDesc);
+
+      // Extract GPS: " | 📍 GPS: -7.123, 112.456"
+      const gpsMatch = text.match(/\|\s*(?:📍\s*)?GPS:\s*([^|\n]+)/i);
+      if (gpsMatch) {
+        gps = gpsMatch[1].trim();
+        text = text.replace(gpsMatch[0], "").trim();
+      }
+
+      // Extract worker: "[zaenal]"
+      const workerMatch = text.match(/^\[(.*?)\]\s*/);
+      if (workerMatch) {
+        worker = workerMatch[1].trim();
+        text = text.slice(workerMatch[0].length).trim();
+      }
+
+      // Extract volume: "(+21)"
+      const volMatch = text.match(/\(\+([^)]+)\)/);
+      if (volMatch) {
+        volume = volMatch[1].trim();
+        text = text.replace(volMatch[0], "").trim();
+      }
+
+      // Extract catatan after " - "
+      const dashIndex = text.indexOf(" - ");
+      if (dashIndex !== -1) {
+        catatan = text.substring(dashIndex + 3).trim();
+        task = text.substring(0, dashIndex).trim();
+      } else {
+        task = text.trim();
+      }
+
+      if (!task) task = "Pekerjaan Lapangan";
+
+      return { worker, task, volume, catatan, gps };
+    }
+
+    async function fetchGroupedMedia(fallbackListFoto, mediaPerTugas) {
+      let logs = mediaPerTugas || [];
+      if (!logs || logs.length === 0) {
+        try {
+          const url = `${getApiUrl()}?action=ambilLogDetailTukang&proyek=${encodeURIComponent(currentProject)}&api=true`;
+          const res = await fetch(url);
+          const json = await res.json();
+          if (json && (json.data || json.result)) {
+            logs = json.data || json.result || [];
+          }
+        } catch(e) {
+          console.warn("Gagal fetch ambilLogDetailTukang:", e);
+        }
+      }
+      renderGalleryGrouped(logs, fallbackListFoto);
+      if (tasksCache && tasksCache.length > 0) {
+        renderTaskItems(tasksCache);
+      }
+    }
+
+    function renderGalleryGrouped(logs, fallbackPhotos) {
+      const container = document.getElementById("taskGroupedGalleryContainer");
+      const flatContainer = document.getElementById("photoGalleryContainer");
+      const noPhotos = document.getElementById("noPhotosPlaceholder");
+      const filterContainer = document.getElementById("taskMediaFilterContainer");
+      const badgeCount = document.getElementById("badgeFotoCount");
+      const badgeTotalHeader = document.getElementById("badgeMediaTotalHeader");
+
+      logs = logs || [];
+      fallbackPhotos = fallbackPhotos || [];
+
+      const groupsMap = new Map();
+      const usedPhotoUrls = new Set();
+      let totalPhotos = 0;
+      let totalVideos = 0;
+
+      logs.forEach(log => {
+        const parsed = parseLogDescription(log.deskripsi || "");
+        const taskKey = parsed.task.trim();
+
+        // Foto
+        let photos = [];
+        if (Array.isArray(log.listFoto)) {
+          photos = log.listFoto.filter(u => u && u !== "-" && typeof u === "string");
+        } else if (log.foto && typeof log.foto === "string" && log.foto !== "-") {
+          photos = [log.foto];
+        }
+
+        // Video
+        let videos = [];
+        if (Array.isArray(log.listVideo)) {
+          videos = log.listVideo.filter(u => u && u !== "-" && typeof u === "string");
+        }
+        if (log.video && typeof log.video === "string" && log.video !== "-" && !videos.includes(log.video)) {
+          videos.push(log.video);
+        }
+
+        if (photos.length === 0 && videos.length === 0) return;
+
+        photos.forEach(p => usedPhotoUrls.add(p));
+        totalPhotos += photos.length;
+        totalVideos += videos.length;
+
+        if (!groupsMap.has(taskKey)) {
+          groupsMap.set(taskKey, {
+            taskName: taskKey,
+            reports: []
+          });
+        }
+
+        groupsMap.get(taskKey).reports.push({
+          tanggal: log.tanggal || "--",
+          worker: parsed.worker,
+          volume: parsed.volume,
+          catatan: parsed.catatan,
+          gps: parsed.gps,
+          photos: photos,
+          videos: videos
+        });
+      });
+
+      // Loose Photos from fallbackPhotos
+      const uncategorizedPhotos = fallbackPhotos.filter(url => url && !usedPhotoUrls.has(url));
+      if (uncategorizedPhotos.length > 0) {
+        totalPhotos += uncategorizedPhotos.length;
+        groupsMap.set("Dokumentasi Umum Lapangan", {
+          taskName: "Dokumentasi Umum Lapangan",
+          reports: [{
+            tanggal: "Dokumentasi Tambahan",
+            worker: "Tim Proyek",
+            volume: "",
+            catatan: "Foto dokumentasi progres lapangan umum",
+            gps: "",
+            photos: uncategorizedPhotos,
+            videos: []
+          }]
+        });
+      }
+
+      allMediaGroupsCache = Array.from(groupsMap.values());
+
+      const grandTotalMedia = totalPhotos + totalVideos;
+      if (badgeCount) badgeCount.textContent = grandTotalMedia;
+      if (badgeTotalHeader) badgeTotalHeader.textContent = `${totalPhotos} Foto, ${totalVideos} Video`;
+
+      if (allMediaGroupsCache.length === 0) {
+        if (container) container.innerHTML = "";
+        if (filterContainer) filterContainer.innerHTML = "";
+        if (flatContainer) flatContainer.classList.add("hidden");
+        if (noPhotos) noPhotos.classList.remove("hidden");
+        return;
+      }
+
+      if (noPhotos) noPhotos.classList.add("hidden");
+      renderFilterChips();
+      renderGroupsUI();
+    }
+
+    function renderFilterChips() {
+      const filterContainer = document.getElementById("taskMediaFilterContainer");
+      if (!filterContainer) return;
+
+      filterContainer.innerHTML = "";
+
+      const totalMedia = allMediaGroupsCache.reduce((acc, g) => {
+        return acc + g.reports.reduce((rAcc, r) => rAcc + r.photos.length + r.videos.length, 0);
+      }, 0);
+
+      const btnAll = document.createElement("button");
+      btnAll.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition flex items-center gap-1.5 ${
+        currentTaskFilter === "ALL" 
+          ? "bg-nafindo-blue text-white shadow-sm" 
+          : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+      }`;
+      btnAll.innerHTML = `<i class="fa-solid fa-layer-group"></i> <span>Semua Tugas</span> <span class="text-[10px] opacity-80">(${totalMedia})</span>`;
+      btnAll.onclick = () => {
+        currentTaskFilter = "ALL";
+        renderFilterChips();
+        renderGroupsUI();
+      };
+      filterContainer.appendChild(btnAll);
+
+      allMediaGroupsCache.forEach(group => {
+        const groupMediaCount = group.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0);
+        const isActive = currentTaskFilter === group.taskName;
+        const btn = document.createElement("button");
+        btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition flex items-center gap-1.5 ${
+          isActive 
+            ? "bg-nafindo-blue text-white shadow-sm" 
+            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+        }`;
+        btn.innerHTML = `<span>${group.taskName}</span> <span class="text-[10px] opacity-80">(${groupMediaCount})</span>`;
+        btn.onclick = () => {
+          currentTaskFilter = group.taskName;
+          renderFilterChips();
+          renderGroupsUI();
+        };
+        filterContainer.appendChild(btn);
+      });
+    }
+
+    function renderGroupsUI() {
+      const container = document.getElementById("taskGroupedGalleryContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const filteredGroups = (currentTaskFilter === "ALL")
+        ? allMediaGroupsCache
+        : allMediaGroupsCache.filter(g => g.taskName === currentTaskFilter);
+
+      if (filteredGroups.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-slate-400">
+            <p class="text-xs">Tidak ada dokumentasi foto atau video untuk tugas "${currentTaskFilter}".</p>
+          </div>
+        `;
+        return;
+      }
+
+      filteredGroups.forEach((group, gIdx) => {
+        const totalP = group.reports.reduce((acc, r) => acc + r.photos.length, 0);
+        const totalV = group.reports.reduce((acc, r) => acc + r.videos.length, 0);
+
+        const card = document.createElement("div");
+        card.id = `media-task-group-${gIdx}`;
+        card.className = "bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4 hover:border-blue-300 transition shadow-sm";
+
+        let headerHtml = `
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-200">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shrink-0">
+                <i class="fa-solid fa-list-check"></i>
+              </div>
+              <div>
+                <h4 class="text-sm sm:text-base font-extrabold text-slate-900">${group.taskName}</h4>
+                <p class="text-[11px] text-slate-500">${group.reports.length} sesi pelaporan media</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 self-start sm:self-auto">
+              ${totalP > 0 ? `<span class="bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold px-2 py-0.5 rounded-lg"><i class="fa-solid fa-camera mr-1"></i>${totalP} Foto</span>` : ''}
+              ${totalV > 0 ? `<span class="bg-purple-50 border border-purple-200 text-purple-700 text-[11px] font-bold px-2 py-0.5 rounded-lg"><i class="fa-solid fa-video mr-1"></i>${totalV} Video</span>` : ''}
+            </div>
+          </div>
+        `;
+
+        let reportsHtml = `<div class="space-y-4">`;
+        group.reports.forEach((rep) => {
+          reportsHtml += `
+            <div class="bg-white rounded-xl p-3.5 border border-slate-200/80 shadow-sm space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+                <div class="flex items-center space-x-2">
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-user-check"></i> ${rep.worker}
+                  </span>
+                  <span class="text-slate-400">•</span>
+                  <span class="text-slate-600 font-medium text-[11px]"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>${rep.tanggal}</span>
+                </div>
+                ${rep.volume ? `<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-ruler-combined mr-1"></i>Capaian: +${rep.volume}</span>` : ''}
+              </div>
+
+              ${rep.catatan ? `<p class="text-xs text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 italic">"${rep.catatan}"</p>` : ''}
+              ${rep.gps ? `<div class="text-[10px] text-slate-500 font-mono flex items-center gap-1"><i class="fa-solid fa-location-dot text-rose-500"></i> ${rep.gps}</div>` : ''}
+
+              <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 pt-1">
+          `;
+
+          // Foto
+          rep.photos.forEach((photoUrl, pIdx) => {
+            reportsHtml += `
+              <div onclick="openLightbox('${photoUrl}')" class="group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-square cursor-pointer hover:shadow-md transition">
+                <img src="${photoUrl}" alt="Foto ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2 opacity-90 group-hover:opacity-100">
+                  <div class="text-white text-[10px] flex items-center justify-between w-full">
+                    <span class="font-bold"><i class="fa-solid fa-camera mr-0.5"></i> Foto ${pIdx+1}</span>
+                    <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          // Video
+          rep.videos.forEach((videoUrl, vIdx) => {
+            const escapedTitle = group.taskName.replace(/'/g, "\\'");
+            reportsHtml += `
+              <div onclick="openVideoModal('${videoUrl}', '${escapedTitle} - Video ${vIdx+1}')" class="group relative rounded-xl overflow-hidden bg-slate-950 border border-purple-300 aspect-square cursor-pointer hover:shadow-md transition flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-purple-600/90 text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition">
+                  <i class="fa-solid fa-play ml-0.5"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
+                  <div class="text-white text-[10px] flex items-center justify-between w-full">
+                    <span class="font-bold text-purple-300"><i class="fa-solid fa-video mr-0.5"></i> Video ${vIdx+1}</span>
+                    <span class="text-[9px] bg-purple-500/40 px-1 rounded">Putar</span>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          reportsHtml += `
+              </div>
+            </div>
+          `;
+        });
+        reportsHtml += `</div>`;
+
+        card.innerHTML = headerHtml + reportsHtml;
+        container.appendChild(card);
+      });
+    }
+
+    function filterAndShowTaskMedia(taskName) {
+      switchTab("tab-dokumentasi");
+      currentTaskFilter = taskName;
+      renderFilterChips();
+      renderGroupsUI();
+      const container = document.getElementById("tab-dokumentasi");
+      if (container) {
+        container.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+
     function renderTaskItems(tasks) {
+      tasksCache = tasks || [];
       const container = document.getElementById("taskListContainer");
       const taskSelect = document.getElementById("complaintTaskSelect");
-      taskSelect.innerHTML = '<option value="Umum">Umum (Seluruh Area Proyek)</option>';
+      if (taskSelect) taskSelect.innerHTML = '<option value="Umum">Umum (Seluruh Area Proyek)</option>';
 
       if (!tasks || tasks.length === 0) {
         container.innerHTML = '<div class="text-center py-8 text-slate-400 text-xs">Belum ada struktur rincian pekerjaan.</div>';
@@ -683,11 +1055,12 @@
         const persen = item.progres !== undefined ? item.progres : (item[2] || 0);
         const bobot = item.bobot !== undefined ? item.bobot : (item[3] || 0);
 
-        // Tambah opsi ke form komplain
-        const opt = document.createElement("option");
-        opt.value = nama;
-        opt.textContent = `${isArea ? '[AREA] ' : ''}${nama}`;
-        taskSelect.appendChild(opt);
+        if (taskSelect) {
+          const opt = document.createElement("option");
+          opt.value = nama;
+          opt.textContent = `${isArea ? '[AREA] ' : ''}${nama}`;
+          taskSelect.appendChild(opt);
+        }
 
         if (isArea) {
           const areaDiv = document.createElement("div");
@@ -708,6 +1081,29 @@
             statusText = `Dikerjakan (${persen}%)`;
           }
 
+          // Cek media untuk tugas ini
+          const matchedGroup = allMediaGroupsCache.find(g => 
+            g.taskName.toLowerCase().includes(nama.toLowerCase()) || 
+            nama.toLowerCase().includes(g.taskName.toLowerCase())
+          );
+          const mediaCount = matchedGroup 
+            ? matchedGroup.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0)
+            : 0;
+
+          let mediaBtnHtml = "";
+          if (mediaCount > 0) {
+            const escapedTask = matchedGroup.taskName.replace(/'/g, "\\'");
+            mediaBtnHtml = `
+              <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
+                <button onclick="filterAndShowTaskMedia('${escapedTask}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition border border-blue-200">
+                  <i class="fa-solid fa-photo-film"></i>
+                  <span>Lihat Bukti Foto & Video (${mediaCount})</span>
+                </button>
+                <span class="text-[10px] text-slate-400"><i class="fa-solid fa-arrow-right"></i></span>
+              </div>
+            `;
+          }
+
           card.innerHTML = `
             <div class="flex items-center justify-between gap-2">
               <span class="text-xs sm:text-sm font-bold text-slate-800">${nama}</span>
@@ -719,44 +1115,49 @@
               </div>
               <span class="text-[11px] font-bold text-slate-500 shrink-0">${persen}%</span>
             </div>
+            ${mediaBtnHtml}
           `;
           container.appendChild(card);
         }
       });
     }
 
+    // Fallback Flat Gallery
     function renderGallery(photos) {
       const container = document.getElementById("photoGalleryContainer");
       const noPhotos = document.getElementById("noPhotosPlaceholder");
       const badgeCount = document.getElementById("badgeFotoCount");
 
       if (!photos || photos.length === 0) {
-        container.innerHTML = "";
-        noPhotos.classList.remove("hidden");
-        badgeCount.textContent = "0";
+        if (container) container.innerHTML = "";
+        if (noPhotos) noPhotos.classList.remove("hidden");
+        if (badgeCount) badgeCount.textContent = "0";
         return;
       }
 
-      noPhotos.classList.add("hidden");
-      badgeCount.textContent = photos.length;
-      container.innerHTML = "";
+      if (noPhotos) noPhotos.classList.add("hidden");
+      if (badgeCount) badgeCount.textContent = photos.length;
+      if (container) {
+        container.innerHTML = "";
+        container.classList.remove("hidden");
 
-      photos.forEach((src, idx) => {
-        const item = document.createElement("div");
-        item.className = "group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition aspect-video sm:aspect-square";
-        item.onclick = () => openLightbox(src);
+        photos.forEach((src, idx) => {
+          const item = document.createElement("div");
+          item.className = "group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition aspect-video sm:aspect-square";
+          item.onclick = () => openLightbox(src);
 
-        item.innerHTML = `
-          <img src="${src}" alt="Dokumentasi ${idx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90 group-hover:opacity-100">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
-            <div class="text-white text-[11px] flex items-center justify-between w-full">
-              <span class="font-semibold truncate"><i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Nafindo Verified</span>
-              <span class="text-[10px] opacity-75">Klik Perbesar</span>
+          item.innerHTML = `
+            <img src="${src}" alt="Dokumentasi ${idx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90 group-hover:opacity-100">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
+              <div class="text-white text-[11px] flex items-center justify-between w-full">
+                <span class="font-semibold truncate"><i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Nafindo Verified</span>
+                <span class="text-[10px] opacity-75">Klik Perbesar</span>
+              </div>
             </div>
-          </div>
-        `;
-        container.appendChild(item);
-      });
+          `;
+          container.appendChild(item);
+        });
+      }
     }
 
     // Demo Mode jika server belum dibuka atau offline
@@ -1100,6 +1501,24 @@
 
     function closeLightbox() {
       document.getElementById("lightboxModal").classList.add("hidden");
+    }
+
+    function openVideoModal(src, title) {
+      const modal = document.getElementById("videoModal");
+      const player = document.getElementById("modalVideoPlayer");
+      const titleEl = document.getElementById("videoModalTitle");
+      if (titleEl) titleEl.textContent = title || "Video Dokumentasi Lapangan";
+      player.src = src;
+      modal.classList.remove("hidden");
+      try { player.play(); } catch(e) {}
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById("videoModal");
+      const player = document.getElementById("modalVideoPlayer");
+      try { player.pause(); } catch(e) {}
+      player.src = "";
+      modal.classList.add("hidden");
     }
 
     function toggleApiSettingsModal() {
