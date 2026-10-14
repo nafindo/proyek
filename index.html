@@ -282,6 +282,20 @@
           </div>
         </div>
 
+        <!-- Filter Bar: Area / Kamar & Pencarian Cepat (Solusi Bug #3: Pisahkan foto per kamar hotel) -->
+        <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+          <div class="flex items-center gap-2 flex-1">
+            <span class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-hotel text-blue-600 mr-1"></i> Area / Kamar:</span>
+            <select id="mediaAreaFilterSelect" onchange="onMediaAreaFilterChange(this.value)" class="text-xs font-semibold bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
+              <option value="ALL">🏢 Semua Area & Kamar</option>
+            </select>
+          </div>
+          <div class="relative">
+            <input type="text" id="mediaSearchInput" oninput="onMediaSearchInput(this.value)" placeholder="Cari kamar / tugas (misal: 102)..." class="text-xs bg-white border border-slate-300 rounded-lg pl-7 pr-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-56">
+            <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-[10px]"></i>
+          </div>
+        </div>
+
         <!-- Filter Chips Per Tugas (Horizontal Scrollable) -->
         <div id="taskMediaFilterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
           <!-- Filter buttons dynamically inserted here -->
@@ -719,51 +733,106 @@
     let tasksCache = [];
     let allMediaGroupsCache = [];
     let currentTaskFilter = "ALL";
+    let currentMediaAreaFilter = "ALL";
+    let currentMediaQuery = "";
+
+    function onMediaAreaFilterChange(val) {
+      currentMediaAreaFilter = val;
+      currentTaskFilter = "ALL";
+      renderFilterChips();
+      renderGroupsUI();
+    }
+
+    function onMediaSearchInput(val) {
+      currentMediaQuery = (val || "").trim().toLowerCase();
+      renderFilterChips();
+      renderGroupsUI();
+    }
 
     function parseLogDescription(rawDesc) {
       let worker = "Pekerja Lapangan";
-      let task = rawDesc || "Dokumentasi Tugas";
+      let area = "";
+      let task = "";
       let volume = "";
       let catatan = "";
       let gps = "";
 
-      if (!rawDesc) return { worker, task, volume, catatan, gps };
+      if (!rawDesc) return { worker, area, task, volume, catatan, gps };
 
       let text = String(rawDesc);
 
-      // Extract GPS: " | 📍 GPS: -7.123, 112.456"
+      // 1. Extract GPS: " | 📍 GPS: -7.123, 112.456"
       const gpsMatch = text.match(/\|\s*(?:📍\s*)?GPS:\s*([^|\n]+)/i);
       if (gpsMatch) {
         gps = gpsMatch[1].trim();
         text = text.replace(gpsMatch[0], "").trim();
       }
 
-      // Extract worker: "[zaenal]"
-      const workerMatch = text.match(/^\[(.*?)\]\s*/);
-      if (workerMatch) {
-        worker = workerMatch[1].trim();
-        text = text.slice(workerMatch[0].length).trim();
+      // 2. Extract Catatan: " | Ket: ..."
+      const ketMatch = text.match(/\|\s*Ket:\s*([^|\n]+)/i);
+      if (ketMatch) {
+        catatan = ketMatch[1].trim();
+        text = text.replace(ketMatch[0], "").trim();
       }
 
-      // Extract volume: "(+21)"
+      // 3. Extract Volume: "(+21)" or "(+21m²)" or "(+Update)"
       const volMatch = text.match(/\(\+([^)]+)\)/);
       if (volMatch) {
         volume = volMatch[1].trim();
         text = text.replace(volMatch[0], "").trim();
       }
 
-      // Extract catatan after " - "
-      const dashIndex = text.indexOf(" - ");
-      if (dashIndex !== -1) {
-        catatan = text.substring(dashIndex + 3).trim();
-        task = text.substring(0, dashIndex).trim();
+      // 4. Extract Session & Worker & Area from bracket tags [...]
+      const bracketRegex = /\[([^\]]+)\]/g;
+      let match;
+      const brackets = [];
+      while ((match = bracketRegex.exec(text)) !== null) {
+        brackets.push(match[1].trim());
+      }
+
+      if (brackets.length > 0) {
+        text = text.replace(/\[[^\]]+\]/g, "").trim();
+
+        brackets.forEach(b => {
+          const bLower = b.toLowerCase();
+          if (b.includes("PAGI") || b.includes("SIANG") || b.includes("SORE") || b.includes("LEMBUR") || b.includes("🌅") || b.includes("☀️") || b.includes("🌆") || b.includes("🌙") || b.includes("🌌")) {
+            // Sesi SOP
+          } else if (bLower.startsWith("area:") || bLower.startsWith("area ") || bLower.includes("lantai") || bLower.includes("kamar") || bLower.includes("room") || bLower.includes("ruang") || bLower.includes("zona") || bLower.includes("blok")) {
+            area = b.replace(/^area:\s*/i, "").trim();
+          } else if (worker === "Pekerja Lapangan") {
+            worker = b;
+          } else if (!area) {
+            area = b;
+          }
+        });
+      }
+
+      // 5. Area prefix jika tidak memakai bracket
+      if (!area) {
+        const areaPrefixMatch = text.match(/^(Lantai\s*[^-\n]+-\s*Kamar\s*\d+|Kamar\s*\d+|Room\s*\d+|Ruang\s*[^-\n]+)\s*[-:•]\s*/i);
+        if (areaPrefixMatch) {
+          area = areaPrefixMatch[1].trim();
+          text = text.slice(areaPrefixMatch[0].length).trim();
+        }
+      }
+
+      // 6. Catatan pembatas dash " - "
+      if (!catatan) {
+        const dashIndex = text.indexOf(" - ");
+        if (dashIndex !== -1) {
+          catatan = text.substring(dashIndex + 3).trim();
+          task = text.substring(0, dashIndex).trim();
+        } else {
+          task = text.trim();
+        }
       } else {
         task = text.trim();
       }
 
       if (!task) task = "Pekerjaan Lapangan";
+      if (!area) area = "Area Umum";
 
-      return { worker, task, volume, catatan, gps };
+      return { worker, area, task, volume, catatan, gps };
     }
 
     async function fetchGroupedMedia(fallbackListFoto, mediaPerTugas) {
@@ -804,7 +873,10 @@
 
       logs.forEach(log => {
         const parsed = parseLogDescription(log.deskripsi || "");
-        const taskKey = parsed.task.trim();
+        const cleanArea = parsed.area || "Area Umum";
+        const cleanTask = parsed.task || "Pekerjaan Lapangan";
+        // Pisahkan grup secara unik: "[Area] Nama Tugas" agar foto tiap kamar hotel tidak tercampur
+        const groupKey = (cleanArea && cleanArea !== "Area Umum") ? `[${cleanArea}] ${cleanTask}` : cleanTask;
 
         // Foto
         let photos = [];
@@ -829,14 +901,17 @@
         totalPhotos += photos.length;
         totalVideos += videos.length;
 
-        if (!groupsMap.has(taskKey)) {
-          groupsMap.set(taskKey, {
-            taskName: taskKey,
+        if (!groupsMap.has(groupKey)) {
+          groupsMap.set(groupKey, {
+            groupKey: groupKey,
+            taskName: groupKey,
+            area: cleanArea,
+            taskClean: cleanTask,
             reports: []
           });
         }
 
-        groupsMap.get(taskKey).reports.push({
+        groupsMap.get(groupKey).reports.push({
           tanggal: log.tanggal || "--",
           worker: parsed.worker,
           volume: parsed.volume,
@@ -852,7 +927,10 @@
       if (uncategorizedPhotos.length > 0) {
         totalPhotos += uncategorizedPhotos.length;
         groupsMap.set("Dokumentasi Umum Lapangan", {
+          groupKey: "Dokumentasi Umum Lapangan",
           taskName: "Dokumentasi Umum Lapangan",
+          area: "Area Umum",
+          taskClean: "Dokumentasi Umum Lapangan",
           reports: [{
             tanggal: "Dokumentasi Tambahan",
             worker: "Tim Proyek",
@@ -871,6 +949,23 @@
       if (badgeCount) badgeCount.textContent = grandTotalMedia;
       if (badgeTotalHeader) badgeTotalHeader.textContent = `${totalPhotos} Foto, ${totalVideos} Video`;
 
+      // Populate Dropdown Filter Area / Kamar
+      const selectEl = document.getElementById("mediaAreaFilterSelect");
+      if (selectEl) {
+        const uniqueAreas = Array.from(new Set(allMediaGroupsCache.map(g => g.area).filter(a => a && a !== "Area Umum"))).sort();
+        let optionsHtml = `<option value="ALL">🏢 Semua Area & Kamar (${totalPhotos} Foto)</option>`;
+        uniqueAreas.forEach(a => {
+          const aCount = allMediaGroupsCache.filter(g => g.area === a).reduce((acc, g) => acc + g.reports.reduce((ra, r) => ra + r.photos.length, 0), 0);
+          const isSel = currentMediaAreaFilter === a ? "selected" : "";
+          optionsHtml += `<option value="${a}" ${isSel}>📍 ${a} (${aCount} Foto)</option>`;
+        });
+        if (allMediaGroupsCache.some(g => g.area === "Area Umum")) {
+          const umumCount = allMediaGroupsCache.filter(g => g.area === "Area Umum").reduce((acc, g) => acc + g.reports.reduce((ra, r) => ra + r.photos.length, 0), 0);
+          optionsHtml += `<option value="Area Umum" ${currentMediaAreaFilter === "Area Umum" ? "selected" : ""}>🌐 Area Umum (${umumCount} Foto)</option>`;
+        }
+        selectEl.innerHTML = optionsHtml;
+      }
+
       if (allMediaGroupsCache.length === 0) {
         if (container) container.innerHTML = "";
         if (filterContainer) filterContainer.innerHTML = "";
@@ -884,13 +979,40 @@
       renderGroupsUI();
     }
 
+    function getVisibleMediaGroups() {
+      return allMediaGroupsCache.filter(group => {
+        // Filter Area / Kamar
+        if (currentMediaAreaFilter !== "ALL") {
+          const gArea = (group.area || "").toLowerCase();
+          const targetArea = currentMediaAreaFilter.toLowerCase();
+          if (gArea !== targetArea && !gArea.includes(targetArea) && !targetArea.includes(gArea)) {
+            return false;
+          }
+        }
+        // Filter Search Query
+        if (currentMediaQuery) {
+          const gName = (group.taskName || "").toLowerCase();
+          const gArea = (group.area || "").toLowerCase();
+          const inReports = group.reports.some(r => 
+            (r.worker && r.worker.toLowerCase().includes(currentMediaQuery)) ||
+            (r.catatan && r.catatan.toLowerCase().includes(currentMediaQuery))
+          );
+          if (!gName.includes(currentMediaQuery) && !gArea.includes(currentMediaQuery) && !inReports) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
     function renderFilterChips() {
       const filterContainer = document.getElementById("taskMediaFilterContainer");
       if (!filterContainer) return;
 
       filterContainer.innerHTML = "";
 
-      const totalMedia = allMediaGroupsCache.reduce((acc, g) => {
+      const visibleGroups = getVisibleMediaGroups();
+      const totalMedia = visibleGroups.reduce((acc, g) => {
         return acc + g.reports.reduce((rAcc, r) => rAcc + r.photos.length + r.videos.length, 0);
       }, 0);
 
@@ -900,7 +1022,7 @@
           ? "bg-nafindo-blue text-white shadow-sm" 
           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
       }`;
-      btnAll.innerHTML = `<i class="fa-solid fa-layer-group"></i> <span>Semua Tugas</span> <span class="text-[10px] opacity-80">(${totalMedia})</span>`;
+      btnAll.innerHTML = `<i class="fa-solid fa-layer-group"></i> <span>Semua (${visibleGroups.length} Tugas)</span> <span class="text-[10px] opacity-80">(${totalMedia})</span>`;
       btnAll.onclick = () => {
         currentTaskFilter = "ALL";
         renderFilterChips();
@@ -908,7 +1030,7 @@
       };
       filterContainer.appendChild(btnAll);
 
-      allMediaGroupsCache.forEach(group => {
+      visibleGroups.forEach(group => {
         const groupMediaCount = group.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0);
         const isActive = currentTaskFilter === group.taskName;
         const btn = document.createElement("button");
@@ -932,14 +1054,17 @@
       if (!container) return;
       container.innerHTML = "";
 
+      const visibleGroups = getVisibleMediaGroups();
       const filteredGroups = (currentTaskFilter === "ALL")
-        ? allMediaGroupsCache
-        : allMediaGroupsCache.filter(g => g.taskName === currentTaskFilter);
+        ? visibleGroups
+        : visibleGroups.filter(g => g.taskName === currentTaskFilter);
 
       if (filteredGroups.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-8 text-slate-400">
-            <p class="text-xs">Tidak ada dokumentasi foto atau video untuk tugas "${currentTaskFilter}".</p>
+          <div class="text-center py-8 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+            <i class="fa-regular fa-folder-open text-2xl text-slate-300 mb-1"></i>
+            <p class="text-xs font-semibold text-slate-600">Tidak ada dokumentasi foto atau video untuk filter yang dipilih.</p>
+            <p class="text-[11px] text-slate-400 mt-0.5">Coba ganti pilihan Area/Kamar atau bersihkan kata kunci pencarian.</p>
           </div>
         `;
         return;
@@ -1037,8 +1162,20 @@
       });
     }
 
-    function filterAndShowTaskMedia(taskName) {
+    function filterAndShowTaskMedia(taskName, areaName) {
       switchTab("tab-dokumentasi");
+      if (areaName && areaName !== "Area Umum") {
+        currentMediaAreaFilter = areaName;
+        const selectEl = document.getElementById("mediaAreaFilterSelect");
+        if (selectEl) {
+          for (let i = 0; i < selectEl.options.length; i++) {
+            if (selectEl.options[i].value === areaName || selectEl.options[i].value.toLowerCase().includes(areaName.toLowerCase())) {
+              selectEl.selectedIndex = i;
+              break;
+            }
+          }
+        }
+      }
       currentTaskFilter = taskName;
       renderFilterChips();
       renderGroupsUI();
@@ -1094,11 +1231,27 @@
             statusText = `Dikerjakan (${persen}%)`;
           }
 
-          // Cek media untuk tugas ini
-          const matchedGroup = allMediaGroupsCache.find(g => 
-            g.taskName.toLowerCase().includes(nama.toLowerCase()) || 
-            nama.toLowerCase().includes(g.taskName.toLowerCase())
-          );
+          // Cek media untuk tugas ini dengan mencocokkan AREA/KAMAR dan NAMA TUGAS (Bug #3 Fix)
+          const itemArea = (item.area || "").trim().toLowerCase();
+          const itemNama = (nama || "").trim().toLowerCase();
+          const itemRoomMatch = itemArea.match(/kamar\s*\d+|room\s*\d+|ruang\s*\d+/i);
+          const itemRoom = itemRoomMatch ? itemRoomMatch[0].replace(/\s+/g, '') : "";
+
+          const matchedGroup = allMediaGroupsCache.find(g => {
+            const gArea = (g.area || "").toLowerCase();
+            const gTask = (g.taskClean || g.taskName || "").toLowerCase();
+            const gRoomMatch = gArea.match(/kamar\s*\d+|room\s*\d+|ruang\s*\d+/i);
+            const gRoom = gRoomMatch ? gRoomMatch[0].replace(/\s+/g, '') : "";
+
+            // Jika kedua punya nomor kamar, nomor kamar WAJIB persis sama! (Jangan gabung foto kamar lain)
+            if (itemRoom && gRoom && itemRoom !== gRoom) {
+              return false;
+            }
+
+            const areaMatch = !itemArea || !gArea || gArea.includes(itemArea) || itemArea.includes(gArea) || (itemRoom && gRoom && itemRoom === gRoom);
+            const taskMatch = gTask === itemNama || gTask.includes(itemNama) || itemNama.includes(gTask);
+            return areaMatch && taskMatch;
+          });
           const mediaCount = matchedGroup 
             ? matchedGroup.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0)
             : 0;
@@ -1106,8 +1259,9 @@
           let actionBtns = [];
           if (mediaCount > 0) {
             const escapedTask = matchedGroup.taskName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            const escapedArea = (matchedGroup.area || "").replace(/'/g, "\\'").replace(/"/g, '&quot;');
             actionBtns.push(`
-              <button onclick="filterAndShowTaskMedia('${escapedTask}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition border border-blue-200">
+              <button onclick="filterAndShowTaskMedia('${escapedTask}', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition border border-blue-200">
                 <i class="fa-solid fa-photo-film"></i>
                 <span>Bukti (${mediaCount})</span>
               </button>
