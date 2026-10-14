@@ -1372,26 +1372,61 @@
         if (isSpc) rData.spcTasks.push({ name, progres, bobot });
       });
 
-      // Hitung akumulasi m² per kamar
+      // Helper: Menentukan progres tugas utama (Primary Task) yang mewakili realisasi fisik m²
+      function getPrimaryExecutionProgress(taskList, isLeveling) {
+        if (!taskList || taskList.length === 0) return 0;
+        if (taskList.length === 1) return taskList[0].progres || 0;
+
+        if (isLeveling) {
+          // Tugas Utama Leveling adalah Pengecoran / Screed (Bukan pembersihan/chipping/primer)
+          const screedTask = taskList.find(t => {
+            const n = (t.name || "").toLowerCase();
+            return n.includes("screed") || n.includes("pengecoran") || n.includes("cor") || n.includes("tuang");
+          });
+          if (screedTask) return screedTask.progres || 0;
+
+          // Jika tidak ada kata screed/pengecoran, cari yang bukan persiapan
+          const nonPrep = taskList.find(t => {
+            const n = (t.name || "").toLowerCase();
+            return !n.includes("chipping") && !n.includes("pembersihan") && !n.includes("bersih") && !n.includes("primer") && !n.includes("bonding") && !n.includes("waterpass");
+          });
+          return nonPrep ? (nonPrep.progres || 0) : 0;
+        } else {
+          // Tugas Utama SPC adalah Pemasangan Plank Lantai SPC (Bukan underlayer foam atau plint)
+          const spcTask = taskList.find(t => {
+            const n = (t.name || "").toLowerCase();
+            return (n.includes("pemasangan") || n.includes("pasang lantai") || n.includes("plank")) && !n.includes("underlayer") && !n.includes("foam") && !n.includes("busa") && !n.includes("plint") && !n.includes("aksesoris");
+          });
+          if (spcTask) return spcTask.progres || 0;
+
+          const nonPrep = taskList.find(t => {
+            const n = (t.name || "").toLowerCase();
+            return !n.includes("underlayer") && !n.includes("foam") && !n.includes("busa") && !n.includes("plint") && !n.includes("aksesoris") && !n.includes("sealant");
+          });
+          return nonPrep ? (nonPrep.progres || 0) : 0;
+        }
+      }
+
+      // Hitung akumulasi m² per kamar strictly dari tugas utama fisik
       roomMap.forEach(rData => {
         const roomVol = rData.volume || 14;
 
         if (rData.levelingTasks.length > 0) {
           levelingTarget += roomVol;
-          const totalB = rData.levelingTasks.reduce((acc, t) => acc + (t.bobot > 0 ? t.bobot : 1), 0);
-          const weightedP = rData.levelingTasks.reduce((acc, t) => acc + (t.progres * (t.bobot > 0 ? t.bobot : 1)), 0) / (totalB || 1);
-          levelingDone += (roomVol * (weightedP / 100));
+          const primaryProg = getPrimaryExecutionProgress(rData.levelingTasks, true);
+          // Hanya menambah m² selesai jika pengecoran screed sudah benar-benar jalan
+          levelingDone += (roomVol * (primaryProg / 100));
         }
 
         if (rData.spcTasks.length > 0) {
           spcTarget += roomVol;
-          const totalB = rData.spcTasks.reduce((acc, t) => acc + (t.bobot > 0 ? t.bobot : 1), 0);
-          const weightedP = rData.spcTasks.reduce((acc, t) => acc + (t.progres * (t.bobot > 0 ? t.bobot : 1)), 0) / (totalB || 1);
-          spcDone += (roomVol * (weightedP / 100));
+          const primaryProg = getPrimaryExecutionProgress(rData.spcTasks, false);
+          // Hanya menambah m² selesai jika pemasangan lantai SPC sudah jalan
+          spcDone += (roomVol * (primaryProg / 100));
         }
       });
 
-      // Hitung volume capaian hari ini dari mediaLogs
+      // Hitung volume capaian hari ini dari mediaLogs (Hanya tugas utama cor screed / pasang spc)
       const now = new Date();
       const todayD = String(now.getDate()).padStart(2, '0');
       const todayM = String(now.getMonth() + 1).padStart(2, '0');
@@ -1413,8 +1448,13 @@
         const desc = (log.deskripsi || "").toString();
         const descLower = desc.toLowerCase();
 
-        const isLev = descLower.includes("leveling") || descLower.includes("screed") || descLower.includes("chipping") || descLower.includes("primer") || descLower.includes("bonding");
-        const isSpc = descLower.includes("spc") || descLower.includes("vinyl") || descLower.includes("underlayer") || descLower.includes("plank") || descLower.includes("plint");
+        // Leveling Hari Ini: Hanya jika laporan adalah pengecoran screed (Bukan pembersihan/chipping/primer)
+        const isLevPrimary = (descLower.includes("screed") || descLower.includes("pengecoran") || descLower.includes("cor")) ||
+                             (descLower.includes("leveling") && !descLower.includes("chipping") && !descLower.includes("pembersihan") && !descLower.includes("bersih") && !descLower.includes("primer") && !descLower.includes("bonding"));
+
+        // SPC Hari Ini: Hanya jika laporan adalah pemasangan plank SPC (Bukan underlayer/plint)
+        const isSpcPrimary = (descLower.includes("pasang spc") || descLower.includes("pemasangan lantai") || descLower.includes("pemasangan spc") || descLower.includes("plank")) ||
+                             (descLower.includes("spc") && !descLower.includes("underlayer") && !descLower.includes("foam") && !descLower.includes("busa") && !descLower.includes("plint"));
 
         let logVol = 0;
         const match = desc.match(/\(\+(\d+(?:[.,]\d+)?)\s*(?:m2|m²)?\)/i);
@@ -1426,8 +1466,8 @@
         }
 
         if (logVol > 0) {
-          if (isLev) levelingToday += logVol;
-          if (isSpc) spcToday += logVol;
+          if (isLevPrimary) levelingToday += logVol;
+          if (isSpcPrimary) spcToday += logVol;
         }
       });
 
