@@ -881,7 +881,12 @@
       document.getElementById("projectNameHeading").textContent = (data.nama || currentProject).replace(/_/g, " ");
 
       // Metrik Utama
-      const persen = (data.persen !== undefined && data.persen !== null) ? data.persen : 0;
+      let persen = 0;
+      if (tasksCache && tasksCache.length > 0) {
+        persen = updateOverallProgressKPI(tasksCache);
+      } else if (data.persen !== undefined && data.persen !== null && Number(data.persen) !== 50) {
+        persen = data.persen;
+      }
       document.getElementById("metricProgressText").textContent = persen + "%";
       document.getElementById("metricProgressBar").style.width = persen + "%";
 
@@ -915,7 +920,7 @@
     }
 
     function renderFallbackDashboard(d) {
-      const p = d.progres || 0;
+      const p = (d.progres !== undefined && d.progres !== null && Number(d.progres) !== 50) ? d.progres : 0;
       document.getElementById("metricProgressText").textContent = p + "%";
       document.getElementById("metricProgressBar").style.width = p + "%";
       document.getElementById("metricTargetDays").textContent = d.targetHari || "--";
@@ -1417,14 +1422,14 @@
         }
 
         // 2. Faktor tahapan pengerjaan (Persiapan 15%, Utama 70%, Finishing 15%)
-        let factor = 0.5;
-        if (name.includes("chipping") || name.includes("pembersihan") || name.includes("underlayer") || name.includes("busa") || name.includes("persiapan")) {
+        let factor = 0.50;
+        if (name.includes("chipping") || name.includes("pembersihan") || name.includes("bersih") || name.includes("underlayer") || name.includes("busa") || name.includes("foam") || name.includes("persiapan") || name.includes("awalan")) {
           factor = 0.15;
-        } else if (name.includes("screed") || name.includes("pengecoran") || name.includes("pemasangan lantai") || name.includes("pasang spc")) {
+        } else if (name.includes("screed") || name.includes("pengecoran") || name.includes("cor") || name.includes("tuang") || name.includes("leveling") || name.includes("pasang spc") || name.includes("pemasangan") || name.includes("plank") || name.includes("vinyl")) {
           factor = 0.70;
-        } else if (name.includes("primer") || name.includes("bonding")) {
+        } else if (name.includes("primer") || name.includes("bonding") || name.includes("lem")) {
           factor = 0.20;
-        } else if (name.includes("plint") || name.includes("aksesoris") || name.includes("waterpass") || name.includes("cutting") || name.includes("sealant") || name.includes("finishing")) {
+        } else if (name.includes("plint") || name.includes("skirting") || name.includes("aksesoris") || name.includes("waterpass") || name.includes("cutting") || name.includes("sealant") || name.includes("finishing")) {
           factor = 0.15;
         }
 
@@ -1441,9 +1446,48 @@
         return {
           ...t,
           bobotOtomatis: dynamicBobot,
-          bobot: (t.bobot !== undefined && Number(t.bobot) > 0 && Number(t.bobot) !== 10) ? t.bobot : dynamicBobot
+          bobot: dynamicBobot // Selalu gunakan bobot dinamis proporsional
         };
       });
+    }
+
+    function updateOverallProgressKPI(tasks) {
+      if (!tasks || tasks.length === 0) return 0;
+      
+      let totalWeightedProgress = 0;
+      let totalWeights = 0;
+      let subTaskCount = 0;
+
+      tasks.forEach(t => {
+        const isArea = t.level === "AREA" || t[0] === "AREA";
+        if (isArea) return;
+
+        subTaskCount++;
+        const prog = Number(t.progres !== undefined ? t.progres : (t[2] || 0)) || 0;
+        const weight = Number(t.bobotOtomatis !== undefined ? t.bobotOtomatis : (t.bobot || 0)) || 0;
+
+        totalWeightedProgress += (prog * weight) / 100;
+        totalWeights += weight;
+      });
+
+      if (subTaskCount === 0) return 0;
+
+      let finalProgress = totalWeightedProgress;
+      if (totalWeights > 0 && Math.abs(totalWeights - 100) > 1) {
+        finalProgress = (totalWeightedProgress / totalWeights) * 100;
+      }
+      finalProgress = Math.min(100, Math.max(0, finalProgress));
+
+      const roundedOneDec = Math.round(finalProgress * 10) / 10;
+      const displayStr = (roundedOneDec % 1 === 0) ? roundedOneDec.toFixed(0) : roundedOneDec.toFixed(1);
+
+      const textEl = document.getElementById("metricProgressText");
+      const barEl = document.getElementById("metricProgressBar");
+
+      if (textEl) textEl.textContent = displayStr + "%";
+      if (barEl) barEl.style.width = finalProgress + "%";
+
+      return roundedOneDec;
     }
 
     function calculateTwoWorksVolume(tasks, mediaLogs) {
@@ -2153,6 +2197,10 @@
     function renderTaskItems(tasks) {
       const normalizedTasks = calculateDynamicWeights(tasks || []);
       tasksCache = normalizedTasks;
+
+      // Update KPI Progres Fisik Keseluruhan secara Dinamis & Akurat
+      updateOverallProgressKPI(normalizedTasks);
+
       const taskSelect = document.getElementById("complaintTaskSelect");
       if (taskSelect) {
         taskSelect.innerHTML = '<option value="Umum">Umum (Seluruh Area Proyek)</option>';
