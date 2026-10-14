@@ -405,6 +405,7 @@
             </div>
 
             <div class="flex items-center space-x-1.5 self-end sm:self-center">
+              <div id="bannerPhotoBtnWrapper" class="inline-flex"></div>
               <button onclick="navigateFocusedRoom(-1)" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1">
                 <i class="fa-solid fa-arrow-left text-[10px]"></i>
                 <span>Prev</span>
@@ -698,6 +699,45 @@
       <div class="flex items-center justify-between pt-2">
         <button onclick="resetDefaultApiUrl()" class="text-xs text-slate-500 hover:text-slate-800 underline">Reset ke Bawaan</button>
         <button onclick="saveApiUrlSetting()" class="bg-nafindo-blue hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Simpan & Terapkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: PREVIEW FOTO PEKERJAAN / TUGAS LAPANGAN -->
+  <!-- ========================================================================= -->
+  <div id="taskPhotosModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden" onclick="closeTaskPhotosModal()">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-100 flex flex-col animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/80 shrink-0">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base font-bold shrink-0">
+            <i class="fa-solid fa-camera"></i>
+          </div>
+          <div>
+            <h3 id="taskPhotosModalTitle" class="text-sm sm:text-base font-extrabold text-slate-900">Foto Pekerjaan</h3>
+            <p id="taskPhotosModalSubtitle" class="text-[11px] text-slate-500">Dokumentasi hasil pengerjaan di lapangan</p>
+          </div>
+        </div>
+        <button onclick="closeTaskPhotosModal()" class="w-8 h-8 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Scrollable Grid of Photos with Details) -->
+      <div id="taskPhotosModalBody" class="p-4 sm:p-5 overflow-y-auto space-y-4">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 sm:p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2 shrink-0">
+        <button id="btnOpenInFullGallery" onclick="" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-xl transition border border-blue-200">
+          <i class="fa-solid fa-photo-film"></i>
+          <span>Buka di Galeri Dokumentasi</span>
+        </button>
+        <button onclick="closeTaskPhotosModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs px-4 py-2 rounded-xl transition">
+          Tutup
+        </button>
       </div>
     </div>
   </div>
@@ -1785,6 +1825,9 @@
       // Render tiap kamar
       availableRooms.forEach(item => {
         const isSel = selectedTaskRoom === item.room && (selectedTaskFloor === "ALL" || selectedTaskFloor === item.floor);
+        const roomMedia = getMediaForTaskItem("", item.room);
+        const hasPhotos = roomMedia.roomPhotos.length > 0;
+
         const rBtn = document.createElement("button");
         rBtn.type = "button";
         rBtn.onclick = () => {
@@ -1797,7 +1840,11 @@
         rBtn.className = `px-2.5 py-1 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1 ${
           isSel ? "bg-amber-600 text-white font-extrabold shadow-sm ring-2 ring-amber-300" : "bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 hover:text-amber-700"
         }`;
-        rBtn.innerHTML = `<i class="fa-solid fa-door-closed text-[10px] text-slate-400"></i><span>${item.room}</span>`;
+        rBtn.innerHTML = `
+          <i class="fa-solid fa-door-closed text-[10px] text-slate-400"></i>
+          <span>${item.room}</span>
+          ${hasPhotos ? `<i class="fa-solid fa-camera text-[9px] text-blue-500 ml-0.5" title="Ada ${roomMedia.roomPhotos.length} foto dokumentasi"></i>` : ''}
+        `;
         container.appendChild(rBtn);
       });
     }
@@ -1827,6 +1874,7 @@
     function updateFocusBanner() {
       const banner = document.getElementById("activeTaskFocusBanner");
       const title = document.getElementById("activeFocusTitle");
+      const photoBtnWrapper = document.getElementById("bannerPhotoBtnWrapper");
       if (!banner || !title) return;
 
       const hasFocus = selectedTaskFloor !== "ALL" || selectedTaskRoom !== "ALL" || taskSearchRoomQuery.trim() !== "";
@@ -1843,8 +1891,27 @@
           txt = `Pencarian: "${taskSearchRoomQuery}"`;
         }
         title.textContent = txt;
+
+        // Tombol Lihat Foto untuk area/kamar yang sedang difokuskan
+        if (photoBtnWrapper) {
+          photoBtnWrapper.innerHTML = "";
+          let focusTarget = (selectedTaskRoom !== "ALL") ? selectedTaskRoom : ((selectedTaskFloor !== "ALL") ? selectedTaskFloor : "");
+          if (focusTarget) {
+            const focusMedia = getMediaForTaskItem("", focusTarget);
+            if (focusMedia.roomPhotos.length > 0) {
+              const escTarget = focusTarget.replace(/'/g, "\\'");
+              photoBtnWrapper.innerHTML = `
+                <button onclick="filterAndShowTaskMedia('', '${escTarget}')" class="bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 px-2.5 py-1 rounded-lg text-xs font-black transition flex items-center gap-1 shadow-sm">
+                  <i class="fa-solid fa-camera"></i>
+                  <span>Foto ${focusTarget} (${focusMedia.roomPhotos.length})</span>
+                </button>
+              `;
+            }
+          }
+        }
       } else {
         banner.classList.add("hidden");
+        if (photoBtnWrapper) photoBtnWrapper.innerHTML = "";
       }
     }
 
@@ -1886,6 +1953,201 @@
       renderRoomButtons();
       updateFocusBanner();
       renderFilteredTasksUI();
+    }
+
+    // =========================================================================
+    // HELPER: CARI MEDIA (FOTO & VIDEO) UNTUK TUGAS / AREA SECARA AKURAT
+    // =========================================================================
+    function getMediaForTaskItem(namaTugas, effectiveArea) {
+      const result = {
+        matchedPhotos: [],
+        matchedVideos: [],
+        matchedReports: [],
+        roomPhotos: [],
+        roomMediaCount: 0,
+        areaTitle: effectiveArea || "Area Umum",
+        taskTitle: namaTugas || "Pekerjaan"
+      };
+
+      const normTask = (namaTugas || "").toLowerCase();
+      const normArea = (effectiveArea || "").toLowerCase();
+      
+      // Ekstrak kamar
+      const roomMatch = normArea.match(/(?:kamar|room|rm\.?)\s*(\d+[a-zA-Z]?)/i) || 
+                        normArea.match(/-\s*(\d{3,4}[a-zA-Z]?)/) ||
+                        normArea.match(/\b(\d{3,4}[a-zA-Z]?)\b/);
+      const roomNum = roomMatch ? roomMatch[1].toUpperCase() : "";
+
+      // Ekstrak kata kunci tugas
+      const hasChipping = normTask.includes("chipping") || normTask.includes("pembersihan") || normTask.includes("bersih");
+      const hasScreed = normTask.includes("screed") || normTask.includes("pengecoran") || normTask.includes("cor") || normTask.includes("leveling");
+      const hasPrimer = normTask.includes("primer") || normTask.includes("bonding");
+      const hasSpc = normTask.includes("spc") || normTask.includes("plank") || normTask.includes("lantai");
+      const hasPlint = normTask.includes("plint") || normTask.includes("skirting") || normTask.includes("aksesoris");
+      const hasUnderlayer = normTask.includes("underlayer") || normTask.includes("foam") || normTask.includes("busa");
+
+      // Bersihkan nama tugas untuk pencocokan string
+      const cleanItemTask = normTask.replace(/\(\d+(?:[.,]\d+)?\s*(?:m2|m²)?\)/g, "").trim();
+
+      (allMediaGroupsCache || []).forEach(group => {
+        const gArea = (group.area || "").toLowerCase();
+        const gTask = (group.taskClean || group.taskName || "").toLowerCase();
+        
+        // Cek apakah room cocok
+        const gRoomMatch = gArea.match(/(?:kamar|room|rm\.?)\s*(\d+[a-zA-Z]?)/i) || 
+                           gArea.match(/-\s*(\d{3,4}[a-zA-Z]?)/) ||
+                           gArea.match(/\b(\d{3,4}[a-zA-Z]?)\b/);
+        const gRoomNum = gRoomMatch ? gRoomMatch[1].toUpperCase() : "";
+
+        const isSameRoom = (roomNum && gRoomNum && roomNum === gRoomNum);
+        const isSameArea = isSameRoom || (!roomNum && !gRoomNum && (gArea === normArea || gArea.includes(normArea) || normArea.includes(gArea)));
+
+        // Kumpulkan semua foto kamar
+        if (isSameRoom || (roomNum && gArea.includes(roomNum))) {
+          group.reports.forEach(r => {
+            (r.photos || []).forEach(p => {
+              if (p && !result.roomPhotos.includes(p)) result.roomPhotos.push(p);
+            });
+          });
+        }
+
+        // Cek kecocokan tugas spesifik
+        let isTaskMatch = false;
+        if (cleanItemTask && (gTask.includes(cleanItemTask) || cleanItemTask.includes(gTask))) {
+          isTaskMatch = true;
+        } else if (hasChipping && (gTask.includes("chipping") || gTask.includes("pembersihan") || gTask.includes("bersih"))) {
+          isTaskMatch = true;
+        } else if (hasScreed && (gTask.includes("screed") || gTask.includes("pengecoran") || gTask.includes("cor") || gTask.includes("leveling"))) {
+          isTaskMatch = true;
+        } else if (hasPrimer && (gTask.includes("primer") || gTask.includes("bonding"))) {
+          isTaskMatch = true;
+        } else if (hasSpc && (gTask.includes("spc") || gTask.includes("plank") || gTask.includes("lantai"))) {
+          isTaskMatch = true;
+        } else if (hasPlint && (gTask.includes("plint") || gTask.includes("skirting"))) {
+          isTaskMatch = true;
+        } else if (hasUnderlayer && (gTask.includes("underlayer") || gTask.includes("foam") || gTask.includes("busa"))) {
+          isTaskMatch = true;
+        }
+
+        if (isSameArea && isTaskMatch) {
+          group.reports.forEach(r => {
+            result.matchedReports.push({
+              worker: r.worker,
+              tanggal: r.tanggal,
+              catatan: r.catatan,
+              gps: r.gps,
+              volume: r.volume,
+              photos: r.photos || [],
+              videos: r.videos || []
+            });
+            (r.photos || []).forEach(p => {
+              if (p && !result.matchedPhotos.includes(p)) result.matchedPhotos.push(p);
+            });
+            (r.videos || []).forEach(v => {
+              if (v && !result.matchedVideos.includes(v)) result.matchedVideos.push(v);
+            });
+          });
+        }
+      });
+
+      result.roomMediaCount = result.roomPhotos.length;
+      return result;
+    }
+
+    function openTaskMediaModal(taskName, areaName) {
+      const mediaInfo = getMediaForTaskItem(taskName, areaName);
+      const modal = document.getElementById("taskPhotosModal");
+      const titleEl = document.getElementById("taskPhotosModalTitle");
+      const subEl = document.getElementById("taskPhotosModalSubtitle");
+      const bodyEl = document.getElementById("taskPhotosModalBody");
+      const btnFull = document.getElementById("btnOpenInFullGallery");
+      if (!modal || !bodyEl) return;
+
+      titleEl.textContent = taskName;
+      subEl.textContent = `${areaName || 'Area Lapangan'} • ${mediaInfo.matchedPhotos.length} Foto Hasil Kerja`;
+
+      if (btnFull) {
+        const escTask = taskName.replace(/'/g, "\\'");
+        const escArea = (areaName || "").replace(/'/g, "\\'");
+        btnFull.setAttribute("onclick", `closeTaskPhotosModal(); filterAndShowTaskMedia('${escTask}', '${escArea}');`);
+      }
+
+      bodyEl.innerHTML = "";
+
+      if (mediaInfo.matchedReports.length === 0 && mediaInfo.matchedPhotos.length === 0) {
+        bodyEl.innerHTML = `
+          <div class="text-center py-8 text-slate-400">
+            <i class="fa-regular fa-image text-3xl mb-2 text-slate-300"></i>
+            <p class="text-xs font-semibold text-slate-600">Belum ada foto laporan khusus untuk item pekerjaan ini.</p>
+            ${mediaInfo.roomPhotos.length > 0 ? `
+              <p class="text-[11px] text-slate-500 mt-1">Namun ada ${mediaInfo.roomPhotos.length} foto tercatat di kamar/area ini.</p>
+              <button onclick="closeTaskPhotosModal(); filterAndShowTaskMedia('', '${(areaName || '').replace(/'/g, "\\'")}');" class="mt-2 text-xs font-bold text-blue-600 hover:underline">
+                Lihat Semua Foto Kamar Ini &rarr;
+              </button>
+            ` : ''}
+          </div>
+        `;
+      } else {
+        mediaInfo.matchedReports.forEach((rep) => {
+          const repDiv = document.createElement("div");
+          repDiv.className = "bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2.5";
+
+          let photosHtml = "";
+          (rep.photos || []).forEach((pUrl, pIdx) => {
+            photosHtml += `
+              <div onclick="openLightbox('${pUrl}')" class="group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-square cursor-pointer hover:shadow-md transition">
+                <img src="${pUrl}" alt="Foto ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2 opacity-90 group-hover:opacity-100">
+                  <div class="text-white text-[10px] flex items-center justify-between w-full font-bold">
+                    <span><i class="fa-solid fa-camera mr-1"></i> Foto ${pIdx+1}</span>
+                    <i class="fa-solid fa-magnifying-glass-plus"></i>
+                  </div>
+                </div>
+              </div>
+            `;
+          });
+
+          let videosHtml = "";
+          (rep.videos || []).forEach((vUrl, vIdx) => {
+            videosHtml += `
+              <div onclick="openVideoModal('${vUrl}', '${taskName.replace(/'/g, "\\'")}')" class="group relative rounded-xl overflow-hidden bg-slate-950 border border-purple-300 aspect-square cursor-pointer hover:shadow-md transition flex items-center justify-center">
+                <div class="w-10 h-10 rounded-full bg-purple-600/90 text-white flex items-center justify-center text-sm shadow group-hover:scale-110 transition">
+                  <i class="fa-solid fa-play ml-0.5"></i>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2 text-white text-[10px] font-bold">
+                  <span class="text-purple-300"><i class="fa-solid fa-video mr-1"></i> Putar Video ${vIdx+1}</span>
+                </div>
+              </div>
+            `;
+          });
+
+          repDiv.innerHTML = `
+            <div class="flex flex-wrap items-center justify-between gap-1 text-xs pb-1.5 border-b border-slate-200/80">
+              <div class="flex items-center space-x-2">
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <i class="fa-solid fa-user-check"></i> ${rep.worker || 'Pekerja Lapangan'}
+                </span>
+                <span class="text-slate-500 font-semibold text-[11px]"><i class="fa-regular fa-clock mr-1"></i>${rep.tanggal || '-'}</span>
+              </div>
+              ${rep.volume ? `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full"><i class="fa-solid fa-ruler-combined mr-1"></i>+${rep.volume}</span>` : ''}
+            </div>
+            ${rep.catatan ? `<p class="text-xs text-slate-700 bg-white p-2 rounded-lg border border-slate-200/60 italic">"${rep.catatan}"</p>` : ''}
+            ${rep.gps ? `<div class="text-[10px] text-slate-500 font-mono flex items-center gap-1"><i class="fa-solid fa-location-dot text-rose-500"></i> ${rep.gps}</div>` : ''}
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+              ${photosHtml}
+              ${videosHtml}
+            </div>
+          `;
+          bodyEl.appendChild(repDiv);
+        });
+      }
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeTaskPhotosModal() {
+      const modal = document.getElementById("taskPhotosModal");
+      if (modal) modal.classList.add("hidden");
     }
 
     function renderTaskItems(tasks) {
@@ -1989,9 +2251,24 @@
         const bobot = item.bobot !== undefined ? item.bobot : (item[3] || 0);
 
         if (isArea) {
+          const areaMedia = getMediaForTaskItem("", nama);
+          const areaPhotoCount = areaMedia.roomPhotos.length;
+          const escapedArea = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
           const areaDiv = document.createElement("div");
-          areaDiv.className = "pt-3 pb-1 text-xs font-extrabold text-nafindo-blue uppercase tracking-wider flex items-center gap-1.5 border-b border-blue-100";
-          areaDiv.innerHTML = `<i class="fa-solid fa-layer-group text-blue-500"></i> <span>${nama}</span>`;
+          areaDiv.className = "pt-3 pb-1.5 text-xs font-extrabold text-nafindo-blue uppercase tracking-wider flex items-center justify-between gap-1.5 border-b border-blue-100 flex-wrap";
+          areaDiv.innerHTML = `
+            <div class="flex items-center gap-1.5">
+              <i class="fa-solid fa-layer-group text-blue-500"></i>
+              <span>${nama}</span>
+            </div>
+            ${areaPhotoCount > 0 ? `
+              <button onclick="filterAndShowTaskMedia('', '${escapedArea}')" class="normal-case font-bold text-[10px] text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-lg transition flex items-center gap-1 shadow-2xs" title="Lihat semua foto di area ${nama}">
+                <i class="fa-solid fa-camera text-blue-500"></i>
+                <span>Foto Area (${areaPhotoCount})</span>
+              </button>
+            ` : ''}
+          `;
           container.appendChild(areaDiv);
           renderedCount++;
         } else {
@@ -2008,49 +2285,67 @@
             statusText = `Dikerjakan (${persen}%)`;
           }
 
-          // Cek media untuk tugas ini dengan mencocokkan AREA/KAMAR dan NAMA TUGAS (Bug #3 Fix)
-          const itemArea = (item.area || effectiveArea || "").trim().toLowerCase();
-          const itemNama = (nama || "").trim().toLowerCase();
-          const itemRoomMatch = itemArea.match(/kamar\s*\d+|room\s*\d+|ruang\s*\d+/i);
-          const itemRoom = itemRoomMatch ? itemRoomMatch[0].replace(/\s+/g, '') : "";
-
-          const matchedGroup = allMediaGroupsCache.find(g => {
-            const gArea = (g.area || "").toLowerCase();
-            const gTask = (g.taskClean || g.taskName || "").toLowerCase();
-            const gRoomMatch = gArea.match(/kamar\s*\d+|room\s*\d+|ruang\s*\d+/i);
-            const gRoom = gRoomMatch ? gRoomMatch[0].replace(/\s+/g, '') : "";
-
-            if (itemRoom && gRoom && itemRoom !== gRoom) {
-              return false;
-            }
-
-            const areaMatch = !itemArea || !gArea || gArea.includes(itemArea) || itemArea.includes(gArea) || (itemRoom && gRoom && itemRoom === gRoom);
-            const taskMatch = gTask === itemNama || gTask.includes(itemNama) || itemNama.includes(gTask);
-            return areaMatch && taskMatch;
-          });
-          const mediaCount = matchedGroup 
-            ? matchedGroup.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0)
-            : 0;
+          // Pencarian Media Cerdas (Foto & Video Hasil Kerja)
+          const mediaInfo = getMediaForTaskItem(nama, effectiveArea);
+          const hasTaskPhotos = mediaInfo.matchedPhotos.length > 0;
+          const hasRoomPhotos = mediaInfo.roomPhotos.length > 0;
+          const escapedNama = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          const escapedArea = (effectiveArea || "").replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
           let actionBtns = [];
-          if (mediaCount > 0) {
-            const escapedTask = matchedGroup.taskName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-            const escapedArea = (matchedGroup.area || "").replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+          // 1. TOMBOL UTAMA: LIHAT FOTO HASIL KERJA
+          if (hasTaskPhotos) {
             actionBtns.push(`
-              <button onclick="filterAndShowTaskMedia('${escapedTask}', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg transition border border-blue-200">
-                <i class="fa-solid fa-photo-film"></i>
-                <span>Bukti (${mediaCount})</span>
+              <button onclick="openTaskMediaModal('${escapedNama}', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 px-3 py-1.5 rounded-xl shadow-sm transition" title="Buka dokumentasi foto pengerjaan tugas ini">
+                <i class="fa-solid fa-camera"></i>
+                <span>Lihat Foto Hasil Kerja (${mediaInfo.matchedPhotos.length})</span>
+              </button>
+            `);
+          } else if (hasRoomPhotos) {
+            actionBtns.push(`
+              <button onclick="filterAndShowTaskMedia('', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-lg transition" title="Lihat foto kamar / area ini">
+                <i class="fa-solid fa-images text-blue-500"></i>
+                <span>Foto Kamar Ini (${mediaInfo.roomPhotos.length})</span>
               </button>
             `);
           }
 
-          const escapedNama = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+          // 2. TOMBOL KOMPLAIN ITEM
           actionBtns.push(`
-            <button onclick="openComplaintForTask('${escapedNama}')" class="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-2 py-1 rounded-lg transition border border-rose-200" title="Laporkan kendala / ajukan catatan untuk pekerjaan ini">
+            <button onclick="openComplaintForTask('${escapedNama}')" class="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-lg transition border border-rose-200" title="Laporkan kendala / ajukan catatan untuk pekerjaan ini">
               <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
               <span>Komplain Item</span>
             </button>
           `);
+
+          // 3. THUMBNAIL PREVIEW STRIP (Jika ada foto tugas)
+          let thumbnailsHtml = "";
+          if (hasTaskPhotos) {
+            const previewSlice = mediaInfo.matchedPhotos.slice(0, 3);
+            thumbnailsHtml = `
+              <div class="flex items-center gap-2 mt-2.5 pt-2 border-t border-slate-100">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
+                  <i class="fa-solid fa-image text-blue-500"></i> Preview:
+                </span>
+                <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                  ${previewSlice.map((pUrl, pIdx) => `
+                    <div onclick="openLightbox('${pUrl}')" class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0 cursor-pointer hover:ring-2 hover:ring-blue-500 transition shadow-2xs group relative" title="Klik perbesar foto ${pIdx+1}">
+                      <img src="${pUrl}" alt="Thumb ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-110 transition duration-200">
+                      <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[10px]">
+                        <i class="fa-solid fa-magnifying-glass-plus"></i>
+                      </div>
+                    </div>
+                  `).join("")}
+                  ${mediaInfo.matchedPhotos.length > 3 ? `
+                    <button onclick="openTaskMediaModal('${escapedNama}', '${escapedArea}')" class="w-10 h-10 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-extrabold text-[10px] border border-blue-200 flex items-center justify-center shrink-0 transition" title="Lihat semua foto">
+                      +${mediaInfo.matchedPhotos.length - 3}
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `;
+          }
 
           card.innerHTML = `
             <div class="flex items-center justify-between gap-2">
@@ -2063,7 +2358,8 @@
               </div>
               <span class="text-[11px] font-bold text-slate-500 shrink-0">${persen}%</span>
             </div>
-            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+            ${thumbnailsHtml}
+            <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
               <div class="flex items-center gap-1.5 flex-wrap">
                 ${actionBtns.join("")}
               </div>
