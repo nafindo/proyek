@@ -210,6 +210,97 @@
       </div>
     </div>
 
+    <!-- ========================================================================= -->
+    <!-- MONITOR VOLUME PEKERJAAN: LEVELING & SPC (KUMULATIF & HARI INI) -->
+    <!-- ========================================================================= -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+      <!-- 1. Self-Leveling Lantai -->
+      <div class="bg-gradient-to-br from-white via-amber-50/20 to-amber-50/50 rounded-2xl p-4 sm:p-5 shadow-sm border border-amber-200/80 hover:shadow-md transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base font-bold shadow-xs">
+              <i class="fa-solid fa-layer-group"></i>
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wide">Pekerjaan Self-Leveling</h4>
+              <p class="text-[11px] text-slate-500 font-medium">Chipping, Primer & Screed Lantai</p>
+            </div>
+          </div>
+          <span id="levelingPercentBadge" class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded-full border border-amber-200">0%</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2 pb-1 border-t border-amber-100">
+          <div>
+            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total Selesai</span>
+            <div class="flex items-baseline space-x-1 mt-0.5">
+              <span id="levelingTotalDoneM2" class="text-2xl sm:text-3xl font-black text-slate-900">0</span>
+              <span class="text-xs text-slate-600 font-bold">m²</span>
+            </div>
+            <span id="levelingTargetM2" class="text-[11px] text-slate-400 font-medium block mt-0.5">Target: 0 m²</span>
+          </div>
+
+          <div class="border-l border-amber-200/60 pl-3">
+            <span class="text-[11px] font-bold text-amber-700 uppercase tracking-wider block flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+              <span>Hari Ini</span>
+            </span>
+            <div class="flex items-baseline space-x-1 mt-0.5">
+              <span id="levelingTodayM2" class="text-2xl sm:text-3xl font-black text-amber-600">0</span>
+              <span class="text-xs text-amber-600 font-bold">m²</span>
+            </div>
+            <span id="levelingTodayBadge" class="text-[10px] text-amber-700 font-bold bg-amber-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">Capaian Live</span>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-100 rounded-full h-2 mt-2.5 overflow-hidden">
+          <div id="levelingProgressBar" class="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- 2. Pemasangan Lantai SPC -->
+      <div class="bg-gradient-to-br from-white via-blue-50/20 to-blue-50/50 rounded-2xl p-4 sm:p-5 shadow-sm border border-blue-200/80 hover:shadow-md transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base font-bold shadow-xs">
+              <i class="fa-solid fa-shapes"></i>
+            </div>
+            <div>
+              <h4 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wide">Pemasangan Lantai SPC</h4>
+              <p class="text-[11px] text-slate-500 font-medium">Underlayer Foam, Plank SPC & Plint</p>
+            </div>
+          </div>
+          <span id="spcPercentBadge" class="bg-blue-100 text-blue-800 text-xs font-black px-2.5 py-1 rounded-full border border-blue-200">0%</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-2 pb-1 border-t border-blue-100">
+          <div>
+            <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total Selesai</span>
+            <div class="flex items-baseline space-x-1 mt-0.5">
+              <span id="spcTotalDoneM2" class="text-2xl sm:text-3xl font-black text-slate-900">0</span>
+              <span class="text-xs text-slate-600 font-bold">m²</span>
+            </div>
+            <span id="spcTargetM2" class="text-[11px] text-slate-400 font-medium block mt-0.5">Target: 0 m²</span>
+          </div>
+
+          <div class="border-l border-blue-200/60 pl-3">
+            <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <span>Hari Ini</span>
+            </span>
+            <div class="flex items-baseline space-x-1 mt-0.5">
+              <span id="spcTodayM2" class="text-2xl sm:text-3xl font-black text-emerald-600">0</span>
+              <span class="text-xs text-emerald-600 font-bold">m²</span>
+            </div>
+            <span id="spcTodayBadge" class="text-[10px] text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">Capaian Live</span>
+          </div>
+        </div>
+
+        <div class="w-full bg-slate-100 rounded-full h-2 mt-2.5 overflow-hidden">
+          <div id="spcProgressBar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- NAVIGATION TABS -->
     <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex space-x-1 overflow-x-auto no-scrollbar">
       <button onclick="switchTab('tab-progres')" id="btn-tab-progres" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition bg-nafindo-blue text-white shadow-sm">
@@ -1185,15 +1276,220 @@
       }
     }
 
+    // =========================================================================
+    // HITUNG OTOMATIS BOBOT DINAMIS & VOLUME PEKERJAAN (LEVELING & SPC)
+    // =========================================================================
+    function calculateDynamicWeights(tasks) {
+      if (!tasks || tasks.length === 0) return [];
+      let totalRawPoints = 0;
+      const subTasks = [];
+
+      tasks.forEach(t => {
+        const isArea = t.level === "AREA" || t[0] === "AREA";
+        if (isArea) return;
+        const name = (t.nama || t.namaTugas || t[1] || "").toString().toLowerCase();
+
+        // 1. Ekstrak volume dari nama atau fallback 14 m²
+        let vol = 14;
+        const volMatch = name.match(/\((\d+(?:[.,]\d+)?)\s*(?:m2|m²|meter)?\)/i) || name.match(/(\d+(?:[.,]\d+)?)\s*(?:m2|m²)/i);
+        if (volMatch) {
+          vol = parseFloat(volMatch[1].replace(',', '.'));
+        }
+
+        // 2. Faktor tahapan pengerjaan (Persiapan 15%, Utama 70%, Finishing 15%)
+        let factor = 0.5;
+        if (name.includes("chipping") || name.includes("pembersihan") || name.includes("underlayer") || name.includes("busa") || name.includes("persiapan")) {
+          factor = 0.15;
+        } else if (name.includes("screed") || name.includes("pengecoran") || name.includes("pemasangan lantai") || name.includes("pasang spc")) {
+          factor = 0.70;
+        } else if (name.includes("primer") || name.includes("bonding")) {
+          factor = 0.20;
+        } else if (name.includes("plint") || name.includes("aksesoris") || name.includes("waterpass") || name.includes("cutting") || name.includes("sealant") || name.includes("finishing")) {
+          factor = 0.15;
+        }
+
+        const rawPoints = vol * factor;
+        totalRawPoints += rawPoints;
+        subTasks.push({ item: t, rawPoints: rawPoints });
+      });
+
+      return tasks.map(t => {
+        const isArea = t.level === "AREA" || t[0] === "AREA";
+        if (isArea) return t;
+        const found = subTasks.find(s => s.item === t);
+        const dynamicBobot = (found && totalRawPoints > 0) ? Math.round((found.rawPoints / totalRawPoints) * 10000) / 100 : 0;
+        return {
+          ...t,
+          bobotOtomatis: dynamicBobot,
+          bobot: (t.bobot !== undefined && Number(t.bobot) > 0 && Number(t.bobot) !== 10) ? t.bobot : dynamicBobot
+        };
+      });
+    }
+
+    function calculateTwoWorksVolume(tasks, mediaLogs) {
+      let levelingTarget = 0;
+      let levelingDone = 0;
+      let levelingToday = 0;
+
+      let spcTarget = 0;
+      let spcDone = 0;
+      let spcToday = 0;
+
+      // Group sub-tasks per room/area to avoid double counting room area
+      const roomMap = new Map();
+
+      (tasks || []).forEach(task => {
+        const isArea = task.level === "AREA" || task[0] === "AREA";
+        if (isArea) return;
+
+        const name = (task.nama || task.namaTugas || task[1] || "").toString();
+        const area = (task.area || "Umum").toString();
+        const progres = Number(task.progres !== undefined ? task.progres : (task[2] || 0)) || 0;
+        const bobot = Number(task.bobot !== undefined ? task.bobot : (task[3] || 10)) || 10;
+
+        let vol = 0;
+        const volMatch = name.match(/\((\d+(?:[.,]\d+)?)\s*(?:m2|m²|meter)?\)/i) || name.match(/(\d+(?:[.,]\d+)?)\s*(?:m2|m²)/i);
+        if (volMatch) {
+          vol = parseFloat(volMatch[1].replace(',', '.'));
+        }
+
+        const roomKey = area.trim() || "Umum";
+        if (!roomMap.has(roomKey)) {
+          roomMap.set(roomKey, {
+            levelingTasks: [],
+            spcTasks: [],
+            volume: vol || 14
+          });
+        }
+        const rData = roomMap.get(roomKey);
+        if (vol > 0) rData.volume = vol;
+
+        const nLower = name.toLowerCase();
+        const isLeveling = nLower.includes("leveling") || nLower.includes("screed") || nLower.includes("chipping") || nLower.includes("primer") || nLower.includes("bonding") || nLower.includes("waterpass");
+        const isSpc = nLower.includes("spc") || nLower.includes("vinyl") || nLower.includes("underlayer") || nLower.includes("underlay") || nLower.includes("plank") || nLower.includes("skirting") || nLower.includes("plint") || nLower.includes("foam");
+
+        if (isLeveling) rData.levelingTasks.push({ name, progres, bobot });
+        if (isSpc) rData.spcTasks.push({ name, progres, bobot });
+      });
+
+      // Hitung akumulasi m² per kamar
+      roomMap.forEach(rData => {
+        const roomVol = rData.volume || 14;
+
+        if (rData.levelingTasks.length > 0) {
+          levelingTarget += roomVol;
+          const totalB = rData.levelingTasks.reduce((acc, t) => acc + (t.bobot > 0 ? t.bobot : 1), 0);
+          const weightedP = rData.levelingTasks.reduce((acc, t) => acc + (t.progres * (t.bobot > 0 ? t.bobot : 1)), 0) / (totalB || 1);
+          levelingDone += (roomVol * (weightedP / 100));
+        }
+
+        if (rData.spcTasks.length > 0) {
+          spcTarget += roomVol;
+          const totalB = rData.spcTasks.reduce((acc, t) => acc + (t.bobot > 0 ? t.bobot : 1), 0);
+          const weightedP = rData.spcTasks.reduce((acc, t) => acc + (t.progres * (t.bobot > 0 ? t.bobot : 1)), 0) / (totalB || 1);
+          spcDone += (roomVol * (weightedP / 100));
+        }
+      });
+
+      // Hitung volume capaian hari ini dari mediaLogs
+      const now = new Date();
+      const todayD = String(now.getDate()).padStart(2, '0');
+      const todayM = String(now.getMonth() + 1).padStart(2, '0');
+      const todayY = String(now.getFullYear());
+      const todayShortY = String(now.getFullYear()).slice(-2);
+
+      const todayPatterns = [
+        `${todayD}/${todayM}/${todayY}`,
+        `${todayD}/${todayM}/${todayShortY}`,
+        `${todayY}-${todayM}-${todayD}`,
+        `${todayD}-${todayM}-${todayY}`
+      ];
+
+      (mediaLogs || []).forEach(log => {
+        const tgl = (log.tanggal || "").toString().trim();
+        const isToday = todayPatterns.some(p => tgl.includes(p));
+        if (!isToday) return;
+
+        const desc = (log.deskripsi || "").toString();
+        const descLower = desc.toLowerCase();
+
+        const isLev = descLower.includes("leveling") || descLower.includes("screed") || descLower.includes("chipping") || descLower.includes("primer") || descLower.includes("bonding");
+        const isSpc = descLower.includes("spc") || descLower.includes("vinyl") || descLower.includes("underlayer") || descLower.includes("plank") || descLower.includes("plint");
+
+        let logVol = 0;
+        const match = desc.match(/\(\+(\d+(?:[.,]\d+)?)\s*(?:m2|m²)?\)/i);
+        if (match) {
+          logVol = parseFloat(match[1].replace(',', '.'));
+        } else if (log.volume) {
+          const vMatch = String(log.volume).match(/(\d+(?:[.,]\d+)?)/);
+          if (vMatch) logVol = parseFloat(vMatch[1].replace(',', '.'));
+        }
+
+        if (logVol > 0) {
+          if (isLev) levelingToday += logVol;
+          if (isSpc) spcToday += logVol;
+        }
+      });
+
+      return {
+        leveling: {
+          target: Math.round(levelingTarget * 10) / 10,
+          done: Math.round(levelingDone * 10) / 10,
+          today: Math.round(levelingToday * 10) / 10,
+          percent: levelingTarget > 0 ? Math.min(100, Math.round((levelingDone / levelingTarget) * 100)) : 0
+        },
+        spc: {
+          target: Math.round(spcTarget * 10) / 10,
+          done: Math.round(spcDone * 10) / 10,
+          today: Math.round(spcToday * 10) / 10,
+          percent: spcTarget > 0 ? Math.min(100, Math.round((spcDone / spcTarget) * 100)) : 0
+        }
+      };
+    }
+
+    function updateTwoWorksVolumeUI(tasks, mediaLogs) {
+      const res = calculateTwoWorksVolume(tasks, mediaLogs);
+
+      // Leveling Elements
+      const levTotalEl = document.getElementById("levelingTotalDoneM2");
+      const levTodayEl = document.getElementById("levelingTodayM2");
+      const levTargetEl = document.getElementById("levelingTargetM2");
+      const levPercentEl = document.getElementById("levelingPercentBadge");
+      const levBarEl = document.getElementById("levelingProgressBar");
+
+      if (levTotalEl) levTotalEl.textContent = res.leveling.done.toLocaleString("id-ID");
+      if (levTodayEl) levTodayEl.textContent = (res.leveling.today > 0 ? "+" : "") + res.leveling.today.toLocaleString("id-ID");
+      if (levTargetEl) levTargetEl.textContent = `Target: ${res.leveling.target.toLocaleString("id-ID")} m²`;
+      if (levPercentEl) levPercentEl.textContent = `${res.leveling.percent}%`;
+      if (levBarEl) levBarEl.style.width = `${res.leveling.percent}%`;
+
+      // SPC Elements
+      const spcTotalEl = document.getElementById("spcTotalDoneM2");
+      const spcTodayEl = document.getElementById("spcTodayM2");
+      const spcTargetEl = document.getElementById("spcTargetM2");
+      const spcPercentEl = document.getElementById("spcPercentBadge");
+      const spcBarEl = document.getElementById("spcProgressBar");
+
+      if (spcTotalEl) spcTotalEl.textContent = res.spc.done.toLocaleString("id-ID");
+      if (spcTodayEl) spcTodayEl.textContent = (res.spc.today > 0 ? "+" : "") + res.spc.today.toLocaleString("id-ID");
+      if (spcTargetEl) spcTargetEl.textContent = `Target: ${res.spc.target.toLocaleString("id-ID")} m²`;
+      if (spcPercentEl) spcPercentEl.textContent = `${res.spc.percent}%`;
+      if (spcBarEl) spcBarEl.style.width = `${res.spc.percent}%`;
+    }
+
     function renderTaskItems(tasks) {
-      tasksCache = tasks || [];
+      const normalizedTasks = calculateDynamicWeights(tasks || []);
+      tasksCache = normalizedTasks;
       const container = document.getElementById("taskListContainer");
       const taskSelect = document.getElementById("complaintTaskSelect");
       if (taskSelect) {
         taskSelect.innerHTML = '<option value="Umum">Umum (Seluruh Area Proyek)</option>';
       }
 
-      if (!tasks || tasks.length === 0) {
+      // Update Dua Pekerjaan Utama Monitor M²
+      updateTwoWorksVolumeUI(normalizedTasks, (projectDataCache && projectDataCache.mediaPerTugas) || []);
+
+      if (!normalizedTasks || normalizedTasks.length === 0) {
         container.innerHTML = '<div class="text-center py-8 text-slate-400 text-xs">Belum ada struktur rincian pekerjaan.</div>';
         return;
       }
