@@ -100,10 +100,20 @@
           </p>
         </div>
 
-        <!-- Private Project Badge (No switching to other projects!) -->
-        <div class="flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-3.5 py-2 text-white">
-          <i class="fa-solid fa-lock text-emerald-400 text-xs"></i>
-          <span class="text-xs font-semibold tracking-wide">Tautan Privat & Terproteksi</span>
+        <!-- Project Switcher & Share Link -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Dropdown Pilih Proyek -->
+          <div class="flex items-center space-x-2 bg-slate-900/60 backdrop-blur-md border border-white/20 rounded-xl px-3 py-1.5 text-white shadow-sm">
+            <i class="fa-solid fa-folder-tree text-blue-300 text-xs"></i>
+            <select id="headerProjectSelect" onchange="selectProject(this.value)" class="bg-transparent text-white text-xs font-semibold focus:outline-none cursor-pointer pr-2">
+              <option value="" class="bg-slate-800 text-white">Pilih Proyek...</option>
+            </select>
+          </div>
+          <!-- Tombol Salin Link -->
+          <button onclick="copyProjectShareLink()" title="Salin Tautan Khusus Proyek Ini" class="bg-white/15 hover:bg-white/25 border border-white/25 px-3 py-1.5 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-sm">
+            <i class="fa-solid fa-share-nodes text-blue-300"></i>
+            <span class="hidden sm:inline">Bagikan Link</span>
+          </button>
         </div>
       </div>
     </div>
@@ -118,28 +128,48 @@
     <!-- LAYAR TERKUNCI: JIKA DIBUKA TANPA PARAMETER PROYEK (?p=...) -->
     <!-- Mencegah user melihat proyek lain! -->
     <!-- ========================================================================= -->
-    <div id="noProjectScreen" class="hidden bg-white rounded-3xl p-8 sm:p-12 text-center shadow-xl border border-slate-200/80 max-w-lg mx-auto my-12 space-y-5 animate-in fade-in duration-300">
-      <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-inner border border-amber-200/60">
-        <i class="fa-solid fa-lock"></i>
+    <div id="noProjectScreen" class="hidden bg-white rounded-3xl p-6 sm:p-10 text-center shadow-xl border border-slate-200/80 max-w-lg mx-auto my-8 space-y-6 animate-in fade-in duration-300">
+      <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-3xl flex items-center justify-center text-3xl mx-auto shadow-inner border border-blue-200/60">
+        <i class="fa-solid fa-building-circle-check"></i>
       </div>
       <div>
-        <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Tautan Khusus Proyek Diperlukan</h3>
+        <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900">Portal Monitoring Proyek</h3>
         <p class="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">
-          Laman monitoring ini bersifat privat dan hanya dapat diakses melalui <strong>link khusus proyek</strong> yang dibagikan secara resmi oleh Manajemen <strong>CV. Nafindo Group</strong>.
+          Silakan pilih proyek aktif di bawah ini untuk melihat progres real-time, volume fisik (Leveling & SPC), dokumentasi foto/video, serta layanan pengaduan.
         </p>
       </div>
+
+      <!-- DAFTAR PILIHAN PROYEK AKTIF -->
+      <div class="space-y-2 text-left">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 px-1">
+          <span class="flex items-center gap-1.5"><i class="fa-solid fa-layer-group text-blue-600"></i> Pilih Proyek Aktif:</span>
+          <span id="quickProjectCountBadge" class="text-[10px] bg-blue-100 text-blue-700 font-extrabold px-2 py-0.5 rounded-full">Memuat...</span>
+        </div>
+        <div id="quickProjectList" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+          <div class="text-center py-6 text-slate-400 text-xs bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+            <i class="fa-solid fa-spinner fa-spin text-lg text-blue-600 mb-1"></i>
+            <p>Memuat daftar proyek dari server...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Format Tautan Khusus untuk Klien -->
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-xs text-slate-600 text-left space-y-1.5">
         <p class="font-bold text-slate-800 flex items-center gap-1.5">
-          <i class="fa-solid fa-circle-info text-blue-600"></i> Contoh Format Tautan Resmi:
+          <i class="fa-solid fa-circle-info text-blue-600"></i> Tautan Langsung Klien:
+        </p>
+        <p class="text-[11px] text-slate-500">
+          Anda juga dapat membagikan link langsung khusus proyek ini kepada klien:
         </p>
         <code class="block bg-slate-900 text-blue-300 p-2.5 rounded-xl text-[11px] font-mono break-all select-all">
-          https://nafindo.github.io/proyek/?p=Nama_Proyek_Anda
+          https://nafindo.github.io/proyek/?p=Nama_Proyek
         </code>
       </div>
-      <div class="pt-2">
-        <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20Nafindo,%20mohon%20kirimkan%20link%20monitoring%20khusus%20untuk%20proyek%20saya" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm py-3 px-5 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition">
+
+      <div class="pt-1">
+        <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20Nafindo,%20saya%20ingin%20menanyakan%20proyek%20CV%20Nafindo%20Group" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm py-3 px-5 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition">
           <i class="fa-brands fa-whatsapp text-lg"></i>
-          <span>Hubungi Admin untuk Mendapatkan Link Proyek</span>
+          <span>Hubungi Tim Admin CV. Nafindo Group</span>
         </a>
       </div>
     </div>
@@ -803,10 +833,40 @@
     // Inisialisasi saat Halaman Dimuat
     document.addEventListener("DOMContentLoaded", () => {
       initProjectFromUrl();
+      fetchProjectList();
     });
 
-    // 1. Parsing Nama Proyek dari Parameter URL (e.g. ?p=Lapangan_Padel_Gresik)
-    // PRIVASI KLIEN: Halaman ini terkunci eksklusif untuk proyek di parameter link. Klien tidak boleh melihat proyek lain!
+    // 1. Pemilihan dan Aktivasi Proyek
+    function selectProject(projName) {
+      if (!projName || projName.trim() === "") return;
+      currentProject = decodeURIComponent(projName).replace(/_/g, " ").replace(/\+/g, " ").trim();
+      localStorage.setItem("nafindo_last_project", currentProject);
+
+      // Sinkronkan URL browser agar link bisa di-copy/share
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("p", currentProject.replace(/\s+/g, '_'));
+        window.history.pushState({}, "", url);
+      } catch (e) {}
+
+      const dashboardEl = document.getElementById("mainDashboardContent");
+      const noProjectEl = document.getElementById("noProjectScreen");
+      const titleEl = document.getElementById("projectNameHeading");
+      const subTitleEl = document.getElementById("projectSubtitle");
+      const badgeEl = document.getElementById("projectStatusBadge");
+      const headerSelect = document.getElementById("headerProjectSelect");
+
+      if (noProjectEl) noProjectEl.classList.add("hidden");
+      if (dashboardEl) dashboardEl.classList.remove("hidden");
+      if (titleEl) titleEl.textContent = currentProject;
+      if (subTitleEl) subTitleEl.textContent = "Data progres dan laporan lapangan khusus proyek Anda secara real-time.";
+      if (badgeEl) badgeEl.textContent = "Sedang Berjalan";
+      if (headerSelect) headerSelect.value = currentProject;
+
+      fetchProjectData();
+    }
+
+    // 2. Parsing Nama Proyek dari Parameter URL (e.g. ?p=Hotel_Pulau_Intan_Solo)
     function initProjectFromUrl() {
       const urlParams = new URLSearchParams(window.location.search);
       const projParam = urlParams.get("p") || urlParams.get("proyek") || urlParams.get("id");
@@ -818,23 +878,106 @@
       const badgeEl = document.getElementById("projectStatusBadge");
 
       if (!projParam || projParam.trim() === "") {
-        // AKSES DIBLOKIR: Tidak ada parameter proyek -> Tampilkan layar terkunci, sembunyikan dashboard
+        // Cek apakah ada proyek terakhir yang tersimpan di browser
+        const lastProject = localStorage.getItem("nafindo_last_project");
+        if (lastProject && lastProject.trim() !== "") {
+          selectProject(lastProject);
+          return;
+        }
+
+        // Tampilkan layar pemilihan proyek
         if (dashboardEl) dashboardEl.classList.add("hidden");
         if (noProjectEl) noProjectEl.classList.remove("hidden");
-        if (titleEl) titleEl.textContent = "Tautan Privat Diperlukan";
-        if (subTitleEl) subTitleEl.textContent = "Laman ini bersifat rahasia. Silakan buka tautan resmi proyek yang dibagikan oleh Manajemen CV. Nafindo Group.";
-        if (badgeEl) badgeEl.textContent = "Akses Terkunci";
+        if (titleEl) titleEl.textContent = "Pilih Proyek";
+        if (subTitleEl) subTitleEl.textContent = "Silakan pilih salah satu proyek di bawah untuk memantau progres lapangan.";
+        if (badgeEl) badgeEl.textContent = "Pilih Proyek";
         return;
       }
 
-      // Klien memiliki link resmi yang valid: Tampilkan dashboard khusus proyek ini saja!
-      currentProject = decodeURIComponent(projParam).replace(/_/g, " ").replace(/\+/g, " ").trim();
-      if (noProjectEl) noProjectEl.classList.add("hidden");
-      if (dashboardEl) dashboardEl.classList.remove("hidden");
-      if (titleEl) titleEl.textContent = currentProject.replace(/_/g, " ");
-      if (subTitleEl) subTitleEl.textContent = "Data progres dan laporan lapangan khusus proyek Anda secara real-time.";
-      
-      fetchProjectData();
+      selectProject(projParam);
+    }
+
+    // 3. Mengambil Daftar Seluruh Proyek Aktif dari Backend API
+    async function fetchProjectList() {
+      try {
+        const url = `${getApiUrl()}?action=getProjectSheets&api=true`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const list = (json && (json.data || json.result)) ? (json.data || json.result) : [];
+
+        // Update Dropdown Header
+        const headerSelect = document.getElementById("headerProjectSelect");
+        if (headerSelect) {
+          headerSelect.innerHTML = '<option value="" class="bg-slate-800 text-white">Ganti Proyek...</option>';
+          list.forEach(p => {
+            const cleanP = p.replace(/_/g, " ");
+            const opt = document.createElement("option");
+            opt.value = p;
+            opt.textContent = cleanP;
+            opt.className = "bg-slate-800 text-white";
+            if (currentProject && (p === currentProject || cleanP === currentProject)) {
+              opt.selected = true;
+            }
+            headerSelect.appendChild(opt);
+          });
+        }
+
+        // Update Kartu Pilihan Proyek di Layar noProjectScreen
+        const countBadge = document.getElementById("quickProjectCountBadge");
+        if (countBadge) countBadge.textContent = `${list.length} Proyek`;
+
+        const quickList = document.getElementById("quickProjectList");
+        if (quickList) {
+          if (list.length === 0) {
+            quickList.innerHTML = '<div class="text-xs text-slate-400 py-3 text-center">Tidak ada proyek aktif yang ditemukan.</div>';
+            return;
+          }
+          quickList.innerHTML = "";
+          list.forEach(p => {
+            const cleanP = p.replace(/_/g, " ");
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "w-full group bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 rounded-2xl p-3.5 text-left transition flex items-center justify-between shadow-sm cursor-pointer";
+            btn.onclick = () => selectProject(p);
+            btn.innerHTML = `
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 group-hover:bg-blue-600 group-hover:text-white text-blue-700 flex items-center justify-center font-bold text-sm shrink-0 transition">
+                  <i class="fa-solid fa-building"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-bold text-slate-900 group-hover:text-blue-700 transition">${cleanP}</h4>
+                  <p class="text-[10px] text-slate-500">Pantau progres, volume & dokumentasi</p>
+                </div>
+              </div>
+              <div class="text-blue-600 text-xs font-bold flex items-center space-x-1 shrink-0">
+                <span>Buka</span>
+                <i class="fa-solid fa-arrow-right text-[11px] group-hover:translate-x-1 transition"></i>
+              </div>
+            `;
+            quickList.appendChild(btn);
+          });
+        }
+      } catch (e) {
+        console.warn("Gagal memuat list proyek:", e);
+      }
+    }
+
+    // 4. Salin Tautan Proyek Aktif untuk Dibagikan ke WhatsApp / Klien
+    function copyProjectShareLink() {
+      if (!currentProject) {
+        alert("Silakan pilih proyek terlebih dahulu.");
+        return;
+      }
+      const shareUrl = `${window.location.origin}${window.location.pathname}?p=${encodeURIComponent(currentProject.replace(/\s+/g, '_'))}`;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert(`✅ Tautan proyek berhasil disalin!\n\n${shareUrl}`);
+        }).catch(() => {
+          prompt("Salin tautan proyek di bawah ini:", shareUrl);
+        });
+      } else {
+        prompt("Salin tautan proyek di bawah ini:", shareUrl);
+      }
     }
 
     // 3. Mengambil Data Progres Proyek secara Lengkap
