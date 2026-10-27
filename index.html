@@ -787,15 +787,53 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- LIGHTBOX MODAL UNTUK PREVIEW FOTO DOKUMENTASI -->
+  <!-- LIGHTBOX MODAL UNTUK PREVIEW FOTO DOKUMENTASI (SWIPE & NEXT/PREV) -->
   <!-- ========================================================================= -->
-  <div id="lightboxModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden" onclick="closeLightbox()">
-    <div class="relative max-w-3xl w-full" onclick="event.stopPropagation()">
-      <button onclick="closeLightbox()" class="absolute -top-10 right-0 text-white/80 hover:text-white text-2xl">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <img id="lightboxImg" src="" alt="Foto Lapangan" class="w-full max-h-[85vh] object-contain rounded-xl shadow-2xl">
+  <div id="lightboxModal" class="fixed inset-0 bg-black/95 z-50 flex flex-col items-center justify-between p-2 sm:p-4 hidden select-none backdrop-blur-sm" onclick="closeLightbox()">
+    
+    <!-- Top Bar: Counter, Info & Close Button -->
+    <div class="w-full max-w-4xl flex items-center justify-between px-2 sm:px-4 py-2 text-white/90 shrink-0 z-30" onclick="event.stopPropagation()">
+      <div class="flex items-center gap-2">
+        <span id="lightboxCounter" class="bg-white/15 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold tracking-wide border border-white/10 backdrop-blur-md">
+          Foto 1 dari 1
+        </span>
+      </div>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a id="lightboxDownloadBtn" href="" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/25 text-white/90 hover:text-white flex items-center justify-center transition border border-white/10 text-xs sm:text-sm" title="Buka Tab Baru / Ukuran Asli">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+        <button onclick="closeLightbox()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-rose-600 text-white/90 hover:text-white flex items-center justify-center transition border border-white/10 text-base sm:text-lg" title="Tutup (Esc)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
     </div>
+
+    <!-- Main Container: Image & Navigation Buttons -->
+    <div class="relative w-full max-w-4xl flex-1 flex items-center justify-center overflow-hidden my-auto px-1 sm:px-12" onclick="event.stopPropagation()">
+      
+      <!-- Tombol Panah Kiri (Sebelumnya) -->
+      <button id="lightboxPrevBtn" onclick="prevLightbox(event)" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 text-white flex items-center justify-center text-lg sm:text-2xl transition shadow-2xl backdrop-blur-md z-30 border border-white/20 focus:outline-none" title="Foto Sebelumnya (Geser Kanan)">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+
+      <!-- Foto Preview Utama -->
+      <div class="w-full h-full flex items-center justify-center p-1">
+        <img id="lightboxImg" src="" alt="Dokumentasi Foto" class="max-h-[78vh] sm:max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl transition-opacity duration-200">
+      </div>
+
+      <!-- Tombol Panah Kanan (Selanjutnya) -->
+      <button id="lightboxNextBtn" onclick="nextLightbox(event)" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 text-white flex items-center justify-center text-lg sm:text-2xl transition shadow-2xl backdrop-blur-md z-30 border border-white/20 focus:outline-none" title="Foto Selanjutnya (Geser Kiri)">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+    </div>
+
+    <!-- Bottom Bar: Petunjuk Navigasi & Geser -->
+    <div class="w-full max-w-4xl flex items-center justify-center py-2 text-white/50 text-[11px] sm:text-xs shrink-0 z-30" onclick="event.stopPropagation()">
+      <span class="flex items-center gap-1.5 bg-black/40 px-3 py-1 rounded-full border border-white/5">
+        <i class="fa-solid fa-arrows-left-right text-xs text-amber-400"></i> Geser layar HP ke kiri/kanan atau tekan panah untuk lihat foto lain
+      </span>
+    </div>
+
   </div>
 
   <!-- ========================================================================= -->
@@ -3017,14 +3055,163 @@
       }
     }
 
-    function openLightbox(src) {
-      document.getElementById("lightboxImg").src = src;
-      document.getElementById("lightboxModal").classList.remove("hidden");
+    // =========================================================================
+    // LIGHTBOX DENGAN FITUR SWIPE GESTURE & NEXT / PREVIOUS (MULTI-FOTO)
+    // =========================================================================
+    let lightboxGallery = [];
+    let currentLightboxIndex = 0;
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    /**
+     * Mengumpulkan semua foto dokumentasi yang ada di halaman web portal
+     */
+    function gatherAllPortalPhotos() {
+      const photos = [];
+      // 1. Dari allMediaGroupsCache jika sudah terisi (data tugas & dokumentasi terverifikasi)
+      if (typeof allMediaGroupsCache !== "undefined" && Array.isArray(allMediaGroupsCache)) {
+        allMediaGroupsCache.forEach(g => {
+          (g.reports || []).forEach(r => {
+            (r.photos || []).forEach(p => {
+              if (p && typeof p === "string" && !photos.includes(p)) photos.push(p);
+            });
+          });
+        });
+      }
+      // 2. Dari gambar di DOM (seluruh elemen img dokumentasi yang sedang tampil)
+      const imgs = document.querySelectorAll('img');
+      imgs.forEach(im => {
+        const s = im.src || "";
+        if (s && (s.includes('cloudinary') || s.includes('drive.google') || s.includes('data:image')) && !photos.includes(s) && !s.includes('logo') && !s.includes('favicon')) {
+          photos.push(s);
+        }
+      });
+      return photos;
+    }
+
+    function openLightbox(src, customList, initialIndex) {
+      if (!src && (!customList || customList.length === 0)) return;
+
+      // 1. Tentukan playlist galeri foto
+      if (Array.isArray(customList) && customList.length > 0) {
+        lightboxGallery = customList.filter(u => typeof u === "string" && u.trim().length > 0);
+      } else {
+        const allPhotos = gatherAllPortalPhotos();
+        if (src && !allPhotos.includes(src)) {
+          allPhotos.push(src);
+        }
+        lightboxGallery = allPhotos.length > 0 ? allPhotos : [src];
+      }
+
+      // 2. Tentukan indeks aktif
+      if (typeof initialIndex === "number" && initialIndex >= 0 && initialIndex < lightboxGallery.length) {
+        currentLightboxIndex = initialIndex;
+      } else {
+        const found = lightboxGallery.indexOf(src);
+        currentLightboxIndex = found !== -1 ? found : 0;
+      }
+
+      updateLightboxDisplay();
+
+      const modal = document.getElementById("lightboxModal");
+      if (modal) modal.classList.remove("hidden");
+      document.body.style.overflow = "hidden"; // Kunci scroll background halaman
+    }
+
+    function updateLightboxDisplay() {
+      if (!lightboxGallery || lightboxGallery.length === 0) return;
+      if (currentLightboxIndex < 0) currentLightboxIndex = 0;
+      if (currentLightboxIndex >= lightboxGallery.length) currentLightboxIndex = lightboxGallery.length - 1;
+
+      const currentSrc = lightboxGallery[currentLightboxIndex];
+      const imgEl = document.getElementById("lightboxImg");
+      const counterEl = document.getElementById("lightboxCounter");
+      const downloadEl = document.getElementById("lightboxDownloadBtn");
+      const prevBtn = document.getElementById("lightboxPrevBtn");
+      const nextBtn = document.getElementById("lightboxNextBtn");
+
+      if (imgEl) {
+        imgEl.style.opacity = "0.2";
+        imgEl.src = currentSrc;
+        setTimeout(() => { imgEl.style.opacity = "1"; }, 40);
+      }
+      if (counterEl) {
+        counterEl.textContent = "Foto " + (currentLightboxIndex + 1) + " dari " + lightboxGallery.length;
+      }
+      if (downloadEl) {
+        downloadEl.href = currentSrc;
+      }
+
+      // Sembunyikan tombol navigasi jika hanya ada 1 foto
+      const isMulti = lightboxGallery.length > 1;
+      if (prevBtn) prevBtn.style.display = isMulti ? "flex" : "none";
+      if (nextBtn) nextBtn.style.display = isMulti ? "flex" : "none";
+    }
+
+    function prevLightbox(e) {
+      if (e) e.stopPropagation();
+      if (lightboxGallery.length <= 1) return;
+      currentLightboxIndex = (currentLightboxIndex - 1 + lightboxGallery.length) % lightboxGallery.length;
+      updateLightboxDisplay();
+    }
+
+    function nextLightbox(e) {
+      if (e) e.stopPropagation();
+      if (lightboxGallery.length <= 1) return;
+      currentLightboxIndex = (currentLightboxIndex + 1) % lightboxGallery.length;
+      updateLightboxDisplay();
     }
 
     function closeLightbox() {
-      document.getElementById("lightboxModal").classList.add("hidden");
+      const modal = document.getElementById("lightboxModal");
+      if (modal) modal.classList.add("hidden");
+      document.body.style.overflow = ""; // Pulihkan scroll halaman
     }
+
+    // Navigasi Keyboard (Panah Kiri, Panah Kanan, Spasi, Escape)
+    document.addEventListener("keydown", function(e) {
+      const modal = document.getElementById("lightboxModal");
+      if (!modal || modal.classList.contains("hidden")) return;
+
+      if (e.key === "ArrowLeft") {
+        prevLightbox(e);
+      } else if (e.key === "ArrowRight" || e.key === " ") {
+        nextLightbox(e);
+      } else if (e.key === "Escape") {
+        closeLightbox();
+      }
+    });
+
+    // Touch Swipe Navigation (Geser Layar Sentuh HP Kiri / Kanan)
+    (function initLightboxSwipeGesture() {
+      const modal = document.getElementById("lightboxModal");
+      if (!modal) return;
+
+      modal.addEventListener("touchstart", function(e) {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+
+      modal.addEventListener("touchend", function(e) {
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const touchEndX = e.changedTouches[0].screenX;
+        const touchEndY = e.changedTouches[0].screenY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        // Pastikan gerakan swipe horizontal dominan dan melampaui batas minimal 40px
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+          if (deltaX < 0) {
+            // Geser ke Kiri -> Foto Selanjutnya (Next)
+            nextLightbox();
+          } else {
+            // Geser ke Kanan -> Foto Sebelumnya (Prev)
+            prevLightbox();
+          }
+        }
+      }, { passive: true });
+    })();
 
     function openVideoModal(src, title) {
       const modal = document.getElementById("videoModal");
