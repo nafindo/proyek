@@ -1,679 +1,1458 @@
 <!DOCTYPE html>
+
 <html lang="id">
+
 <head>
+
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Portal Monitoring Proyek & Layanan Klien | CV. Nafindo Group</title>
+
   <link rel="icon" href="https://www.nafindogroup.com/favicon.ico" type="image/x-icon">
+
   
+
   <!-- Tailwind CSS & FontAwesome -->
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <script>
+
     tailwind.config = {
+
       theme: {
+
         extend: {
+
           fontFamily: {
+
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+
           },
+
           colors: {
+
             nafindo: {
+
               blue: '#0056b3',
+
               dark: '#0f172a',
+
               navy: '#1e3a8a',
+
               accent: '#3b82f6',
+
               gold: '#f59e0b',
+
               surface: '#f8fafc'
+
             }
+
           }
+
         }
+
       }
+
     }
+
   </script>
 
   <style>
+
     .gradient-header {
+
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0056b3 100%);
+
     }
+
     .pulse-dot {
+
       box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+
       animation: pulse-ring 2s infinite cubic-bezier(0.66, 0, 0, 1);
+
     }
+
     @keyframes pulse-ring {
+
       to {
+
         box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+
       }
+
     }
+
     /* Hide scrollbar for tabs on mobile */
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
+
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
   </style>
+
 </head>
+
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased">
 
   <!-- ========================================================================= -->
+
   <!-- TOP BAR & BRANDING HEADER -->
+
   <!-- ========================================================================= -->
+
   <header class="gradient-header text-white shadow-xl relative overflow-hidden">
+
     <!-- Background Decorator -->
+
     <div class="absolute -right-16 -top-16 w-64 h-64 bg-white/5 rounded-full blur-2xl pointer-events-none"></div>
+
     <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-blue-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
     <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-6 pb-8 relative z-10">
+
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
         <!-- Brand Info -->
+
         <div class="flex items-center space-x-3">
+
           <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/20 shadow-inner">
+
             <span class="text-2xl sm:text-3xl">🏗️</span>
+
           </div>
+
           <div>
+
             <div class="flex items-center space-x-2">
+
               <h1 class="text-lg sm:text-xl font-extrabold tracking-wide uppercase">CV. Nafindo Group</h1>
+
               <span class="bg-emerald-500/20 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/40">OFFICIAL</span>
+
             </div>
+
             <p class="text-xs text-blue-200 font-medium">Portal Monitoring Proyek & Transparansi Klien</p>
+
           </div>
+
         </div>
 
         <!-- Project Status Badge -->
+
         <div class="flex items-center space-x-2">
+
           <div class="bg-white/10 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-xl flex items-center space-x-2">
+
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 pulse-dot"></span>
+
             <span id="projectStatusBadge" class="text-xs font-bold text-white uppercase tracking-wider">Sedang Berjalan</span>
+
           </div>
+
         </div>
+
       </div>
 
       <!-- Project Title Banner -->
+
       <div class="mt-6 pt-6 border-t border-white/15 flex flex-col md:flex-row md:items-end justify-between gap-4">
+
         <div>
+
           <span class="text-[11px] font-bold uppercase tracking-widest text-blue-300 flex items-center gap-1.5">
+
             <i class="fa-solid fa-map-pin"></i> Pemantauan Khusus:
+
           </span>
+
           <h2 id="projectNameHeading" class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white mt-0.5 capitalize">
+
             Memuat Proyek...
+
           </h2>
+
           <p id="projectSubtitle" class="text-xs text-blue-200 mt-1">
+
             Data progres terhubung langsung secara real-time dengan laporan lapangan.
+
           </p>
+
         </div>
 
         <!-- Status & Share Link Proyek -->
+
         <div class="flex items-center space-x-2">
+
           <div class="flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-3.5 py-2 text-white shadow-sm">
+
             <i class="fa-solid fa-shield-halved text-emerald-400 text-xs"></i>
+
             <span id="headerPrivacyBadge" class="text-xs font-semibold tracking-wide">Akses Khusus Klien</span>
+
           </div>
+
           <button id="btnCopyShareHeader" onclick="copyProjectShareLink()" title="Salin Tautan Khusus Proyek Ini" class="hidden bg-white/15 hover:bg-white/25 border border-white/25 px-3.5 py-2 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-sm active:scale-95">
+
             <i class="fa-solid fa-share-nodes text-blue-300"></i>
+
             <span class="hidden sm:inline">Salin Link Proyek</span>
+
           </button>
+
         </div>
+
       </div>
+
     </div>
+
   </header>
 
   <!-- ========================================================================= -->
+
   <!-- MAIN CONTENT CONTAINER -->
+
   <!-- ========================================================================= -->
+
   <main class="max-w-5xl mx-auto px-4 sm:px-6 -mt-4 mb-16 flex-1 w-full space-y-6">
 
     <!-- ========================================================================= -->
+
     <!-- LAYAR TERKUNCI: JIKA DIBUKA TANPA PARAMETER PROYEK (?p=...) -->
+
     <!-- Mencegah user melihat proyek lain! -->
+
     <!-- ========================================================================= -->
+
     <div id="noProjectScreen" class="bg-white rounded-3xl p-6 sm:p-10 text-center shadow-xl border border-slate-200/80 max-w-lg mx-auto my-6 sm:my-10 space-y-6 animate-in fade-in duration-300">
+
       
+
       <!-- Icon Logo Sambutan -->
+
       <div class="relative w-20 h-20 mx-auto">
+
         <div class="w-20 h-20 bg-gradient-to-tr from-blue-600 to-indigo-600 text-white rounded-3xl flex items-center justify-center text-3xl shadow-lg shadow-blue-500/30">
+
           <i class="fa-solid fa-handshake-angle"></i>
+
         </div>
+
         <span class="absolute -bottom-1 -right-1 bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full border-2 border-white shadow">
+
           RESMI
+
         </span>
+
       </div>
 
       <!-- Ucapan Selamat Datang -->
+
       <div class="space-y-2">
+
         <span class="bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+
           CV. NAFINDO GROUP
+
         </span>
+
         <h3 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight">
+
           Selamat Datang di Portal Pemantauan Proyek & Layanan Klien
+
         </h3>
+
         <p class="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1">
+
           Layanan transparansi progres fisik lapangan, dokumentasi pekerjaan, dan saluran resmi pengaduan komplain klien CV. Nafindo Group.
+
         </p>
+
       </div>
 
       <!-- Penjelasan Kerahasiaan & Akses Khusus Proyek (Mencegah Komplain Sembarangan) -->
+
       <div class="bg-amber-50/90 border border-amber-200 rounded-2xl p-4 sm:p-5 text-left space-y-2">
+
         <div class="flex items-center space-x-2 text-amber-900 font-extrabold text-xs sm:text-sm">
+
           <i class="fa-solid fa-shield-halved text-amber-600 text-base"></i>
+
           <span>Kerahasiaan & Akses Khusus Proyek</span>
+
         </div>
+
         <p class="text-xs text-amber-800 leading-relaxed">
+
           Demi menjaga privasi data proyek dan memastikan seluruh layanan pengaduan / komplain hanya dapat diakses oleh pemilik proyek yang sah, <strong>laman pemantauan ini bersifat privat dan tidak dibuka untuk umum</strong>.
+
         </p>
+
       </div>
 
       <!-- Panduan Untuk Pemilik Proyek -->
+
       <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 text-left space-y-2">
+
         <p class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+
           <i class="fa-solid fa-circle-info text-blue-600"></i> Cara Membuka Proyek Anda:
+
         </p>
+
         <ol class="text-xs text-slate-600 space-y-1.5 list-decimal list-inside leading-relaxed">
+
           <li>Gunakan <strong>link khusus proyek</strong> yang telah dibagikan secara resmi oleh Manajemen CV. Nafindo Group ke WhatsApp Anda.</li>
+
           <li>Format tautan resmi Anda: <br>
+
             <code class="inline-block mt-1 bg-slate-900 text-blue-300 px-2 py-1 rounded-lg text-[11px] font-mono select-all">
+
               https://nafindo.github.io/proyek/?p=Nama_Proyek_Anda
+
             </code>
+
           </li>
+
           <li>Dashboard progres real-time, foto/video lapangan, dan formulir komplain akan langsung terbuka otomatis.</li>
+
         </ol>
+
       </div>
 
       <!-- Tombol Hubungi Admin via WhatsApp -->
+
       <div class="pt-1 space-y-2">
+
         <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20Nafindo,%20saya%20klien%20ingin%20meminta%20link%20monitoring%20resmi%20proyek%20saya" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm py-3.5 px-5 rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2.5 transition active:scale-95">
+
           <i class="fa-brands fa-whatsapp text-lg"></i>
+
           <span>Hubungi Admin untuk Mendapatkan Link Proyek</span>
+
         </a>
+
         <p class="text-[11px] text-slate-400">
+
           Tim Manajemen CV. Nafindo Group siap melayani Anda.
+
         </p>
+
       </div>
+
     </div>
 
     <!-- MAIN DASHBOARD CONTENT (HANYA MUNCUL JIKA LINK PROYEK VALID) -->
+
     <div id="mainDashboardContent" class="hidden space-y-6">
 
     <!-- KPI & METRICS SUMMARY CARDS -->
+
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+
       <!-- 1. Total Progres -->
+
       <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-2">
+
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Progres Fisik</span>
+
           <div class="w-8 h-8 rounded-xl bg-blue-50 text-nafindo-blue flex items-center justify-center text-sm font-bold">
+
             <i class="fa-solid fa-chart-line"></i>
+
           </div>
+
         </div>
+
         <div class="flex items-baseline space-x-1">
+
           <span id="metricProgressText" class="text-2xl sm:text-3xl font-extrabold text-nafindo-dark">0%</span>
+
         </div>
+
         <div class="w-full bg-slate-100 rounded-full h-2 mt-2 overflow-hidden">
+
           <div id="metricProgressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+
         </div>
+
       </div>
 
       <!-- 2. Target Hari & Durasi -->
+
       <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-2">
+
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Target Waktu</span>
+
           <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-sm font-bold">
+
             <i class="fa-solid fa-hourglass-half"></i>
+
           </div>
+
         </div>
+
         <div class="flex items-baseline space-x-1">
+
           <span id="metricTargetDays" class="text-2xl sm:text-3xl font-extrabold text-nafindo-dark">--</span>
+
           <span class="text-xs text-slate-500 font-medium">Hari</span>
+
         </div>
+
         <span id="metricRemainingDays" class="text-[11px] text-amber-600 font-semibold block mt-1">Sisa: -- hari</span>
+
       </div>
 
       <!-- 3. Target Deadline -->
+
       <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-2">
+
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Target Selesai</span>
+
           <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold">
+
             <i class="fa-regular fa-calendar-check"></i>
+
           </div>
+
         </div>
+
         <div class="flex items-baseline space-x-1">
+
           <span id="metricDeadlineText" class="text-base sm:text-lg font-bold text-nafindo-dark truncate">--</span>
+
         </div>
+
         <span class="text-[11px] text-slate-400 font-medium block mt-1">Berdasarkan Kontrak</span>
+
       </div>
 
       <!-- 4. Update Lapangan Terakhir -->
+
       <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-2">
+
           <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Update Terakhir</span>
+
           <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-sm font-bold">
+
             <i class="fa-solid fa-clock-rotate-left"></i>
+
           </div>
+
         </div>
+
         <div class="flex items-baseline space-x-1">
+
           <span id="metricLastUpdate" class="text-lg sm:text-xl font-bold text-nafindo-dark">--:--</span>
+
           <span class="text-xs text-slate-500 font-medium">WIB</span>
+
         </div>
+
         <span class="text-[11px] text-purple-600 font-semibold block mt-1">Live Mandor Lapangan</span>
+
       </div>
+
     </div>
 
     <!-- ========================================================================= -->
+
     <!-- MONITOR VOLUME PEKERJAAN: LEVELING & SPC (KUMULATIF & HARI INI) -->
+
     <!-- ========================================================================= -->
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+
       <!-- 1. Self-Leveling Lantai -->
+
       <div class="bg-gradient-to-br from-white via-amber-50/20 to-amber-50/50 rounded-2xl p-4 sm:p-5 shadow-sm border border-amber-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-3">
+
           <div class="flex items-center space-x-2.5">
+
             <div class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-base font-bold shadow-xs">
+
               <i class="fa-solid fa-layer-group"></i>
+
             </div>
+
             <div>
+
               <h4 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wide">Pekerjaan Self-Leveling</h4>
+
               <p class="text-[11px] text-slate-500 font-medium">Chipping, Primer & Screed Lantai</p>
+
             </div>
+
           </div>
+
           <span id="levelingPercentBadge" class="bg-amber-100 text-amber-800 text-xs font-black px-2.5 py-1 rounded-full border border-amber-200">0%</span>
+
         </div>
 
         <div class="grid grid-cols-2 gap-3 pt-2 pb-1 border-t border-amber-100">
+
           <div>
+
             <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total Selesai</span>
+
             <div class="flex items-baseline space-x-1 mt-0.5">
+
               <span id="levelingTotalDoneM2" class="text-2xl sm:text-3xl font-black text-slate-900">0</span>
+
               <span class="text-xs text-slate-600 font-bold">m²</span>
+
             </div>
+
             <span id="levelingTargetM2" class="text-[11px] text-slate-400 font-medium block mt-0.5">Target: 0 m²</span>
+
           </div>
 
           <div class="border-l border-amber-200/60 pl-3">
+
             <span class="text-[11px] font-bold text-amber-700 uppercase tracking-wider block flex items-center gap-1">
+
               <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+
               <span>Hari Ini</span>
+
             </span>
+
             <div class="flex items-baseline space-x-1 mt-0.5">
+
               <span id="levelingTodayM2" class="text-2xl sm:text-3xl font-black text-amber-600">0</span>
+
               <span class="text-xs text-amber-600 font-bold">m²</span>
+
             </div>
+
             <span id="levelingTodayBadge" class="text-[10px] text-amber-700 font-bold bg-amber-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">Capaian Live</span>
+
           </div>
+
         </div>
 
         <div class="w-full bg-slate-100 rounded-full h-2 mt-2.5 overflow-hidden">
+
           <div id="levelingProgressBar" class="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+
         </div>
+
       </div>
 
       <!-- 2. Pemasangan Lantai SPC -->
+
       <div class="bg-gradient-to-br from-white via-blue-50/20 to-blue-50/50 rounded-2xl p-4 sm:p-5 shadow-sm border border-blue-200/80 hover:shadow-md transition">
+
         <div class="flex items-center justify-between mb-3">
+
           <div class="flex items-center space-x-2.5">
+
             <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base font-bold shadow-xs">
+
               <i class="fa-solid fa-shapes"></i>
+
             </div>
+
             <div>
+
               <h4 class="text-xs sm:text-sm font-extrabold text-slate-800 uppercase tracking-wide">Pemasangan Lantai SPC</h4>
+
               <p class="text-[11px] text-slate-500 font-medium">Underlayer Foam, Plank SPC & Plint</p>
+
             </div>
+
           </div>
+
           <span id="spcPercentBadge" class="bg-blue-100 text-blue-800 text-xs font-black px-2.5 py-1 rounded-full border border-blue-200">0%</span>
+
         </div>
 
         <div class="grid grid-cols-2 gap-3 pt-2 pb-1 border-t border-blue-100">
+
           <div>
+
             <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider block">Total Selesai</span>
+
             <div class="flex items-baseline space-x-1 mt-0.5">
+
               <span id="spcTotalDoneM2" class="text-2xl sm:text-3xl font-black text-slate-900">0</span>
+
               <span class="text-xs text-slate-600 font-bold">m²</span>
+
             </div>
+
             <span id="spcTargetM2" class="text-[11px] text-slate-400 font-medium block mt-0.5">Target: 0 m²</span>
+
           </div>
 
           <div class="border-l border-blue-200/60 pl-3">
+
             <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block flex items-center gap-1">
+
               <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+
               <span>Hari Ini</span>
+
             </span>
+
             <div class="flex items-baseline space-x-1 mt-0.5">
+
               <span id="spcTodayM2" class="text-2xl sm:text-3xl font-black text-emerald-600">0</span>
+
               <span class="text-xs text-emerald-600 font-bold">m²</span>
+
             </div>
+
             <span id="spcTodayBadge" class="text-[10px] text-emerald-700 font-bold bg-emerald-100/70 px-1.5 py-0.5 rounded inline-block mt-0.5">Capaian Live</span>
+
           </div>
+
         </div>
 
         <div class="w-full bg-slate-100 rounded-full h-2 mt-2.5 overflow-hidden">
+
           <div id="spcProgressBar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-700" style="width: 0%"></div>
+
         </div>
+
       </div>
+
     </div>
 
     <!-- NAVIGATION TABS -->
+
     <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex space-x-1 overflow-x-auto no-scrollbar">
+
       <button onclick="switchTab('tab-progres')" id="btn-tab-progres" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition bg-nafindo-blue text-white shadow-sm">
+
         <i class="fa-solid fa-list-check"></i>
+
         <span>Rincian Progres</span>
+
       </button>
 
       <button onclick="switchTab('tab-dokumentasi')" id="btn-tab-dokumentasi" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
+
         <i class="fa-solid fa-photo-film"></i>
+
         <span>Foto & Video</span>
+
         <span id="badgeFotoCount" class="bg-slate-200 text-slate-700 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ml-1">0</span>
+
       </button>
 
       <button onclick="switchTab('tab-komplain')" id="btn-tab-komplain" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-rose-600 hover:bg-rose-50 flex items-center justify-center space-x-2 transition border border-rose-200/50">
+
         <i class="fa-solid fa-circle-exclamation"></i>
+
         <span>Ajukan Komplain</span>
+
       </button>
 
-      <button onclick="switchTab('tab-riwayat')" id="btn-tab-riwayat" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
-        <i class="fa-solid fa-clock-rotate-left"></i>
-        <span>Riwayat Laporan</span>
+      
+      <button onclick="switchTab('tab-denah')" id="btn-tab-denah" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-indigo-600 hover:bg-indigo-50 flex items-center justify-center space-x-2 transition border border-indigo-200/60">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>Peta Denah Area</span>
       </button>
+<button onclick="switchTab('tab-riwayat')" id="btn-tab-riwayat" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
+
+        <i class="fa-solid fa-clock-rotate-left"></i>
+
+        <span>Riwayat Laporan</span>
+
+      </button>
+
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TAB 1: RINCIAN PROGRES & PEKERJAAN -->
+
     <!-- ========================================================================= -->
-    <section id="tab-progres" class="tab-content space-y-4">
-      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
-        <div class="flex items-center justify-between mb-4">
+
+    <!-- TAB BARU: PETA DENAH AREA & RUANGAN INTERAKTIF PER LANTAI -->
+
+    <!-- ========================================================================= -->
+
+    <section id="tab-denah" class="tab-content hidden space-y-4">
+
+      <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+
+        <!-- Header & Floor Selector -->
+
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
+
           <div>
-            <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Tabel Rincian Item Pekerjaan</h3>
-            <p class="text-xs text-slate-500">Transparansi bobot dan tahapan penyelesaian proyek fisik</p>
+
+            <div class="flex items-center gap-2">
+
+              <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm"><i class="fa-solid fa-map-location-dot"></i></span>
+
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">Peta Denah Area & Ruangan Proyek</h3>
+
+            </div>
+
+            <p class="text-xs text-slate-500 mt-0.5">Pantau progres fisik lapangan, status per ruangan, dan foto riil langsung di atas denah fisik</p>
+
           </div>
-          <button onclick="fetchProjectData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
-            <i class="fa-solid fa-rotate text-xs"></i>
-            <span>Refresh</span>
+
+          <!-- Floor Switcher Pills -->
+
+          <div id="floorSwitcherContainer" class="flex items-center gap-1.5 overflow-x-auto py-1">
+
+            <!-- Diisi dinamis via JS -->
+
+          </div>
+
+        </div>
+
+        <!-- Legenda Status Warna -->
+
+        <div class="flex flex-wrap items-center gap-2 sm:gap-4 py-3 px-3 bg-slate-50 rounded-xl my-3 text-[11px] font-semibold text-slate-600 border border-slate-200/60">
+
+          <span class="text-slate-400 font-bold">Indikator:</span>
+
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-emerald-500/80 border border-emerald-600 inline-block"></span> 🟢 Selesai (100%)</span>
+
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-amber-400/80 border border-amber-500 inline-block"></span> 🟡 Sedang Dikerjakan (1-99%)</span>
+
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-slate-300/80 border border-slate-400 inline-block"></span> ⚪ Belum Dikerjakan (0%)</span>
+
+          <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded-md bg-rose-500/80 border border-rose-600 animate-pulse inline-block"></span> 🔴 Ada Komplain</span>
+
+        </div>
+
+        <!-- Canvas / Interactive Map Container -->
+
+        <div class="relative w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-inner flex items-center justify-center min-h-[350px] sm:min-h-[500px]">
+
+          <div id="floorMapWrapper" class="relative inline-block w-full max-w-full">
+
+            <img id="floorMapImage" src="" alt="Denah Lantai" class="w-full h-auto block select-none" />
+
+            <!-- Layer Ruangan Menyala (Zone Overlays) -->
+
+            <div id="floorZonesLayer" class="absolute inset-0 pointer-events-auto">
+
+              <!-- Ruangan di-generate dinamis via JS -->
+
+            </div>
+
+          </div>
+
+          <!-- Placeholder jika belum ada denah -->
+
+          <div id="floorMapPlaceholder" class="hidden flex flex-col items-center justify-center p-8 text-center text-slate-400 space-y-2">
+
+            <i class="fa-solid fa-map text-4xl text-slate-300"></i>
+
+            <p class="text-sm font-semibold text-slate-600">Denah untuk lantai ini belum diunggah oleh Admin</p>
+
+            <p class="text-xs text-slate-400 max-w-sm">Admin proyek dapat mengunggah gambar denah dan memetakan ruangan melalui menu Denah di aplikasi.</p>
+
+          </div>
+
+        </div>
+
+        <div class="text-[11px] text-slate-400 text-center pt-2">
+
+          💡 <span class="font-medium text-slate-500">Ketuk ruangan pada denah untuk melihat checklist pekerjaan & foto dokumentasi dari tukang.</span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- MODAL DETAIL RUANGAN / ZONA -->
+
+    <div id="modalZoneDetail" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+
+      <div class="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+
+        <!-- Modal Header -->
+
+        <div class="p-4 bg-slate-900 text-white flex items-center justify-between">
+
+          <div>
+
+            <div class="flex items-center gap-2">
+
+              <span id="zoneModalStatusBadge" class="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500 text-white">Selesai</span>
+
+              <h3 id="zoneModalTitle" class="text-base font-extrabold text-white">Nama Ruangan</h3>
+
+            </div>
+
+            <p id="zoneModalFloorSubtitle" class="text-xs text-slate-400 mt-0.5">Lantai Proyek</p>
+
+          </div>
+
+          <button onclick="closeZoneModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+
+            <i class="fa-solid fa-xmark"></i>
+
           </button>
+
+        </div>
+
+        <!-- Modal Body Scrollable -->
+
+        <div class="p-4 sm:p-5 overflow-y-auto space-y-4 text-xs sm:text-sm">
+
+          <!-- Progres Bar -->
+
+          <div class="space-y-1.5 p-3 bg-slate-50 rounded-xl border border-slate-200/60">
+
+            <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+
+              <span>Progres Keseluruhan Ruangan:</span>
+
+              <span id="zoneModalProgressText" class="text-indigo-600 font-extrabold text-sm">0%</span>
+
+            </div>
+
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+
+              <div id="zoneModalProgressBar" class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+
+            </div>
+
+          </div>
+
+          <!-- Checklist Tugas di Ruangan Ini -->
+
+          <div class="space-y-2">
+
+            <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center gap-1.5">
+
+              <i class="fa-solid fa-list-check text-indigo-500"></i> Item Pekerjaan di Ruangan Ini:
+
+            </h4>
+
+            <div id="zoneModalTaskList" class="space-y-1.5">
+
+              <!-- Diisi dinamis via JS -->
+
+            </div>
+
+          </div>
+
+          <!-- Galeri Foto Tukang untuk Ruangan Ini -->
+
+          <div class="space-y-2 pt-2 border-t border-slate-100">
+
+            <h4 class="font-bold text-slate-800 text-xs uppercase tracking-wider flex items-center justify-between">
+
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-camera text-blue-500"></i> Dokumentasi Pekerjaan Tukang:</span>
+
+              <span id="zoneModalPhotoCount" class="text-[10px] text-slate-400 font-normal">0 Foto</span>
+
+            </h4>
+
+            <div id="zoneModalPhotoGrid" class="grid grid-cols-3 gap-2">
+
+              <!-- Diisi dinamis via JS -->
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Modal Footer -->
+
+        <div class="p-3 bg-slate-50 border-t border-slate-200/80 flex items-center gap-2">
+
+          <button onclick="ajukanKomplainDariRuangan()" class="flex-1 py-2 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
+
+            <i class="fa-solid fa-circle-exclamation"></i> Komplain Ruangan Ini
+
+          </button>
+
+          <button onclick="closeZoneModal()" class="py-2 px-4 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition">
+
+            Tutup
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 1: RINCIAN PROGRES & PEKERJAAN -->
+
+    <!-- ========================================================================= -->
+
+    <section id="tab-progres" class="tab-content space-y-4">
+
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+
+        <div class="flex items-center justify-between mb-4">
+
+          <div>
+
+            <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Tabel Rincian Item Pekerjaan</h3>
+
+            <p class="text-xs text-slate-500">Transparansi bobot dan tahapan penyelesaian proyek fisik</p>
+
+          </div>
+
+          <button onclick="fetchProjectData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5">
+
+            <i class="fa-solid fa-rotate text-xs"></i>
+
+            <span>Refresh</span>
+
+          </button>
+
         </div>
 
         <!-- ========================================================================= -->
+
         <!-- SPEED AKSES LANTAI & KAMAR (ANTI-SCROLL 130+ KAMAR) -->
+
         <!-- ========================================================================= -->
+
         <div class="bg-slate-50/90 rounded-2xl p-3.5 sm:p-4 border border-slate-200 space-y-3 mb-4">
+
           <!-- Header Bar: Judul & Search Input -->
+
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5">
+
             <div class="flex items-center space-x-2">
+
               <div class="w-7 h-7 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+
                 <i class="fa-solid fa-bolt"></i>
+
               </div>
+
               <div>
+
                 <h4 class="text-xs sm:text-sm font-bold text-slate-800">Speed Akses Lantai & Kamar</h4>
+
                 <p class="text-[10px] text-slate-500">Pilih lantai dan kamar untuk langsung melihat progres tanpa scroll panjang</p>
+
               </div>
+
             </div>
 
             <!-- Quick Search Input -->
+
             <div class="relative w-full sm:w-60">
+
               <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+
               <input type="text" id="taskSearchRoomInput" oninput="onTaskSearchRoom(this.value)" placeholder="Cari nomor kamar (contoh: 504)..." class="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+
             </div>
+
           </div>
 
           <!-- LEVEL 1: TOMBOL PILIH LANTAI -->
+
           <div>
+
             <div class="flex items-center justify-between mb-1.5">
+
               <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+
                 <i class="fa-solid fa-building text-blue-600"></i>
+
                 <span>1. Pilih Tingkat / Lantai:</span>
+
               </span>
+
               <span id="labelFloorCount" class="text-[10px] text-slate-400 font-semibold">Semua Lantai</span>
+
             </div>
+
             <div id="floorButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+
               <!-- Rendered via JS -->
+
             </div>
+
           </div>
 
           <!-- LEVEL 2: TOMBOL PILIH KAMAR -->
+
           <div id="roomButtonsSection" class="pt-2 border-t border-slate-200/70">
+
             <div class="flex items-center justify-between mb-1.5">
+
               <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+
                 <i class="fa-solid fa-door-open text-amber-600"></i>
+
                 <span>2. Pilih Nomor Kamar:</span>
+
               </span>
+
               <span id="labelRoomCount" class="text-[10px] text-slate-400 font-semibold">Pilih kamar</span>
+
             </div>
+
             <div id="roomButtonsContainer" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1">
+
               <!-- Rendered via JS -->
+
             </div>
+
           </div>
 
           <!-- ACTIVE FOCUS BANNER (Ketika kamar/lantai sedang difokuskan) -->
+
           <div id="activeTaskFocusBanner" class="hidden bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-xl p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 shadow-sm">
+
             <div class="flex items-center space-x-2">
+
               <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center text-sm font-bold shrink-0">
+
                 <i class="fa-solid fa-location-dot"></i>
+
               </div>
+
               <div>
+
                 <span class="text-[10px] font-bold text-blue-100 uppercase tracking-wider block">Fokus Area Aktif</span>
+
                 <span id="activeFocusTitle" class="text-xs sm:text-sm font-extrabold block">Lantai 5 - Kamar 504</span>
+
               </div>
+
             </div>
 
             <div class="flex items-center space-x-1.5 self-end sm:self-center">
+
               <div id="bannerPhotoBtnWrapper" class="inline-flex"></div>
+
               <button onclick="navigateFocusedRoom(-1)" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1">
+
                 <i class="fa-solid fa-arrow-left text-[10px]"></i>
+
                 <span>Prev</span>
+
               </button>
+
               <button onclick="navigateFocusedRoom(1)" class="bg-white/20 hover:bg-white/30 text-white px-2.5 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1">
+
                 <span>Next</span>
+
                 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+
               </button>
+
               <button onclick="resetTaskFocusFilter()" class="bg-white text-slate-900 hover:bg-slate-100 px-3 py-1 rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-sm">
+
                 <i class="fa-solid fa-xmark"></i>
+
                 <span>Reset (Lihat Semua)</span>
+
               </button>
+
             </div>
+
           </div>
+
         </div>
 
         <div id="taskListContainer" class="space-y-3">
+
           <!-- Loading skeleton -->
+
           <div class="animate-pulse space-y-3">
+
             <div class="h-16 bg-slate-100 rounded-xl"></div>
+
             <div class="h-16 bg-slate-100 rounded-xl"></div>
+
             <div class="h-16 bg-slate-100 rounded-xl"></div>
+
           </div>
+
         </div>
+
       </div>
+
     </section>
 
     <!-- ========================================================================= -->
+
     <!-- TAB 2: DOKUMENTASI FOTO & VIDEO LAPANGAN (TERKELOMPOK PER TUGAS) -->
+
     <!-- ========================================================================= -->
+
     <section id="tab-dokumentasi" class="tab-content hidden space-y-4">
+
       <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200 space-y-4">
+
         <!-- Header Galeri -->
+
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
+
           <div>
+
             <div class="flex items-center space-x-2">
+
               <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Dokumentasi Foto & Video Lapangan</h3>
+
               <span id="badgeMediaTotalHeader" class="bg-blue-100 text-blue-700 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full">0 Media</span>
+
             </div>
+
             <p class="text-xs text-slate-500 mt-0.5">Dikelompokkan rapi per rincian tugas & area kerja dengan stempel watermark resmi.</p>
+
           </div>
+
           <div class="flex items-center space-x-2 shrink-0">
+
             <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-xl flex items-center gap-1.5 shadow-sm">
+
               <i class="fa-solid fa-shield-check text-emerald-500"></i> GPS & Waktu Terverifikasi
+
             </span>
+
           </div>
+
         </div>
 
         <!-- Filter Bar: Area / Kamar & Pencarian Cepat (Solusi Bug #3: Pisahkan foto per kamar hotel) -->
+
         <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center justify-between bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+
           <div class="flex items-center gap-2 flex-1">
+
             <span class="text-xs font-bold text-slate-700 whitespace-nowrap"><i class="fa-solid fa-hotel text-blue-600 mr-1"></i> Area / Kamar:</span>
+
             <select id="mediaAreaFilterSelect" onchange="onMediaAreaFilterChange(this.value)" class="text-xs font-semibold bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-auto">
+
               <option value="ALL">🏢 Semua Area & Kamar</option>
+
             </select>
+
           </div>
+
           <div class="relative">
+
             <input type="text" id="mediaSearchInput" oninput="onMediaSearchInput(this.value)" placeholder="Cari kamar / tugas (misal: 102)..." class="text-xs bg-white border border-slate-300 rounded-lg pl-7 pr-3 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-56">
+
             <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-400 text-[10px]"></i>
+
           </div>
+
         </div>
 
         <!-- Filter Chips Per Tugas (Horizontal Scrollable) -->
+
         <div id="taskMediaFilterContainer" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+
           <!-- Filter buttons dynamically inserted here -->
+
         </div>
 
         <!-- Container Kelompok Tugas -->
+
         <div id="taskGroupedGalleryContainer" class="space-y-4">
+
           <!-- Dynamic Task Cards with Photos & Videos -->
+
         </div>
 
         <!-- Flat Gallery Fallback Container (Jika format log bebas) -->
+
         <div id="photoGalleryContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 hidden">
+
           <!-- Fallback Photos injected here -->
+
         </div>
 
         <!-- Placeholder Jika Belum Ada Media -->
+
         <div id="noPhotosPlaceholder" class="hidden text-center py-12 text-slate-400">
+
           <i class="fa-regular fa-images text-4xl mb-2 text-slate-300"></i>
+
           <p class="text-sm font-semibold text-slate-600">Belum ada dokumentasi foto atau video untuk proyek ini.</p>
+
           <p class="text-xs text-slate-400 mt-0.5">Foto dan video yang dikirim tukang/mandor akan otomatis muncul di sini dikelompokkan per tugas.</p>
+
         </div>
+
       </div>
+
     </section>
 
     <!-- ========================================================================= -->
+
     <!-- TAB 3: FITUR KOMPLAIN & PENGADUAN KLIEN (FOTO LANGSUNG / UPLOAD) -->
+
     <!-- ========================================================================= -->
+
     <section id="tab-komplain" class="tab-content hidden space-y-4">
+
       <div class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border border-rose-200/80">
+
         <!-- Banner Heading -->
+
         <div class="flex items-start space-x-3 mb-6 pb-4 border-b border-slate-100">
+
           <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shrink-0">
+
             <i class="fa-solid fa-triangle-exclamation"></i>
+
           </div>
+
           <div>
+
             <h3 class="text-lg font-extrabold text-slate-900">Formulir Pengaduan & Komplain Proyek</h3>
+
             <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+
               Apakah Anda menemukan hasil kerja yang kurang sesuai, keterlambatan, atau kendala lapangan? Sampaikan langsung kepada manajemen CV. Nafindo Group.
+
             </p>
+
           </div>
+
         </div>
 
         <form id="complaintForm" onsubmit="submitComplaint(event)" class="space-y-5">
+
           <!-- 1. LAMPIRAN MEDIA (FOTO / VIDEO) -->
+
           <div class="border-2 border-dashed border-rose-200 rounded-2xl p-4 sm:p-5 bg-rose-50/20">
+
             <div class="flex items-center justify-between mb-2">
+
               <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
+
                 <i class="fa-solid fa-camera-retro text-rose-600 mr-1.5"></i> Lampirkan Bukti Foto atau Video <span class="text-rose-500">*</span>
+
               </label>
+
               <span id="mediaTypeBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Lampiran Siap</span>
+
             </div>
+
             <p class="text-xs text-slate-500 mb-3">
+
               Ambil foto/video langsung di lokasi proyek atau pilih file dari galeri HP Anda.
+
             </p>
 
             <!-- Tombol Pilihan Media -->
+
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+
               <!-- Kamera Foto -->
+
               <label class="cursor-pointer bg-white border border-slate-300 hover:border-rose-400 hover:bg-rose-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+
                 <i class="fa-solid fa-camera text-rose-600 text-lg"></i>
+
                 <span class="text-xs font-bold">📸 Foto Langsung</span>
+
                 <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handleMediaSelected(this, 'photo')" class="hidden">
+
               </label>
 
               <!-- Kamera Video -->
+
               <label class="cursor-pointer bg-white border border-slate-300 hover:border-rose-400 hover:bg-rose-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+
                 <i class="fa-solid fa-video text-rose-600 text-lg"></i>
+
                 <span class="text-xs font-bold">🎥 Rekam Video</span>
+
                 <input type="file" id="cameraVideoInput" accept="video/*" capture="environment" onchange="handleMediaSelected(this, 'video')" class="hidden">
+
               </label>
 
               <!-- Galeri / File -->
+
               <label class="cursor-pointer bg-white border border-slate-300 hover:border-blue-400 hover:bg-blue-50/50 text-slate-700 rounded-xl p-3 flex items-center justify-center space-x-2 transition shadow-sm">
+
                 <i class="fa-solid fa-folder-open text-blue-600 text-lg"></i>
+
                 <span class="text-xs font-bold">📁 Pilih Galeri / File</span>
+
                 <input type="file" id="galleryMediaInput" accept="image/*,video/*" onchange="handleMediaSelected(this, 'auto')" class="hidden">
+
               </label>
+
             </div>
 
             <!-- Preview Media Box -->
+
             <div id="mediaPreviewContainer" class="hidden mt-4 relative">
+
               <div class="relative inline-block rounded-xl overflow-hidden border border-slate-300 shadow-md max-w-full bg-black">
+
                 <!-- Preview Gambar -->
+
                 <img id="photoPreviewImg" src="" alt="Preview Bukti Foto" class="max-h-72 max-w-full object-contain mx-auto hidden">
+
                 <!-- Preview Video -->
+
                 <video id="videoPreviewPlayer" controls class="max-h-72 max-w-full mx-auto hidden"></video>
+
                 <div class="bg-slate-900/90 text-white text-[10px] px-3 py-1 font-mono flex items-center justify-between">
+
                   <span id="mediaPreviewLabel"><i class="fa-solid fa-paperclip text-amber-400 mr-1"></i> Lampiran Terpasang</span>
+
                   <span id="mediaPreviewTimestamp"></span>
+
                 </div>
+
               </div>
+
               <div class="mt-2 flex items-center space-x-3">
+
                 <button type="button" onclick="removeSelectedMedia()" class="text-xs text-rose-600 hover:text-rose-800 font-bold flex items-center space-x-1">
+
                   <i class="fa-solid fa-trash-can"></i>
+
                   <span>Hapus Media</span>
+
                 </button>
+
                 <span id="mediaFileName" class="text-xs text-slate-500 truncate max-w-xs"></span>
+
               </div>
+
             </div>
 
             <!-- Canvas untuk watermark foto -->
+
             <canvas id="watermarkCanvas" class="hidden"></canvas>
+
           </div>
 
           <!-- 2. PILIHAN ITEM PEKERJAAN / AREA YANG DIKOMPLAIN -->
+
           <div>
+
             <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+
               <i class="fa-solid fa-list-check text-rose-600 mr-1.5"></i> Terkait Pekerjaan / Area <span class="text-slate-400 font-normal">(Opsional)</span>
+
             </label>
+
             <select id="complaintTaskSelect" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition">
+
               <option value="Umum">Umum (Seluruh Area Proyek)</option>
+
             </select>
+
           </div>
 
           <!-- 3. KETERANGAN MASALAH -->
+
           <div>
+
             <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+
               <i class="fa-solid fa-pen-to-square text-rose-600 mr-1"></i> Keterangan Komplain / Keluhan Lapangan <span class="text-rose-500">*</span>
+
             </label>
+
             <textarea id="complaintDescription" required rows="4" placeholder="Tuliskan keterangan komplain, bagian yang kurang rapi / perlu diperbaiki, atau instruksi untuk tim mandor..." class="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 focus:bg-white transition"></textarea>
+
           </div>
 
           <!-- Submit Button -->
+
           <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+
             <span class="text-xs text-slate-500 italic">
+
               <i class="fa-solid fa-shield-halved text-emerald-600 mr-1"></i> Laporan langsung diterima mandor dan manajemen pusat CV. Nafindo Group.
+
             </span>
 
             <button type="submit" id="btnSubmitComplaint" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm px-7 py-3 rounded-xl shadow-lg shadow-rose-600/20 hover:shadow-rose-600/30 transition flex items-center justify-center space-x-2">
+
               <i class="fa-solid fa-paper-plane"></i>
+
               <span>Kirim Komplain</span>
+
             </button>
+
           </div>
+
         </form>
+
       </div>
+
     </section>
 
     <!-- ========================================================================= -->
+
     <!-- TAB 4: RIWAYAT KOMPLAIN & STATUS TINDAK LANJUT -->
+
     <!-- ========================================================================= -->
+
     <section id="tab-riwayat" class="tab-content hidden space-y-4">
+
       <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+
         <div class="flex items-center justify-between mb-4">
+
           <div>
+
             <h3 class="text-base sm:text-lg font-bold text-nafindo-dark">Riwayat Pengaduan Klien</h3>
+
             <p class="text-xs text-slate-500">Daftar keluhan dan catatan tindakan perbaikan oleh tim kontraktor</p>
+
           </div>
+
           <button onclick="fetchProjectData()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-1.5 rounded-lg transition">
+
             <i class="fa-solid fa-rotate"></i>
+
           </button>
+
         </div>
 
         <div id="complaintHistoryContainer" class="space-y-3">
+
           <!-- Injected via JS -->
+
         </div>
 
         <div id="noComplaintPlaceholder" class="hidden text-center py-12 text-slate-400">
+
           <i class="fa-regular fa-circle-check text-4xl mb-2 text-emerald-500"></i>
+
           <p class="text-sm font-semibold text-slate-600">Belum ada komplain untuk proyek ini.</p>
+
           <p class="text-xs text-slate-400 mt-0.5">Semua pekerjaan berjalan lancar tanpa kendala tercatat.</p>
+
         </div>
+
       </div>
+
     </section>
 
     </div> <!-- End of #mainDashboardContent -->
@@ -681,462 +1460,809 @@
   </main>
 
   <!-- ========================================================================= -->
+
   <!-- MODAL: HASIL KIRIM KOMPLAIN & LINK WHATSAPP -->
+
   <!-- ========================================================================= -->
+
   <div id="successModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in duration-200">
+
       <div class="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-2xl mx-auto shadow-inner">
+
         <i class="fa-solid fa-check-double"></i>
+
       </div>
 
       <div class="text-center">
+
         <h3 class="text-xl font-extrabold text-slate-900">Komplain Berhasil Dikirim!</h3>
+
         <p class="text-xs text-slate-500 mt-1">
+
           Laporan Anda telah tercatat dengan ID:
+
           <span id="modalTicketId" class="font-mono font-bold text-nafindo-blue block text-sm mt-0.5">KMP-0000</span>
+
         </p>
+
       </div>
 
       <div class="bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-600 space-y-1">
+
         <p><span class="font-bold">Proyek:</span> <span id="modalProjectName"></span></p>
+
         <p><span class="font-bold">Terkait Tugas:</span> <span id="modalTaskName" class="font-semibold text-blue-600">Umum</span></p>
+
         <p><span class="font-bold">Kategori:</span> <span id="modalCategory"></span></p>
+
         <p class="line-clamp-2"><span class="font-bold">Uraian:</span> <span id="modalDesc"></span></p>
+
       </div>
 
       <div class="space-y-2 pt-2">
+
         <!-- Tombol WhatsApp Langsung -->
+
         <a id="btnForwardWa" href="#" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition">
+
           <i class="fa-brands fa-whatsapp text-lg"></i>
+
           <span>Kirim Salinan via WhatsApp ke Admin</span>
+
         </a>
 
         <button onclick="closeSuccessModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs py-2.5 px-4 rounded-xl transition">
+
           Tutup Jendela Ini
+
         </button>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- ========================================================================= -->
+
   <!-- MODAL: PENGATURAN API SERVER GOOGLE APPS SCRIPT -->
+
   <!-- ========================================================================= -->
+
   <div id="apiSettingsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+
     <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+
       <div class="flex items-center justify-between border-b pb-3">
+
         <div class="flex items-center space-x-2">
+
           <i class="fa-solid fa-server text-nafindo-blue text-lg"></i>
+
           <h3 class="text-base font-bold text-slate-900">Pengaturan Server Google Script</h3>
+
         </div>
+
         <button onclick="toggleApiSettingsModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+
       </div>
 
       <p class="text-xs text-slate-500">
+
         Jika URL Google Apps Script Anda berubah atau diperbarui, Anda dapat mengubah URL Web App di bawah ini:
+
       </p>
 
       <div>
+
         <label class="block text-xs font-bold text-slate-700 uppercase mb-1">URL Web App (/exec):</label>
+
         <input type="url" id="customApiUrlInput" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-mono text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
       </div>
 
       <div class="flex items-center justify-between pt-2">
+
         <button onclick="resetDefaultApiUrl()" class="text-xs text-slate-500 hover:text-slate-800 underline">Reset ke Bawaan</button>
+
         <button onclick="saveApiUrlSetting()" class="bg-nafindo-blue hover:bg-blue-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition">Simpan & Terapkan</button>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- ========================================================================= -->
+
   <!-- MODAL: PREVIEW FOTO PEKERJAAN / TUGAS LAPANGAN -->
+
   <!-- ========================================================================= -->
+
   <div id="taskPhotosModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden" onclick="closeTaskPhotosModal()">
+
     <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-slate-100 flex flex-col animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+
       <!-- Modal Header -->
+
       <div class="p-4 sm:p-5 border-b border-slate-200 flex items-center justify-between bg-slate-50/80 shrink-0">
+
         <div class="flex items-center space-x-2.5">
+
           <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-base font-bold shrink-0">
+
             <i class="fa-solid fa-camera"></i>
+
           </div>
+
           <div>
+
             <h3 id="taskPhotosModalTitle" class="text-sm sm:text-base font-extrabold text-slate-900">Foto Pekerjaan</h3>
+
             <p id="taskPhotosModalSubtitle" class="text-[11px] text-slate-500">Dokumentasi hasil pengerjaan di lapangan</p>
+
           </div>
+
         </div>
+
         <button onclick="closeTaskPhotosModal()" class="w-8 h-8 rounded-full bg-slate-200/80 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition">
+
           <i class="fa-solid fa-xmark text-sm"></i>
+
         </button>
+
       </div>
 
       <!-- Modal Body (Scrollable Grid of Photos with Details) -->
+
       <div id="taskPhotosModalBody" class="p-4 sm:p-5 overflow-y-auto space-y-4">
+
         <!-- Injected via JS -->
+
       </div>
 
       <!-- Modal Footer -->
+
       <div class="p-3 sm:p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2 shrink-0">
+
         <button id="btnOpenInFullGallery" onclick="" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-2 rounded-xl transition border border-blue-200">
+
           <i class="fa-solid fa-photo-film"></i>
+
           <span>Buka di Galeri Dokumentasi</span>
+
         </button>
+
         <button onclick="closeTaskPhotosModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs px-4 py-2 rounded-xl transition">
+
           Tutup
+
         </button>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- ========================================================================= -->
+
   <!-- LIGHTBOX MODAL UNTUK PREVIEW FOTO DOKUMENTASI (SWIPE & NEXT/PREV) -->
+
   <!-- ========================================================================= -->
+
   <div id="lightboxModal" class="fixed inset-0 bg-black/95 z-50 flex flex-col items-center justify-between p-2 sm:p-4 hidden select-none backdrop-blur-sm" onclick="closeLightbox()">
+
     
+
     <!-- Top Bar: Counter, Info & Close Button -->
+
     <div class="w-full max-w-4xl flex items-center justify-between px-2 sm:px-4 py-2 text-white/90 shrink-0 z-30" onclick="event.stopPropagation()">
+
       <div class="flex items-center gap-2">
+
         <span id="lightboxCounter" class="bg-white/15 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold tracking-wide border border-white/10 backdrop-blur-md">
+
           Foto 1 dari 1
+
         </span>
+
       </div>
+
       <div class="flex items-center gap-2 sm:gap-3">
+
         <a id="lightboxDownloadBtn" href="" target="_blank" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-white/25 text-white/90 hover:text-white flex items-center justify-center transition border border-white/10 text-xs sm:text-sm" title="Buka Tab Baru / Ukuran Asli">
+
           <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
         </a>
+
         <button onclick="closeLightbox()" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/10 hover:bg-rose-600 text-white/90 hover:text-white flex items-center justify-center transition border border-white/10 text-base sm:text-lg" title="Tutup (Esc)">
+
           <i class="fa-solid fa-xmark"></i>
+
         </button>
+
       </div>
+
     </div>
 
     <!-- Main Container: Image & Navigation Buttons -->
+
     <div class="relative w-full max-w-4xl flex-1 flex items-center justify-center overflow-hidden my-auto px-1 sm:px-12" onclick="event.stopPropagation()">
+
       
+
       <!-- Tombol Panah Kiri (Sebelumnya) -->
+
       <button id="lightboxPrevBtn" onclick="prevLightbox(event)" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 text-white flex items-center justify-center text-lg sm:text-2xl transition shadow-2xl backdrop-blur-md z-30 border border-white/20 focus:outline-none" title="Foto Sebelumnya (Geser Kanan)">
+
         <i class="fa-solid fa-chevron-left"></i>
+
       </button>
 
       <!-- Foto Preview Utama -->
+
       <div class="w-full h-full flex items-center justify-center p-1">
+
         <img id="lightboxImg" src="" alt="Dokumentasi Foto" class="max-h-[78vh] sm:max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl transition-opacity duration-200">
+
       </div>
 
       <!-- Tombol Panah Kanan (Selanjutnya) -->
+
       <button id="lightboxNextBtn" onclick="nextLightbox(event)" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 text-white flex items-center justify-center text-lg sm:text-2xl transition shadow-2xl backdrop-blur-md z-30 border border-white/20 focus:outline-none" title="Foto Selanjutnya (Geser Kiri)">
+
         <i class="fa-solid fa-chevron-right"></i>
+
       </button>
+
     </div>
 
     <!-- Bottom Bar: Petunjuk Navigasi & Geser -->
+
     <div class="w-full max-w-4xl flex items-center justify-center py-2 text-white/50 text-[11px] sm:text-xs shrink-0 z-30" onclick="event.stopPropagation()">
+
       <span class="flex items-center gap-1.5 bg-black/40 px-3 py-1 rounded-full border border-white/5">
+
         <i class="fa-solid fa-arrows-left-right text-xs text-amber-400"></i> Geser layar HP ke kiri/kanan atau tekan panah untuk lihat foto lain
+
       </span>
+
     </div>
 
   </div>
 
   <!-- ========================================================================= -->
+
   <!-- VIDEO PLAYER MODAL UNTUK PREVIEW VIDEO LAPANGAN -->
+
   <!-- ========================================================================= -->
+
   <div id="videoModal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4 hidden" onclick="closeVideoModal()">
+
     <div class="relative max-w-3xl w-full bg-slate-900 rounded-2xl overflow-hidden shadow-2xl border border-slate-700" onclick="event.stopPropagation()">
+
       <div class="flex items-center justify-between p-3.5 bg-slate-800 text-white text-xs border-b border-slate-700">
+
         <span class="font-bold flex items-center gap-2">
+
           <i class="fa-solid fa-circle-play text-emerald-400 text-base"></i>
+
           <span id="videoModalTitle">Video Dokumentasi Lapangan</span>
+
         </span>
+
         <button onclick="closeVideoModal()" class="text-slate-400 hover:text-white text-lg p-1 transition">
+
           <i class="fa-solid fa-xmark"></i>
+
         </button>
+
       </div>
+
       <div class="relative bg-black flex items-center justify-center">
+
         <video id="modalVideoPlayer" controls playsinline class="w-full max-h-[75vh] object-contain bg-black"></video>
+
       </div>
+
     </div>
+
   </div>
 
   <!-- ========================================================================= -->
+
   <!-- FOOTER -->
+
   <!-- ========================================================================= -->
+
   <footer class="bg-white border-t border-slate-200 py-6 mt-auto">
+
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-500 space-y-1">
+
       <p class="font-bold text-slate-700">© 2026 CV. NAFINDO GROUP — Konstruksi & Lapangan Olahraga</p>
+
       <p>Sistem Pemantauan Progres Real-Time Terintegrasi Google Apps Script & Mobile Native</p>
+
     </div>
+
   </footer>
 
   <!-- ========================================================================= -->
+
   <!-- LOGIKA JAVASCRIPT LENGKAP -->
+
   <!-- ========================================================================= -->
+
   <script>
+
     // URL Web App Google Script Resmi Nafindo Group
+
     const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbyLYhugu3r1oibh5giHX3YQdzgw4MTxqomsVhcYrY7TlxcW3vrwlfs1bXbLJT_44r-efQ/exec";
+
     const ADMIN_WA_NUMBER = "6281234567890"; // Ganti dengan nomor WhatsApp resmi Admin CV Nafindo
 
     let currentProject = "";
+
     let projectDataCache = null;
+
     let selectedPhotoBase64 = null;
 
     // Helper penyimpanan aman (Anti-crash di browser HP/incognito/WhatsApp WebView)
+
     function safeGetStorage(key) {
+
       try {
+
         return localStorage.getItem(key);
+
       } catch (e) {
+
         return null;
+
       }
+
     }
 
     function safeSetStorage(key, val) {
+
       try {
+
         localStorage.setItem(key, val);
+
       } catch (e) {}
+
     }
 
     function getApiUrl() {
+
       return safeGetStorage("nafindo_custom_api_url") || DEFAULT_API_URL;
+
     }
 
     // Inisialisasi saat Halaman Dimuat
+
     document.addEventListener("DOMContentLoaded", () => {
+
       initProjectFromUrl();
+
     });
 
     // Parsing & Validasi Parameter Proyek di URL (?p=Nama_Proyek)
+
     function initProjectFromUrl() {
+
       let projParam = "";
+
       try {
+
         const urlParams = new URLSearchParams(window.location.search);
+
         projParam = urlParams.get("p") || urlParams.get("proyek") || urlParams.get("id") || "";
+
         if (!projParam && window.location.hash) {
+
           const match = window.location.hash.match(/[?&#]p=([^&#]+)/);
+
           if (match) projParam = match[1];
+
         }
+
       } catch (e) {
+
         console.warn("Gagal parse URL params:", e);
+
       }
 
       const dashboardEl = document.getElementById("mainDashboardContent");
+
       const noProjectEl = document.getElementById("noProjectScreen");
+
       const titleEl = document.getElementById("projectNameHeading");
+
       const subTitleEl = document.getElementById("projectSubtitle");
+
       const badgeEl = document.getElementById("projectStatusBadge");
+
       const btnShare = document.getElementById("btnCopyShareHeader");
+
       const privacyBadge = document.getElementById("headerPrivacyBadge");
 
       // JIKA TIDAK MEMBAWA LINK PROYEK -> TAMPILKAN WELCOME SCREEN RESMI (TERKUNCI)
+
       if (!projParam || projParam.trim() === "") {
+
         if (dashboardEl) dashboardEl.classList.add("hidden");
+
         if (noProjectEl) noProjectEl.classList.remove("hidden");
+
         if (titleEl) titleEl.textContent = "Portal CV. Nafindo Group";
+
         if (subTitleEl) subTitleEl.textContent = "Sistem Pemantauan Lapangan, Progres Real-Time & Layanan Klien Resmi";
+
         if (badgeEl) badgeEl.textContent = "Akses Khusus";
+
         if (privacyBadge) privacyBadge.textContent = "Portal Resmi";
+
         if (btnShare) btnShare.classList.add("hidden");
+
         return;
+
       }
 
       // KLIEN MEMBAWA LINK RESMI PROYEK: BUKA DASHBOARD EKSKLUSIF PROYEK INI
+
       currentProject = decodeURIComponent(projParam).replace(/_/g, " ").replace(/\+/g, " ").trim();
+
       safeSetStorage("nafindo_current_project", currentProject);
 
       if (noProjectEl) noProjectEl.classList.add("hidden");
+
       if (dashboardEl) dashboardEl.classList.remove("hidden");
+
       if (titleEl) titleEl.textContent = currentProject;
+
       if (subTitleEl) subTitleEl.textContent = "Data progres dan laporan lapangan khusus proyek Anda secara real-time.";
+
       if (badgeEl) badgeEl.textContent = "Sedang Berjalan";
+
       if (privacyBadge) privacyBadge.textContent = "Tautan Privat Klien";
+
       if (btnShare) btnShare.classList.remove("hidden");
 
       // Tampilkan indikator loading di layar HP agar user tahu data sedang dimuat
+
       showLoadingState();
 
       // Ambil data progres khusus proyek ini
+
       fetchProjectData();
+
     }
 
     function showLoadingState() {
+
       const pText = document.getElementById("metricProgressText");
+
       const tText = document.getElementById("metricTargetDays");
+
       const rText = document.getElementById("metricRemainingDays");
+
       const tContainer = document.getElementById("taskListContainer");
+
       const gContainer = document.getElementById("taskGroupedGalleryContainer");
 
       if (pText) pText.textContent = "...";
+
       if (tText) tText.textContent = "...";
+
       if (rText) rText.textContent = "Memuat...";
 
       if (tContainer) {
+
         tContainer.innerHTML = `
+
           <div class="text-center py-10 text-slate-400 text-xs bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+
             <i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-600 mb-2"></i>
+
             <p class="font-bold text-slate-700">Menghubungkan ke Server Lapangan...</p>
+
             <p class="text-[11px] text-slate-400 mt-0.5">Sedang memuat data rincian pekerjaan & capaian fisik.</p>
+
           </div>
+
         `;
+
       }
+
       if (gContainer) {
+
         gContainer.innerHTML = `
+
           <div class="text-center py-10 text-slate-400 text-xs bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+
             <i class="fa-solid fa-camera text-2xl text-blue-400 mb-2"></i>
+
             <p class="font-semibold text-slate-600">Menyiapkan dokumentasi lapangan...</p>
+
           </div>
+
         `;
+
       }
+
     }
 
     // Salin Tautan Proyek Aktif untuk Dibagikan ke WhatsApp / Klien
+
     function copyProjectShareLink() {
+
       if (!currentProject) {
+
         alert("Tautan proyek belum dipilih.");
+
         return;
+
       }
+
       const shareUrl = `${window.location.origin}${window.location.pathname}?p=${encodeURIComponent(currentProject.replace(/\s+/g, '_'))}`;
+
       if (navigator.clipboard && navigator.clipboard.writeText) {
+
         navigator.clipboard.writeText(shareUrl).then(() => {
+
           alert(`✅ Tautan khusus proyek berhasil disalin!\n\n${shareUrl}`);
+
         }).catch(() => {
+
           prompt("Salin tautan proyek di bawah ini:", shareUrl);
+
         });
+
       } else {
+
         prompt("Salin tautan proyek di bawah ini:", shareUrl);
+
       }
+
     }
 
     // Mengambil Data Progres Proyek secara Lengkap
+
     async function fetchProjectData() {
+
       const taskContainer = document.getElementById("taskListContainer");
+
       const galleryContainer = document.getElementById("photoGalleryContainer");
 
       try {
+
         const apiUrl = `${getApiUrl()}?action=ambilDataMonitoring&proyek=${encodeURIComponent(currentProject)}&api=true&_t=${Date.now()}`;
+
         const res = await fetch(apiUrl);
+
         const json = await res.json();
 
         if (json.status === "success" && json.data) {
+
           renderProjectData(json.data);
+
         } else {
+
           // Fallback coba endpoint getAdminFullDashboard
+
           fetchFallbackData();
+
         }
+
       } catch (err) {
+
         console.warn("Koneksi gagal, mencoba fallback data:", err);
+
         fetchFallbackData();
+
       }
+
     }
 
     async function fetchFallbackData() {
+
       try {
+
         const apiUrl = `${getApiUrl()}?action=getAdminFullDashboard&proyek=${encodeURIComponent(currentProject)}&api=true`;
+
         const res = await fetch(apiUrl);
+
         const json = await res.json();
+
         if (json && json.data) {
+
           renderFallbackDashboard(json.data);
+
         } else {
+
           renderDemoData();
+
         }
+
       } catch (e) {
+
         renderDemoData();
+
       }
+
     }
 
     function renderProjectData(data) {
+
       projectDataCache = data;
+
       // Status & Header
+
       document.getElementById("projectStatusBadge").textContent = data.status || "Sedang Berjalan";
+
       document.getElementById("projectNameHeading").textContent = (data.nama || currentProject).replace(/_/g, " ");
 
       // Metrik Utama
+
       let persen = 0;
+
       if (tasksCache && tasksCache.length > 0) {
+
         persen = updateOverallProgressKPI(tasksCache);
+
       } else if (data.persen !== undefined && data.persen !== null && Number(data.persen) !== 50) {
+
         persen = data.persen;
+
       }
+
       document.getElementById("metricProgressText").textContent = persen + "%";
+
       document.getElementById("metricProgressBar").style.width = persen + "%";
 
       const targetHariVal = (data.targetHari !== undefined && data.targetHari !== null && data.targetHari !== 0) ? data.targetHari : (data.sisaHari || "--");
+
       document.getElementById("metricTargetDays").textContent = targetHariVal;
 
       // Filter tanggal deadline: cegah tanggal 1970 (karena sel kosong di spreadsheet)
+
       let dl = data.deadline;
+
       const isInvalidDate = !dl || dl.includes("1970") || dl === "0" || dl === "--" || dl.toLowerCase().includes("undefined");
+
       
+
       let sisa = data.sisaHari;
+
       if (isInvalidDate || sisa === "0" || sisa === 0 || sisa === "--") {
+
         if (targetHariVal && targetHariVal !== "--") {
+
           sisa = targetHariVal;
+
         }
+
       }
 
       document.getElementById("metricRemainingDays").textContent = "Sisa: " + (sisa || "--") + " hari";
 
       if (document.getElementById("metricDeadlineText")) {
+
         document.getElementById("metricDeadlineText").textContent = isInvalidDate ? "Belum Ditentukan" : dl;
+
       }
+
       document.getElementById("metricLastUpdate").textContent = data.waktuUpdate || "--:--";
 
       // Foto & Video Dokumentasi (Dikelompokkan per Tugas)
+
       fetchGroupedMedia(data.listFoto || [], data.mediaPerTugas || []);
 
       // Ambil Task Rincian
+
       fetchTasksList();
+
       fetchComplaintHistory();
+
     }
 
     function renderFallbackDashboard(d) {
+
       const p = (d.progres !== undefined && d.progres !== null && Number(d.progres) !== 50) ? d.progres : 0;
+
       document.getElementById("metricProgressText").textContent = p + "%";
+
       document.getElementById("metricProgressBar").style.width = p + "%";
+
       document.getElementById("metricTargetDays").textContent = d.targetHari || "--";
+
       let dl = d.deadline;
+
       const isInvalid = !dl || dl.includes("1970") || dl === "0" || dl === "--";
+
       document.getElementById("metricDeadlineText").textContent = isInvalid ? "Belum Ditentukan" : dl;
 
       if (d.tasks) {
+
         renderTaskItems(d.tasks);
+
       }
+
     }
 
     async function fetchTasksList() {
+
       try {
+
         const apiUrl = `${getApiUrl()}?action=ambilTaskMonitor&proyek=${encodeURIComponent(currentProject)}&api=true&_t=${Date.now()}`;
+
         const res = await fetch(apiUrl);
+
         const json = await res.json();
+
         if (json && json.data) {
+
           renderTaskItems(json.data);
+
         }
+
       } catch (e) {
+
         console.warn("Gagal memuat task monitor:", e);
+
       }
+
     }
 
     let tasksCache = [];
+
     let allMediaGroupsCache = [];
+
     let currentTaskFilter = "ALL";
+
     let currentMediaAreaFilter = "ALL";
+
     let currentMediaQuery = "";
 
     function onMediaAreaFilterChange(val) {
+
       currentMediaAreaFilter = val;
+
       currentTaskFilter = "ALL";
+
       renderFilterChips();
+
       renderGroupsUI();
+
     }
 
     function onMediaSearchInput(val) {
+
       currentMediaQuery = (val || "").trim().toLowerCase();
+
       renderFilterChips();
+
       renderGroupsUI();
+
     }
 
     function parseLogDescription(rawDesc) {
+
       let worker = "Pekerja Lapangan";
+
       let area = "";
+
       let task = "";
+
       let volume = "";
+
       let catatan = "";
+
       let gps = "";
 
       if (!rawDesc) return { worker, area, task, volume, catatan, gps };
@@ -1144,2114 +2270,4196 @@
       let text = String(rawDesc);
 
       // 1. Extract GPS: " | 📍 GPS: -7.123, 112.456"
+
       const gpsMatch = text.match(/\|\s*(?:📍\s*)?GPS:\s*([^|\n]+)/i);
+
       if (gpsMatch) {
+
         gps = gpsMatch[1].trim();
+
         text = text.replace(gpsMatch[0], "").trim();
+
       }
 
       // 2. Extract Catatan: " | Ket: ..."
+
       const ketMatch = text.match(/\|\s*Ket:\s*([^|\n]+)/i);
+
       if (ketMatch) {
+
         catatan = ketMatch[1].trim();
+
         text = text.replace(ketMatch[0], "").trim();
+
       }
 
       // 3. Extract Volume: "(+21)" or "(+21m²)" or "(+Update)"
+
       const volMatch = text.match(/\(\+([^)]+)\)/);
+
       if (volMatch) {
+
         volume = volMatch[1].trim();
+
         text = text.replace(volMatch[0], "").trim();
+
       }
 
       // 4. Extract Session & Worker & Area from bracket tags [...]
+
       const bracketRegex = /\[([^\]]+)\]/g;
+
       let match;
+
       const brackets = [];
+
       while ((match = bracketRegex.exec(text)) !== null) {
+
         brackets.push(match[1].trim());
+
       }
 
       if (brackets.length > 0) {
+
         text = text.replace(/\[[^\]]+\]/g, "").trim();
 
         brackets.forEach(b => {
+
           const bLower = b.toLowerCase();
+
           if (b.includes("PAGI") || b.includes("SIANG") || b.includes("SORE") || b.includes("LEMBUR") || b.includes("🌅") || b.includes("☀️") || b.includes("🌆") || b.includes("🌙") || b.includes("🌌")) {
+
             // Sesi SOP
+
           } else if (bLower.startsWith("area:") || bLower.startsWith("area ") || bLower.includes("lantai") || bLower.includes("kamar") || bLower.includes("room") || bLower.includes("ruang") || bLower.includes("zona") || bLower.includes("blok")) {
+
             area = b.replace(/^area:\s*/i, "").trim();
+
           } else if (worker === "Pekerja Lapangan") {
+
             worker = b;
+
           } else if (!area) {
+
             area = b;
+
           }
+
         });
+
       }
 
       // 5. Area prefix jika tidak memakai bracket
+
       if (!area) {
+
         const areaPrefixMatch = text.match(/^(Lantai\s*[^-\n]+-\s*Kamar\s*\d+|Kamar\s*\d+|Room\s*\d+|Ruang\s*[^-\n]+)\s*[-:•]\s*/i);
+
         if (areaPrefixMatch) {
+
           area = areaPrefixMatch[1].trim();
+
           text = text.slice(areaPrefixMatch[0].length).trim();
+
         }
+
       }
 
       // 6. Catatan pembatas dash " - "
+
       if (!catatan) {
+
         const dashIndex = text.indexOf(" - ");
+
         if (dashIndex !== -1) {
+
           catatan = text.substring(dashIndex + 3).trim();
+
           task = text.substring(0, dashIndex).trim();
+
         } else {
+
           task = text.trim();
+
         }
+
       } else {
+
         task = text.trim();
+
       }
 
       if (!task) task = "Pekerjaan Lapangan";
+
       if (!area) area = "Area Umum";
 
       return { worker, area, task, volume, catatan, gps };
+
     }
 
     async function fetchGroupedMedia(fallbackListFoto, mediaPerTugas) {
+
       let logs = mediaPerTugas || [];
+
       if (!logs || logs.length === 0) {
+
         try {
+
           const url = `${getApiUrl()}?action=ambilLogDetailTukang&proyek=${encodeURIComponent(currentProject)}&api=true`;
+
           const res = await fetch(url);
+
           const json = await res.json();
+
           if (json && (json.data || json.result)) {
+
             logs = json.data || json.result || [];
+
           }
+
         } catch(e) {
+
           console.warn("Gagal fetch ambilLogDetailTukang:", e);
+
         }
+
       }
+
       renderGalleryGrouped(logs, fallbackListFoto);
+
       if (tasksCache && tasksCache.length > 0) {
+
         renderTaskItems(tasksCache);
+
       }
+
     }
 
     function renderGalleryGrouped(logs, fallbackPhotos) {
+
       const container = document.getElementById("taskGroupedGalleryContainer");
+
       const flatContainer = document.getElementById("photoGalleryContainer");
+
       const noPhotos = document.getElementById("noPhotosPlaceholder");
+
       const filterContainer = document.getElementById("taskMediaFilterContainer");
+
       const badgeCount = document.getElementById("badgeFotoCount");
+
       const badgeTotalHeader = document.getElementById("badgeMediaTotalHeader");
 
       logs = logs || [];
+
       fallbackPhotos = fallbackPhotos || [];
 
       const groupsMap = new Map();
+
       const usedPhotoUrls = new Set();
+
       let totalPhotos = 0;
+
       let totalVideos = 0;
 
       logs.forEach(log => {
+
         const parsed = parseLogDescription(log.deskripsi || "");
+
         const cleanArea = parsed.area || "Area Umum";
+
         const cleanTask = parsed.task || "Pekerjaan Lapangan";
+
         // Pisahkan grup secara unik: "[Area] Nama Tugas" agar foto tiap kamar hotel tidak tercampur
+
         const groupKey = (cleanArea && cleanArea !== "Area Umum") ? `[${cleanArea}] ${cleanTask}` : cleanTask;
 
         // Foto
+
         let photos = [];
+
         if (Array.isArray(log.listFoto)) {
+
           photos = log.listFoto.filter(u => u && u !== "-" && typeof u === "string");
+
         } else if (log.foto && typeof log.foto === "string" && log.foto !== "-") {
+
           photos = [log.foto];
+
         }
 
         // Video
+
         let videos = [];
+
         if (Array.isArray(log.listVideo)) {
+
           videos = log.listVideo.filter(u => u && u !== "-" && typeof u === "string");
+
         }
+
         if (log.video && typeof log.video === "string" && log.video !== "-" && !videos.includes(log.video)) {
+
           videos.push(log.video);
+
         }
 
         if (photos.length === 0 && videos.length === 0) return;
 
         photos.forEach(p => usedPhotoUrls.add(p));
+
         totalPhotos += photos.length;
+
         totalVideos += videos.length;
 
         if (!groupsMap.has(groupKey)) {
+
           groupsMap.set(groupKey, {
+
             groupKey: groupKey,
+
             taskName: groupKey,
+
             area: cleanArea,
+
             taskClean: cleanTask,
+
             reports: []
+
           });
+
         }
 
         groupsMap.get(groupKey).reports.push({
+
           tanggal: log.tanggal || "--",
+
           worker: parsed.worker,
+
           volume: parsed.volume,
+
           catatan: parsed.catatan,
+
           gps: parsed.gps,
+
           photos: photos,
+
           videos: videos
+
         });
+
       });
 
       // Loose Photos from fallbackPhotos
+
       const uncategorizedPhotos = fallbackPhotos.filter(url => url && !usedPhotoUrls.has(url));
+
       if (uncategorizedPhotos.length > 0) {
+
         totalPhotos += uncategorizedPhotos.length;
+
         groupsMap.set("Dokumentasi Umum Lapangan", {
+
           groupKey: "Dokumentasi Umum Lapangan",
+
           taskName: "Dokumentasi Umum Lapangan",
+
           area: "Area Umum",
+
           taskClean: "Dokumentasi Umum Lapangan",
+
           reports: [{
+
             tanggal: "Dokumentasi Tambahan",
+
             worker: "Tim Proyek",
+
             volume: "",
+
             catatan: "Foto dokumentasi progres lapangan umum",
+
             gps: "",
+
             photos: uncategorizedPhotos,
+
             videos: []
+
           }]
+
         });
+
       }
 
       allMediaGroupsCache = Array.from(groupsMap.values());
 
       const grandTotalMedia = totalPhotos + totalVideos;
+
       if (badgeCount) badgeCount.textContent = grandTotalMedia;
+
       if (badgeTotalHeader) badgeTotalHeader.textContent = `${totalPhotos} Foto, ${totalVideos} Video`;
 
       // Populate Dropdown Filter Area / Kamar
+
       const selectEl = document.getElementById("mediaAreaFilterSelect");
+
       if (selectEl) {
+
         const uniqueAreas = Array.from(new Set(allMediaGroupsCache.map(g => g.area).filter(a => a && a !== "Area Umum"))).sort();
+
         let optionsHtml = `<option value="ALL">🏢 Semua Area & Kamar (${totalPhotos} Foto)</option>`;
+
         uniqueAreas.forEach(a => {
+
           const aCount = allMediaGroupsCache.filter(g => g.area === a).reduce((acc, g) => acc + g.reports.reduce((ra, r) => ra + r.photos.length, 0), 0);
+
           const isSel = currentMediaAreaFilter === a ? "selected" : "";
+
           optionsHtml += `<option value="${a}" ${isSel}>📍 ${a} (${aCount} Foto)</option>`;
+
         });
+
         if (allMediaGroupsCache.some(g => g.area === "Area Umum")) {
+
           const umumCount = allMediaGroupsCache.filter(g => g.area === "Area Umum").reduce((acc, g) => acc + g.reports.reduce((ra, r) => ra + r.photos.length, 0), 0);
+
           optionsHtml += `<option value="Area Umum" ${currentMediaAreaFilter === "Area Umum" ? "selected" : ""}>🌐 Area Umum (${umumCount} Foto)</option>`;
+
         }
+
         selectEl.innerHTML = optionsHtml;
+
       }
 
       if (allMediaGroupsCache.length === 0) {
+
         if (container) container.innerHTML = "";
+
         if (filterContainer) filterContainer.innerHTML = "";
+
         if (flatContainer) flatContainer.classList.add("hidden");
+
         if (noPhotos) noPhotos.classList.remove("hidden");
+
         return;
+
       }
 
       if (noPhotos) noPhotos.classList.add("hidden");
+
       renderFilterChips();
+
       renderGroupsUI();
+
     }
 
     function getVisibleMediaGroups() {
+
       return allMediaGroupsCache.filter(group => {
+
         // Filter Area / Kamar
+
         if (currentMediaAreaFilter !== "ALL") {
+
           const gArea = (group.area || "").toLowerCase();
+
           const targetArea = currentMediaAreaFilter.toLowerCase();
+
           if (gArea !== targetArea && !gArea.includes(targetArea) && !targetArea.includes(gArea)) {
+
             return false;
+
           }
+
         }
+
         // Filter Search Query
+
         if (currentMediaQuery) {
+
           const gName = (group.taskName || "").toLowerCase();
+
           const gArea = (group.area || "").toLowerCase();
+
           const inReports = group.reports.some(r => 
+
             (r.worker && r.worker.toLowerCase().includes(currentMediaQuery)) ||
+
             (r.catatan && r.catatan.toLowerCase().includes(currentMediaQuery))
+
           );
+
           if (!gName.includes(currentMediaQuery) && !gArea.includes(currentMediaQuery) && !inReports) {
+
             return false;
+
           }
+
         }
+
         return true;
+
       });
+
     }
 
     function renderFilterChips() {
+
       const filterContainer = document.getElementById("taskMediaFilterContainer");
+
       if (!filterContainer) return;
 
       filterContainer.innerHTML = "";
 
       const visibleGroups = getVisibleMediaGroups();
+
       const totalMedia = visibleGroups.reduce((acc, g) => {
+
         return acc + g.reports.reduce((rAcc, r) => rAcc + r.photos.length + r.videos.length, 0);
+
       }, 0);
 
       const btnAll = document.createElement("button");
+
       btnAll.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition flex items-center gap-1.5 ${
+
         currentTaskFilter === "ALL" 
+
           ? "bg-nafindo-blue text-white shadow-sm" 
+
           : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+
       }`;
+
       btnAll.innerHTML = `<i class="fa-solid fa-layer-group"></i> <span>Semua (${visibleGroups.length} Tugas)</span> <span class="text-[10px] opacity-80">(${totalMedia})</span>`;
+
       btnAll.onclick = () => {
+
         currentTaskFilter = "ALL";
+
         renderFilterChips();
+
         renderGroupsUI();
+
       };
+
       filterContainer.appendChild(btnAll);
 
       visibleGroups.forEach(group => {
+
         const groupMediaCount = group.reports.reduce((acc, r) => acc + r.photos.length + r.videos.length, 0);
+
         const isActive = currentTaskFilter === group.taskName;
+
         const btn = document.createElement("button");
+
         btn.className = `px-3.5 py-1.5 rounded-xl text-xs font-bold shrink-0 transition flex items-center gap-1.5 ${
+
           isActive 
+
             ? "bg-nafindo-blue text-white shadow-sm" 
+
             : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+
         }`;
+
         btn.innerHTML = `<span>${group.taskName}</span> <span class="text-[10px] opacity-80">(${groupMediaCount})</span>`;
+
         btn.onclick = () => {
+
           currentTaskFilter = group.taskName;
+
           renderFilterChips();
+
           renderGroupsUI();
+
         };
+
         filterContainer.appendChild(btn);
+
       });
+
     }
 
     function renderGroupsUI() {
+
       const container = document.getElementById("taskGroupedGalleryContainer");
+
       if (!container) return;
+
       container.innerHTML = "";
 
       const visibleGroups = getVisibleMediaGroups();
+
       const filteredGroups = (currentTaskFilter === "ALL")
+
         ? visibleGroups
+
         : visibleGroups.filter(g => g.taskName === currentTaskFilter);
 
       if (filteredGroups.length === 0) {
+
         container.innerHTML = `
+
           <div class="text-center py-8 text-slate-400 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+
             <i class="fa-regular fa-folder-open text-2xl text-slate-300 mb-1"></i>
+
             <p class="text-xs font-semibold text-slate-600">Tidak ada dokumentasi foto atau video untuk filter yang dipilih.</p>
+
             <p class="text-[11px] text-slate-400 mt-0.5">Coba ganti pilihan Area/Kamar atau bersihkan kata kunci pencarian.</p>
+
           </div>
+
         `;
+
         return;
+
       }
 
       filteredGroups.forEach((group, gIdx) => {
+
         const totalP = group.reports.reduce((acc, r) => acc + r.photos.length, 0);
+
         const totalV = group.reports.reduce((acc, r) => acc + r.videos.length, 0);
 
         const card = document.createElement("div");
+
         card.id = `media-task-group-${gIdx}`;
+
         card.className = "bg-slate-50/90 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-4 hover:border-blue-300 transition shadow-sm";
 
         let headerHtml = `
+
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-200">
+
             <div class="flex items-center space-x-2.5">
+
               <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shrink-0">
+
                 <i class="fa-solid fa-list-check"></i>
+
               </div>
+
               <div>
+
                 <h4 class="text-sm sm:text-base font-extrabold text-slate-900">${group.taskName}</h4>
+
                 <p class="text-[11px] text-slate-500">${group.reports.length} sesi pelaporan media</p>
+
               </div>
+
             </div>
+
             <div class="flex items-center gap-1.5 self-start sm:self-auto">
+
               ${totalP > 0 ? `<span class="bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-bold px-2 py-0.5 rounded-lg"><i class="fa-solid fa-camera mr-1"></i>${totalP} Foto</span>` : ''}
+
               ${totalV > 0 ? `<span class="bg-purple-50 border border-purple-200 text-purple-700 text-[11px] font-bold px-2 py-0.5 rounded-lg"><i class="fa-solid fa-video mr-1"></i>${totalV} Video</span>` : ''}
+
             </div>
+
           </div>
+
         `;
 
         let reportsHtml = `<div class="space-y-4">`;
+
         group.reports.forEach((rep) => {
+
           reportsHtml += `
+
             <div class="bg-white rounded-xl p-3.5 border border-slate-200/80 shadow-sm space-y-2.5">
+
               <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+
                 <div class="flex items-center space-x-2">
+
                   <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full flex items-center gap-1">
+
                     <i class="fa-solid fa-user-check"></i> ${rep.worker}
+
                   </span>
+
                   <span class="text-slate-400">•</span>
+
                   <span class="text-slate-600 font-medium text-[11px]"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>${rep.tanggal}</span>
+
                 </div>
+
                 ${rep.volume ? `<span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded-full"><i class="fa-solid fa-ruler-combined mr-1"></i>Capaian: +${rep.volume}</span>` : ''}
+
               </div>
 
               ${rep.catatan ? `<p class="text-xs text-slate-700 bg-slate-50 p-2 rounded-lg border border-slate-100 italic">"${rep.catatan}"</p>` : ''}
+
               ${rep.gps ? `<div class="text-[10px] text-slate-500 font-mono flex items-center gap-1"><i class="fa-solid fa-location-dot text-rose-500"></i> ${rep.gps}</div>` : ''}
 
               <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 pt-1">
+
           `;
 
           // Foto
+
           rep.photos.forEach((photoUrl, pIdx) => {
+
             reportsHtml += `
+
               <div onclick="openLightbox('${photoUrl}')" class="group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-square cursor-pointer hover:shadow-md transition">
+
                 <img src="${photoUrl}" alt="Foto ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2 opacity-90 group-hover:opacity-100">
+
                   <div class="text-white text-[10px] flex items-center justify-between w-full">
+
                     <span class="font-bold"><i class="fa-solid fa-camera mr-0.5"></i> Foto ${pIdx+1}</span>
+
                     <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+
                   </div>
+
                 </div>
+
               </div>
+
             `;
+
           });
 
           // Video
+
           rep.videos.forEach((videoUrl, vIdx) => {
+
             const escapedTitle = group.taskName.replace(/'/g, "\\'");
+
             reportsHtml += `
+
               <div onclick="openVideoModal('${videoUrl}', '${escapedTitle} - Video ${vIdx+1}')" class="group relative rounded-xl overflow-hidden bg-slate-950 border border-purple-300 aspect-square cursor-pointer hover:shadow-md transition flex items-center justify-center">
+
                 <div class="w-10 h-10 rounded-full bg-purple-600/90 text-white flex items-center justify-center text-sm shadow-lg group-hover:scale-110 transition">
+
                   <i class="fa-solid fa-play ml-0.5"></i>
+
                 </div>
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2">
+
                   <div class="text-white text-[10px] flex items-center justify-between w-full">
+
                     <span class="font-bold text-purple-300"><i class="fa-solid fa-video mr-0.5"></i> Video ${vIdx+1}</span>
+
                     <span class="text-[9px] bg-purple-500/40 px-1 rounded">Putar</span>
+
                   </div>
+
                 </div>
+
               </div>
+
             `;
+
           });
 
           reportsHtml += `
+
               </div>
+
             </div>
+
           `;
+
         });
+
         reportsHtml += `</div>`;
 
         card.innerHTML = headerHtml + reportsHtml;
+
         container.appendChild(card);
+
       });
+
     }
 
     function filterAndShowTaskMedia(taskName, areaName) {
+
       switchTab("tab-dokumentasi");
+
       if (areaName && areaName !== "Area Umum") {
+
         currentMediaAreaFilter = areaName;
+
         const selectEl = document.getElementById("mediaAreaFilterSelect");
+
         if (selectEl) {
+
           for (let i = 0; i < selectEl.options.length; i++) {
+
             if (selectEl.options[i].value === areaName || selectEl.options[i].value.toLowerCase().includes(areaName.toLowerCase())) {
+
               selectEl.selectedIndex = i;
+
               break;
+
             }
+
           }
+
         }
+
       }
+
       currentTaskFilter = taskName;
+
       renderFilterChips();
+
       renderGroupsUI();
+
       const container = document.getElementById("tab-dokumentasi");
+
       if (container) {
+
         container.scrollIntoView({ behavior: "smooth" });
+
       }
+
     }
 
     // =========================================================================
+
     // HITUNG OTOMATIS BOBOT DINAMIS & VOLUME PEKERJAAN (LEVELING & SPC)
+
     // =========================================================================
+
     function calculateDynamicWeights(tasks) {
+
       if (!tasks || tasks.length === 0) return [];
+
       let totalRawPoints = 0;
+
       const subTasks = [];
 
       tasks.forEach(t => {
+
         const isArea = t.level === "AREA" || t[0] === "AREA";
+
         if (isArea) return;
+
         const name = (t.nama || t.namaTugas || t[1] || "").toString().toLowerCase();
 
         // 1. Ekstrak volume dari nama atau fallback 14 m²
+
         let vol = 14;
+
         const volMatch = name.match(/\((\d+(?:[.,]\d+)?)\s*(?:m2|m²|meter)?\)/i) || name.match(/(\d+(?:[.,]\d+)?)\s*(?:m2|m²)/i);
+
         if (volMatch) {
+
           vol = parseFloat(volMatch[1].replace(',', '.'));
+
         }
 
         // 2. Faktor tahapan pengerjaan (Persiapan 15%, Utama 70%, Finishing 15%)
+
         let factor = 0.50;
+
         if (name.includes("chipping") || name.includes("pembersihan") || name.includes("bersih") || name.includes("underlayer") || name.includes("busa") || name.includes("foam") || name.includes("persiapan") || name.includes("awalan")) {
+
           factor = 0.15;
+
         } else if (name.includes("screed") || name.includes("pengecoran") || name.includes("cor") || name.includes("tuang") || name.includes("leveling") || name.includes("pasang spc") || name.includes("pemasangan") || name.includes("plank") || name.includes("vinyl")) {
+
           factor = 0.70;
+
         } else if (name.includes("primer") || name.includes("bonding") || name.includes("lem")) {
+
           factor = 0.20;
+
         } else if (name.includes("plint") || name.includes("skirting") || name.includes("aksesoris") || name.includes("waterpass") || name.includes("cutting") || name.includes("sealant") || name.includes("finishing")) {
+
           factor = 0.15;
+
         }
 
         const rawPoints = vol * factor;
+
         totalRawPoints += rawPoints;
+
         subTasks.push({ item: t, rawPoints: rawPoints });
+
       });
 
       return tasks.map(t => {
+
         const isArea = t.level === "AREA" || t[0] === "AREA";
+
         if (isArea) return t;
+
         const found = subTasks.find(s => s.item === t);
+
         const dynamicBobot = (found && totalRawPoints > 0) ? Math.round((found.rawPoints / totalRawPoints) * 10000) / 100 : 0;
+
         return {
+
           ...t,
+
           bobotOtomatis: dynamicBobot,
+
           bobot: dynamicBobot // Selalu gunakan bobot dinamis proporsional
+
         };
+
       });
+
     }
 
     function updateOverallProgressKPI(tasks) {
+
       if (!tasks || tasks.length === 0) return 0;
+
       
+
       let totalWeightedProgress = 0;
+
       let totalWeights = 0;
+
       let subTaskCount = 0;
 
       tasks.forEach(t => {
+
         const isArea = t.level === "AREA" || t[0] === "AREA";
+
         if (isArea) return;
 
         subTaskCount++;
+
         const prog = Number(t.progres !== undefined ? t.progres : (t[2] || 0)) || 0;
+
         const weight = Number(t.bobotOtomatis !== undefined ? t.bobotOtomatis : (t.bobot || 0)) || 0;
 
         totalWeightedProgress += (prog * weight) / 100;
+
         totalWeights += weight;
+
       });
 
       if (subTaskCount === 0) return 0;
 
       let finalProgress = totalWeightedProgress;
+
       if (totalWeights > 0 && Math.abs(totalWeights - 100) > 1) {
+
         finalProgress = (totalWeightedProgress / totalWeights) * 100;
+
       }
+
       finalProgress = Math.min(100, Math.max(0, finalProgress));
 
       const roundedOneDec = Math.round(finalProgress * 10) / 10;
+
       const displayStr = (roundedOneDec % 1 === 0) ? roundedOneDec.toFixed(0) : roundedOneDec.toFixed(1);
 
       const textEl = document.getElementById("metricProgressText");
+
       const barEl = document.getElementById("metricProgressBar");
 
       if (textEl) textEl.textContent = displayStr + "%";
+
       if (barEl) barEl.style.width = finalProgress + "%";
 
       return roundedOneDec;
+
     }
 
     function calculateTwoWorksVolume(tasks, mediaLogs) {
+
       let levelingTarget = 0;
+
       let levelingDone = 0;
+
       let levelingToday = 0;
 
       let spcTarget = 0;
+
       let spcDone = 0;
+
       let spcToday = 0;
 
       // Group sub-tasks per room/area to avoid double counting room area
+
       const roomMap = new Map();
 
       (tasks || []).forEach(task => {
+
         const isArea = task.level === "AREA" || task[0] === "AREA";
+
         if (isArea) return;
 
         const name = (task.nama || task.namaTugas || task[1] || "").toString();
+
         const area = (task.area || "Umum").toString();
+
         const progres = Number(task.progres !== undefined ? task.progres : (task[2] || 0)) || 0;
+
         const bobot = Number(task.bobot !== undefined ? task.bobot : (task[3] || 10)) || 10;
 
         let vol = 0;
+
         const volMatch = name.match(/\((\d+(?:[.,]\d+)?)\s*(?:m2|m²|meter)?\)/i) || name.match(/(\d+(?:[.,]\d+)?)\s*(?:m2|m²)/i);
+
         if (volMatch) {
+
           vol = parseFloat(volMatch[1].replace(',', '.'));
+
         }
 
         const roomKey = area.trim() || "Umum";
+
         if (!roomMap.has(roomKey)) {
+
           roomMap.set(roomKey, {
+
             levelingTasks: [],
+
             spcTasks: [],
+
             volume: vol || 14
+
           });
+
         }
+
         const rData = roomMap.get(roomKey);
+
         if (vol > 0) rData.volume = vol;
 
         const nLower = name.toLowerCase();
+
         const isLeveling = nLower.includes("leveling") || nLower.includes("screed") || nLower.includes("chipping") || nLower.includes("primer") || nLower.includes("bonding") || nLower.includes("waterpass");
+
         const isSpc = nLower.includes("spc") || nLower.includes("vinyl") || nLower.includes("underlayer") || nLower.includes("underlay") || nLower.includes("plank") || nLower.includes("skirting") || nLower.includes("plint") || nLower.includes("foam");
 
         if (isLeveling) rData.levelingTasks.push({ name, progres, bobot });
+
         if (isSpc) rData.spcTasks.push({ name, progres, bobot });
+
       });
 
       // Helper: Menentukan progres tugas utama (Primary Task) yang mewakili realisasi fisik m²
+
       function getPrimaryExecutionProgress(taskList, isLeveling) {
+
         if (!taskList || taskList.length === 0) return 0;
+
         if (taskList.length === 1) return taskList[0].progres || 0;
 
         if (isLeveling) {
+
           // Tugas Utama Leveling adalah Pengecoran / Screed (Bukan pembersihan/chipping/primer)
+
           const screedTask = taskList.find(t => {
+
             const n = (t.name || "").toLowerCase();
+
             return n.includes("screed") || n.includes("pengecoran") || n.includes("cor") || n.includes("tuang");
+
           });
+
           if (screedTask) return screedTask.progres || 0;
 
           // Jika tidak ada kata screed/pengecoran, cari yang bukan persiapan
+
           const nonPrep = taskList.find(t => {
+
             const n = (t.name || "").toLowerCase();
+
             return !n.includes("chipping") && !n.includes("pembersihan") && !n.includes("bersih") && !n.includes("primer") && !n.includes("bonding") && !n.includes("waterpass");
+
           });
+
           return nonPrep ? (nonPrep.progres || 0) : 0;
+
         } else {
+
           // Tugas Utama SPC adalah Pemasangan Plank Lantai SPC (Bukan underlayer foam atau plint)
+
           const spcTask = taskList.find(t => {
+
             const n = (t.name || "").toLowerCase();
+
             return (n.includes("pemasangan") || n.includes("pasang lantai") || n.includes("plank")) && !n.includes("underlayer") && !n.includes("foam") && !n.includes("busa") && !n.includes("plint") && !n.includes("aksesoris");
+
           });
+
           if (spcTask) return spcTask.progres || 0;
 
           const nonPrep = taskList.find(t => {
+
             const n = (t.name || "").toLowerCase();
+
             return !n.includes("underlayer") && !n.includes("foam") && !n.includes("busa") && !n.includes("plint") && !n.includes("aksesoris") && !n.includes("sealant");
+
           });
+
           return nonPrep ? (nonPrep.progres || 0) : 0;
+
         }
+
       }
 
       // Hitung akumulasi m² per kamar strictly dari tugas utama fisik
+
       roomMap.forEach(rData => {
+
         const roomVol = rData.volume || 14;
 
         if (rData.levelingTasks.length > 0) {
+
           levelingTarget += roomVol;
+
           const primaryProg = getPrimaryExecutionProgress(rData.levelingTasks, true);
+
           // Hanya menambah m² selesai jika pengecoran screed sudah benar-benar jalan
+
           levelingDone += (roomVol * (primaryProg / 100));
+
         }
 
         if (rData.spcTasks.length > 0) {
+
           spcTarget += roomVol;
+
           const primaryProg = getPrimaryExecutionProgress(rData.spcTasks, false);
+
           // Hanya menambah m² selesai jika pemasangan lantai SPC sudah jalan
+
           spcDone += (roomVol * (primaryProg / 100));
+
         }
+
       });
 
       // Hitung volume capaian hari ini dari mediaLogs (Hanya tugas utama cor screed / pasang spc)
+
       const now = new Date();
+
       const todayD = String(now.getDate()).padStart(2, '0');
+
       const todayM = String(now.getMonth() + 1).padStart(2, '0');
+
       const todayY = String(now.getFullYear());
+
       const todayShortY = String(now.getFullYear()).slice(-2);
 
       const todayPatterns = [
+
         `${todayD}/${todayM}/${todayY}`,
+
         `${todayD}/${todayM}/${todayShortY}`,
+
         `${todayY}-${todayM}-${todayD}`,
+
         `${todayD}-${todayM}-${todayY}`
+
       ];
 
       (mediaLogs || []).forEach(log => {
+
         const tgl = (log.tanggal || "").toString().trim();
+
         const isToday = todayPatterns.some(p => tgl.includes(p));
+
         if (!isToday) return;
 
         const desc = (log.deskripsi || "").toString();
+
         const descLower = desc.toLowerCase();
 
         // Leveling Hari Ini: Hanya jika laporan adalah pengecoran screed (Bukan pembersihan/chipping/primer)
+
         const isLevPrimary = (descLower.includes("screed") || descLower.includes("pengecoran") || descLower.includes("cor")) ||
+
                              (descLower.includes("leveling") && !descLower.includes("chipping") && !descLower.includes("pembersihan") && !descLower.includes("bersih") && !descLower.includes("primer") && !descLower.includes("bonding"));
 
         // SPC Hari Ini: Hanya jika laporan adalah pemasangan plank SPC (Bukan underlayer/plint)
+
         const isSpcPrimary = (descLower.includes("pasang spc") || descLower.includes("pemasangan lantai") || descLower.includes("pemasangan spc") || descLower.includes("plank")) ||
+
                              (descLower.includes("spc") && !descLower.includes("underlayer") && !descLower.includes("foam") && !descLower.includes("busa") && !descLower.includes("plint"));
 
         let logVol = 0;
+
         const match = desc.match(/\(\+(\d+(?:[.,]\d+)?)\s*(?:m2|m²)?\)/i);
+
         if (match) {
+
           logVol = parseFloat(match[1].replace(',', '.'));
+
         } else if (log.volume) {
+
           const vMatch = String(log.volume).match(/(\d+(?:[.,]\d+)?)/);
+
           if (vMatch) logVol = parseFloat(vMatch[1].replace(',', '.'));
+
         }
 
         if (logVol > 0) {
+
           if (isLevPrimary) levelingToday += logVol;
+
           if (isSpcPrimary) spcToday += logVol;
+
         }
+
       });
 
       return {
+
         leveling: {
+
           target: Math.round(levelingTarget * 10) / 10,
+
           done: Math.round(levelingDone * 10) / 10,
+
           today: Math.round(levelingToday * 10) / 10,
+
           percent: levelingTarget > 0 ? Math.min(100, Math.round((levelingDone / levelingTarget) * 100)) : 0
+
         },
+
         spc: {
+
           target: Math.round(spcTarget * 10) / 10,
+
           done: Math.round(spcDone * 10) / 10,
+
           today: Math.round(spcToday * 10) / 10,
+
           percent: spcTarget > 0 ? Math.min(100, Math.round((spcDone / spcTarget) * 100)) : 0
+
         }
+
       };
+
     }
 
     function updateTwoWorksVolumeUI(tasks, mediaLogs) {
+
       const res = calculateTwoWorksVolume(tasks, mediaLogs);
 
       // Leveling Elements
+
       const levTotalEl = document.getElementById("levelingTotalDoneM2");
+
       const levTodayEl = document.getElementById("levelingTodayM2");
+
       const levTargetEl = document.getElementById("levelingTargetM2");
+
       const levPercentEl = document.getElementById("levelingPercentBadge");
+
       const levBarEl = document.getElementById("levelingProgressBar");
 
       if (levTotalEl) levTotalEl.textContent = res.leveling.done.toLocaleString("id-ID");
+
       if (levTodayEl) levTodayEl.textContent = (res.leveling.today > 0 ? "+" : "") + res.leveling.today.toLocaleString("id-ID");
+
       if (levTargetEl) levTargetEl.textContent = `Target: ${res.leveling.target.toLocaleString("id-ID")} m²`;
+
       if (levPercentEl) levPercentEl.textContent = `${res.leveling.percent}%`;
+
       if (levBarEl) levBarEl.style.width = `${res.leveling.percent}%`;
 
       // SPC Elements
+
       const spcTotalEl = document.getElementById("spcTotalDoneM2");
+
       const spcTodayEl = document.getElementById("spcTodayM2");
+
       const spcTargetEl = document.getElementById("spcTargetM2");
+
       const spcPercentEl = document.getElementById("spcPercentBadge");
+
       const spcBarEl = document.getElementById("spcProgressBar");
 
       if (spcTotalEl) spcTotalEl.textContent = res.spc.done.toLocaleString("id-ID");
+
       if (spcTodayEl) spcTodayEl.textContent = (res.spc.today > 0 ? "+" : "") + res.spc.today.toLocaleString("id-ID");
+
       if (spcTargetEl) spcTargetEl.textContent = `Target: ${res.spc.target.toLocaleString("id-ID")} m²`;
+
       if (spcPercentEl) spcPercentEl.textContent = `${res.spc.percent}%`;
+
       if (spcBarEl) spcBarEl.style.width = `${res.spc.percent}%`;
+
     }
 
     // =========================================================================
+
     // SPEED AKSES LANTAI & KAMAR CONTROLLER (WEB MONITOR)
+
     // =========================================================================
+
     let selectedTaskFloor = "ALL";
+
     let selectedTaskRoom = "ALL";
+
     let taskSearchRoomQuery = "";
+
     let cachedFloors = [];
+
     let cachedRoomsPerFloor = {}; // floor -> array of room strings
+
     let flatRoomList = [];        // array of { floor, room } for navigation
 
     function parseTaskFloorAndRoom(areaStr, taskNameStr) {
+
       const area = (areaStr || "").trim();
+
       const task = (taskNameStr || "").trim();
+
       const fullText = `${area} ${task}`.trim();
 
       // 1. Ekstrak Lantai
+
       let floor = "Area Umum";
+
       const floorMatch = fullText.match(/(?:lantai|lt\.?|floor)\s*(\d+|dasar|mezanin|basement|[A-Za-z])/i);
+
       if (floorMatch) {
+
         const val = floorMatch[1].trim();
+
         if (/^\d+$/.test(val)) {
+
           floor = `Lantai ${val}`;
+
         } else {
+
           floor = `Lantai ${val.charAt(0).toUpperCase() + val.slice(1).toLowerCase()}`;
+
         }
+
       } else if (/basement/i.test(fullText)) {
+
         floor = "Basement";
+
       } else if (/lobby|lobi/i.test(fullText)) {
+
         floor = "Lantai Dasar / Lobby";
+
       }
 
       // 2. Ekstrak Kamar / Room
+
       let room = "";
+
       const roomExplicit = fullText.match(/(?:kamar|room|rm\.?)\s*(\d{2,4}[a-zA-Z]?)/i);
+
       const hyphenMatch = area.match(/-\s*(\d{2,4}[a-zA-Z]?)\b/);
+
       const numInArea = area.match(/\b([1-9]\d{2,3}[a-zA-Z]?)\b/);
 
       if (roomExplicit) {
+
         room = roomExplicit[1].toUpperCase();
+
       } else if (hyphenMatch) {
+
         room = hyphenMatch[1].toUpperCase();
+
       } else if (numInArea) {
+
         room = numInArea[1].toUpperCase();
+
       }
 
       // 3. Fallback jika lantai belum ketemu tapi ada nomor kamar 3-4 digit
+
       if (floor === "Area Umum" && room) {
+
         if (room.length === 4) {
+
           const flNum = parseInt(room.substring(0, 1), 10);
+
           if (flNum >= 1 && flNum <= 9) floor = `Lantai ${flNum}`;
+
         } else if (room.length === 3) {
+
           const flNum = parseInt(room.substring(0, 1), 10);
+
           if (flNum >= 1 && flNum <= 9) floor = `Lantai ${flNum}`;
+
         }
+
       }
 
       return { floor, room };
+
     }
 
     function initSpeedAccessSelectors(tasks) {
+
       const floorsSet = new Set();
+
       const roomsMap = {};
+
       const flatRooms = [];
 
       let currentArea = "";
+
       (tasks || []).forEach(t => {
+
         const isArea = t.level === "AREA" || t[0] === "AREA";
+
         const nama = (t.nama || t.namaTugas || t[1] || "").toString();
+
         if (isArea) currentArea = nama;
+
         const area = (t.area || currentArea || "").toString();
+
         
+
         const { floor, room } = parseTaskFloorAndRoom(area, nama);
+
         if (floor) {
+
           floorsSet.add(floor);
+
           if (!roomsMap[floor]) roomsMap[floor] = new Set();
+
           if (room) {
+
             roomsMap[floor].add(room);
+
           }
+
         }
+
       });
 
       // Sort floors (e.g., Lantai 1, Lantai 2, ..., Lantai 5)
+
       cachedFloors = Array.from(floorsSet).sort((a, b) => {
+
         const numA = parseInt((a.match(/\d+/) || [999])[0], 10);
+
         const numB = parseInt((b.match(/\d+/) || [999])[0], 10);
+
         return numA - numB;
+
       });
 
       cachedRoomsPerFloor = {};
+
       flatRoomList = [];
+
       cachedFloors.forEach(fl => {
+
         const rList = Array.from(roomsMap[fl] || []).sort((a, b) => {
+
           const na = parseInt(a, 10);
+
           const nb = parseInt(b, 10);
+
           if (!isNaN(na) && !isNaN(nb)) return na - nb;
+
           return a.localeCompare(b);
+
         });
+
         cachedRoomsPerFloor[fl] = rList;
+
         rList.forEach(rm => {
+
           flatRooms.push({ floor: fl, room: rm });
+
         });
+
       });
+
       flatRoomList = flatRooms;
 
       renderFloorButtons();
+
       renderRoomButtons();
+
       updateFocusBanner();
+
     }
 
     function renderFloorButtons() {
+
       const container = document.getElementById("floorButtonsContainer");
+
       const label = document.getElementById("labelFloorCount");
+
       if (!container) return;
 
       container.innerHTML = "";
+
       if (label) {
+
         label.textContent = `${cachedFloors.length} Lantai Terdeteksi`;
+
       }
 
       // Tombol "Semua Lantai"
+
       const allBtn = document.createElement("button");
+
       allBtn.type = "button";
+
       allBtn.onclick = () => onSelectTaskFloor("ALL");
+
       const isAll = selectedTaskFloor === "ALL";
+
       allBtn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center gap-1.5 ${
+
         isAll ? "bg-nafindo-blue text-white shadow-sm ring-2 ring-blue-300" : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-100"
+
       }`;
+
       allBtn.innerHTML = `<i class="fa-solid fa-layer-group text-[10px]"></i><span>Semua Lantai</span>`;
+
       container.appendChild(allBtn);
 
       // Tombol per lantai
+
       cachedFloors.forEach(fl => {
+
         const btn = document.createElement("button");
+
         btn.type = "button";
+
         btn.onclick = () => onSelectTaskFloor(fl);
+
         const isSel = selectedTaskFloor === fl;
+
         const roomCount = (cachedRoomsPerFloor[fl] || []).length;
+
         btn.className = `px-3 py-1.5 rounded-xl text-xs font-bold transition shrink-0 flex items-center gap-1.5 ${
+
           isSel ? "bg-blue-600 text-white shadow-sm ring-2 ring-blue-300" : "bg-white text-slate-700 border border-slate-200 hover:bg-blue-50 hover:text-blue-600"
+
         }`;
+
         btn.innerHTML = `<i class="fa-solid fa-building text-[10px]"></i><span>${fl}</span> <span class="text-[10px] opacity-80 font-normal">(${roomCount} kmr)</span>`;
+
         container.appendChild(btn);
+
       });
+
     }
 
     function renderRoomButtons() {
+
       const container = document.getElementById("roomButtonsContainer");
+
       const label = document.getElementById("labelRoomCount");
+
       if (!container) return;
 
       container.innerHTML = "";
 
       let availableRooms = [];
+
       if (selectedTaskFloor === "ALL") {
+
         availableRooms = flatRoomList;
+
       } else {
+
         const rList = cachedRoomsPerFloor[selectedTaskFloor] || [];
+
         availableRooms = rList.map(r => ({ floor: selectedTaskFloor, room: r }));
+
       }
 
       if (taskSearchRoomQuery.trim()) {
+
         const q = taskSearchRoomQuery.trim().toLowerCase();
+
         availableRooms = availableRooms.filter(item => item.room.toLowerCase().includes(q) || item.floor.toLowerCase().includes(q));
+
       }
 
       if (label) {
+
         label.textContent = `${availableRooms.length} Kamar`;
+
       }
 
       if (availableRooms.length === 0) {
+
         container.innerHTML = `<span class="text-[11px] text-slate-400 italic py-1">Tidak ada nomor kamar spesifik ditemukan.</span>`;
+
         return;
+
       }
 
       // Tombol "Semua Kamar" (dalam lantai aktif)
+
       const allRoomBtn = document.createElement("button");
+
       allRoomBtn.type = "button";
+
       allRoomBtn.onclick = () => onSelectTaskRoom("ALL");
+
       const isAllR = selectedTaskRoom === "ALL";
+
       allRoomBtn.className = `px-2.5 py-1 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1 ${
+
         isAllR ? "bg-amber-500 text-white shadow-sm font-bold" : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-100"
+
       }`;
+
       allRoomBtn.innerHTML = `<span>Semua Kamar</span>`;
+
       container.appendChild(allRoomBtn);
 
       // Render tiap kamar
+
       availableRooms.forEach(item => {
+
         const isSel = selectedTaskRoom === item.room && (selectedTaskFloor === "ALL" || selectedTaskFloor === item.floor);
+
         const roomMedia = getMediaForTaskItem("", item.room);
+
         const hasPhotos = roomMedia.roomPhotos.length > 0;
 
         const rBtn = document.createElement("button");
+
         rBtn.type = "button";
+
         rBtn.onclick = () => {
+
           if (selectedTaskFloor === "ALL") {
+
             selectedTaskFloor = item.floor;
+
             renderFloorButtons();
+
           }
+
           onSelectTaskRoom(item.room);
+
         };
+
         rBtn.className = `px-2.5 py-1 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1 ${
+
           isSel ? "bg-amber-600 text-white font-extrabold shadow-sm ring-2 ring-amber-300" : "bg-white text-slate-700 border border-slate-200 hover:bg-amber-50 hover:text-amber-700"
+
         }`;
+
         rBtn.innerHTML = `
+
           <i class="fa-solid fa-door-closed text-[10px] text-slate-400"></i>
+
           <span>${item.room}</span>
+
           ${hasPhotos ? `<i class="fa-solid fa-camera text-[9px] text-blue-500 ml-0.5" title="Ada ${roomMedia.roomPhotos.length} foto dokumentasi"></i>` : ''}
+
         `;
+
         container.appendChild(rBtn);
+
       });
+
     }
 
     function onSelectTaskFloor(floor) {
+
       selectedTaskFloor = floor;
+
       selectedTaskRoom = "ALL";
+
       renderFloorButtons();
+
       renderRoomButtons();
+
       updateFocusBanner();
+
       renderFilteredTasksUI();
+
     }
 
     function onSelectTaskRoom(room) {
+
       selectedTaskRoom = room;
+
       renderRoomButtons();
+
       updateFocusBanner();
+
       renderFilteredTasksUI();
+
     }
 
     function onTaskSearchRoom(query) {
+
       taskSearchRoomQuery = query || "";
+
       renderRoomButtons();
+
       renderFilteredTasksUI();
+
     }
 
     function updateFocusBanner() {
+
       const banner = document.getElementById("activeTaskFocusBanner");
+
       const title = document.getElementById("activeFocusTitle");
+
       const photoBtnWrapper = document.getElementById("bannerPhotoBtnWrapper");
+
       if (!banner || !title) return;
 
       const hasFocus = selectedTaskFloor !== "ALL" || selectedTaskRoom !== "ALL" || taskSearchRoomQuery.trim() !== "";
+
       if (hasFocus) {
+
         banner.classList.remove("hidden");
+
         let txt = "";
+
         if (selectedTaskFloor !== "ALL" && selectedTaskRoom !== "ALL") {
+
           txt = `${selectedTaskFloor} • Kamar ${selectedTaskRoom}`;
+
         } else if (selectedTaskFloor !== "ALL") {
+
           txt = `${selectedTaskFloor} • Seluruh Kamar`;
+
         } else if (selectedTaskRoom !== "ALL") {
+
           txt = `Kamar ${selectedTaskRoom}`;
+
         } else if (taskSearchRoomQuery.trim()) {
+
           txt = `Pencarian: "${taskSearchRoomQuery}"`;
+
         }
+
         title.textContent = txt;
 
         // Tombol Lihat Foto untuk area/kamar yang sedang difokuskan
+
         if (photoBtnWrapper) {
+
           photoBtnWrapper.innerHTML = "";
+
           let focusTarget = (selectedTaskRoom !== "ALL") ? selectedTaskRoom : ((selectedTaskFloor !== "ALL") ? selectedTaskFloor : "");
+
           if (focusTarget) {
+
             const focusMedia = getMediaForTaskItem("", focusTarget);
+
             if (focusMedia.roomPhotos.length > 0) {
+
               const escTarget = focusTarget.replace(/'/g, "\\'");
+
               photoBtnWrapper.innerHTML = `
+
                 <button onclick="filterAndShowTaskMedia('', '${escTarget}')" class="bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 px-2.5 py-1 rounded-lg text-xs font-black transition flex items-center gap-1 shadow-sm">
+
                   <i class="fa-solid fa-camera"></i>
+
                   <span>Foto ${focusTarget} (${focusMedia.roomPhotos.length})</span>
+
                 </button>
+
               `;
+
             }
+
           }
+
         }
+
       } else {
+
         banner.classList.add("hidden");
+
         if (photoBtnWrapper) photoBtnWrapper.innerHTML = "";
+
       }
+
     }
 
     function resetTaskFocusFilter() {
+
       selectedTaskFloor = "ALL";
+
       selectedTaskRoom = "ALL";
+
       taskSearchRoomQuery = "";
+
       const input = document.getElementById("taskSearchRoomInput");
+
       if (input) input.value = "";
+
       renderFloorButtons();
+
       renderRoomButtons();
+
       updateFocusBanner();
+
       renderFilteredTasksUI();
+
     }
 
     function navigateFocusedRoom(direction) {
+
       let currentList = [];
+
       if (selectedTaskFloor === "ALL") {
+
         currentList = flatRoomList;
+
       } else {
+
         const rList = cachedRoomsPerFloor[selectedTaskFloor] || [];
+
         currentList = rList.map(r => ({ floor: selectedTaskFloor, room: r }));
+
       }
+
       if (currentList.length === 0) return;
 
       let idx = currentList.findIndex(x => x.room === selectedTaskRoom);
+
       if (idx === -1) {
+
         idx = direction > 0 ? 0 : currentList.length - 1;
+
       } else {
+
         idx = idx + direction;
+
         if (idx < 0) idx = currentList.length - 1;
+
         if (idx >= currentList.length) idx = 0;
+
       }
 
       const target = currentList[idx];
+
       selectedTaskFloor = target.floor;
+
       selectedTaskRoom = target.room;
+
       renderFloorButtons();
+
       renderRoomButtons();
+
       updateFocusBanner();
+
       renderFilteredTasksUI();
+
     }
 
     // =========================================================================
+
     // HELPER: CARI MEDIA (FOTO & VIDEO) UNTUK TUGAS / AREA SECARA AKURAT
+
     // =========================================================================
+
     function getMediaForTaskItem(namaTugas, effectiveArea) {
+
       const result = {
+
         matchedPhotos: [],
+
         matchedVideos: [],
+
         matchedReports: [],
+
         roomPhotos: [],
+
         roomMediaCount: 0,
+
         areaTitle: effectiveArea || "Area Umum",
+
         taskTitle: namaTugas || "Pekerjaan"
+
       };
 
       const normTask = (namaTugas || "").toLowerCase();
+
       const normArea = (effectiveArea || "").toLowerCase();
+
       
+
       // Ekstrak kamar
+
       const roomMatch = normArea.match(/(?:kamar|room|rm\.?)\s*(\d+[a-zA-Z]?)/i) || 
+
                         normArea.match(/-\s*(\d{3,4}[a-zA-Z]?)/) ||
+
                         normArea.match(/\b(\d{3,4}[a-zA-Z]?)\b/);
+
       const roomNum = roomMatch ? roomMatch[1].toUpperCase() : "";
 
       // Ekstrak kata kunci tugas
+
       const hasChipping = normTask.includes("chipping") || normTask.includes("pembersihan") || normTask.includes("bersih");
+
       const hasScreed = normTask.includes("screed") || normTask.includes("pengecoran") || normTask.includes("cor") || normTask.includes("leveling");
+
       const hasPrimer = normTask.includes("primer") || normTask.includes("bonding");
+
       const hasSpc = normTask.includes("spc") || normTask.includes("plank") || normTask.includes("lantai");
+
       const hasPlint = normTask.includes("plint") || normTask.includes("skirting") || normTask.includes("aksesoris");
+
       const hasUnderlayer = normTask.includes("underlayer") || normTask.includes("foam") || normTask.includes("busa");
 
       // Bersihkan nama tugas untuk pencocokan string
+
       const cleanItemTask = normTask.replace(/\(\d+(?:[.,]\d+)?\s*(?:m2|m²)?\)/g, "").trim();
 
       (allMediaGroupsCache || []).forEach(group => {
+
         const gArea = (group.area || "").toLowerCase();
+
         const gTask = (group.taskClean || group.taskName || "").toLowerCase();
+
         
+
         // Cek apakah room cocok
+
         const gRoomMatch = gArea.match(/(?:kamar|room|rm\.?)\s*(\d+[a-zA-Z]?)/i) || 
+
                            gArea.match(/-\s*(\d{3,4}[a-zA-Z]?)/) ||
+
                            gArea.match(/\b(\d{3,4}[a-zA-Z]?)\b/);
+
         const gRoomNum = gRoomMatch ? gRoomMatch[1].toUpperCase() : "";
 
         const isSameRoom = (roomNum && gRoomNum && roomNum === gRoomNum);
+
         const isSameArea = isSameRoom || (!roomNum && !gRoomNum && (gArea === normArea || gArea.includes(normArea) || normArea.includes(gArea)));
 
         // Kumpulkan semua foto kamar
+
         if (isSameRoom || (roomNum && gArea.includes(roomNum))) {
+
           group.reports.forEach(r => {
+
             (r.photos || []).forEach(p => {
+
               if (p && !result.roomPhotos.includes(p)) result.roomPhotos.push(p);
+
             });
+
           });
+
         }
 
         // Cek kecocokan tugas spesifik
+
         let isTaskMatch = false;
+
         if (cleanItemTask && (gTask.includes(cleanItemTask) || cleanItemTask.includes(gTask))) {
+
           isTaskMatch = true;
+
         } else if (hasChipping && (gTask.includes("chipping") || gTask.includes("pembersihan") || gTask.includes("bersih"))) {
+
           isTaskMatch = true;
+
         } else if (hasScreed && (gTask.includes("screed") || gTask.includes("pengecoran") || gTask.includes("cor") || gTask.includes("leveling"))) {
+
           isTaskMatch = true;
+
         } else if (hasPrimer && (gTask.includes("primer") || gTask.includes("bonding"))) {
+
           isTaskMatch = true;
+
         } else if (hasSpc && (gTask.includes("spc") || gTask.includes("plank") || gTask.includes("lantai"))) {
+
           isTaskMatch = true;
+
         } else if (hasPlint && (gTask.includes("plint") || gTask.includes("skirting"))) {
+
           isTaskMatch = true;
+
         } else if (hasUnderlayer && (gTask.includes("underlayer") || gTask.includes("foam") || gTask.includes("busa"))) {
+
           isTaskMatch = true;
+
         }
 
         if (isSameArea && isTaskMatch) {
+
           group.reports.forEach(r => {
+
             result.matchedReports.push({
+
               worker: r.worker,
+
               tanggal: r.tanggal,
+
               catatan: r.catatan,
+
               gps: r.gps,
+
               volume: r.volume,
+
               photos: r.photos || [],
+
               videos: r.videos || []
+
             });
+
             (r.photos || []).forEach(p => {
+
               if (p && !result.matchedPhotos.includes(p)) result.matchedPhotos.push(p);
+
             });
+
             (r.videos || []).forEach(v => {
+
               if (v && !result.matchedVideos.includes(v)) result.matchedVideos.push(v);
+
             });
+
           });
+
         }
+
       });
 
       result.roomMediaCount = result.roomPhotos.length;
+
       return result;
+
     }
 
     function openTaskMediaModal(taskName, areaName) {
+
       const mediaInfo = getMediaForTaskItem(taskName, areaName);
+
       const modal = document.getElementById("taskPhotosModal");
+
       const titleEl = document.getElementById("taskPhotosModalTitle");
+
       const subEl = document.getElementById("taskPhotosModalSubtitle");
+
       const bodyEl = document.getElementById("taskPhotosModalBody");
+
       const btnFull = document.getElementById("btnOpenInFullGallery");
+
       if (!modal || !bodyEl) return;
 
       titleEl.textContent = taskName;
+
       subEl.textContent = `${areaName || 'Area Lapangan'} • ${mediaInfo.matchedPhotos.length} Foto Hasil Kerja`;
 
       if (btnFull) {
+
         const escTask = taskName.replace(/'/g, "\\'");
+
         const escArea = (areaName || "").replace(/'/g, "\\'");
+
         btnFull.setAttribute("onclick", `closeTaskPhotosModal(); filterAndShowTaskMedia('${escTask}', '${escArea}');`);
+
       }
 
       bodyEl.innerHTML = "";
 
       if (mediaInfo.matchedReports.length === 0 && mediaInfo.matchedPhotos.length === 0) {
+
         bodyEl.innerHTML = `
+
           <div class="text-center py-8 text-slate-400">
+
             <i class="fa-regular fa-image text-3xl mb-2 text-slate-300"></i>
+
             <p class="text-xs font-semibold text-slate-600">Belum ada foto laporan khusus untuk item pekerjaan ini.</p>
+
             ${mediaInfo.roomPhotos.length > 0 ? `
+
               <p class="text-[11px] text-slate-500 mt-1">Namun ada ${mediaInfo.roomPhotos.length} foto tercatat di kamar/area ini.</p>
+
               <button onclick="closeTaskPhotosModal(); filterAndShowTaskMedia('', '${(areaName || '').replace(/'/g, "\\'")}');" class="mt-2 text-xs font-bold text-blue-600 hover:underline">
+
                 Lihat Semua Foto Kamar Ini &rarr;
+
               </button>
+
             ` : ''}
+
           </div>
+
         `;
+
       } else {
+
         mediaInfo.matchedReports.forEach((rep) => {
+
           const repDiv = document.createElement("div");
+
           repDiv.className = "bg-slate-50 border border-slate-200 rounded-xl p-3.5 space-y-2.5";
 
           let photosHtml = "";
+
           (rep.photos || []).forEach((pUrl, pIdx) => {
+
             photosHtml += `
+
               <div onclick="openLightbox('${pUrl}')" class="group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-square cursor-pointer hover:shadow-md transition">
+
                 <img src="${pUrl}" alt="Foto ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2 opacity-90 group-hover:opacity-100">
+
                   <div class="text-white text-[10px] flex items-center justify-between w-full font-bold">
+
                     <span><i class="fa-solid fa-camera mr-1"></i> Foto ${pIdx+1}</span>
+
                     <i class="fa-solid fa-magnifying-glass-plus"></i>
+
                   </div>
+
                 </div>
+
               </div>
+
             `;
+
           });
 
           let videosHtml = "";
+
           (rep.videos || []).forEach((vUrl, vIdx) => {
+
             videosHtml += `
+
               <div onclick="openVideoModal('${vUrl}', '${taskName.replace(/'/g, "\\'")}')" class="group relative rounded-xl overflow-hidden bg-slate-950 border border-purple-300 aspect-square cursor-pointer hover:shadow-md transition flex items-center justify-center">
+
                 <div class="w-10 h-10 rounded-full bg-purple-600/90 text-white flex items-center justify-center text-sm shadow group-hover:scale-110 transition">
+
                   <i class="fa-solid fa-play ml-0.5"></i>
+
                 </div>
+
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-2 text-white text-[10px] font-bold">
+
                   <span class="text-purple-300"><i class="fa-solid fa-video mr-1"></i> Putar Video ${vIdx+1}</span>
+
                 </div>
+
               </div>
+
             `;
+
           });
 
           repDiv.innerHTML = `
+
             <div class="flex flex-wrap items-center justify-between gap-1 text-xs pb-1.5 border-b border-slate-200/80">
+
               <div class="flex items-center space-x-2">
+
                 <span class="bg-emerald-100 text-emerald-800 text-[10px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+
                   <i class="fa-solid fa-user-check"></i> ${rep.worker || 'Pekerja Lapangan'}
+
                 </span>
+
                 <span class="text-slate-500 font-semibold text-[11px]"><i class="fa-regular fa-clock mr-1"></i>${rep.tanggal || '-'}</span>
+
               </div>
+
               ${rep.volume ? `<span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full"><i class="fa-solid fa-ruler-combined mr-1"></i>+${rep.volume}</span>` : ''}
+
             </div>
+
             ${rep.catatan ? `<p class="text-xs text-slate-700 bg-white p-2 rounded-lg border border-slate-200/60 italic">"${rep.catatan}"</p>` : ''}
+
             ${rep.gps ? `<div class="text-[10px] text-slate-500 font-mono flex items-center gap-1"><i class="fa-solid fa-location-dot text-rose-500"></i> ${rep.gps}</div>` : ''}
+
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1">
+
               ${photosHtml}
+
               ${videosHtml}
+
             </div>
+
           `;
+
           bodyEl.appendChild(repDiv);
+
         });
+
       }
 
       modal.classList.remove("hidden");
+
     }
 
     function closeTaskPhotosModal() {
+
       const modal = document.getElementById("taskPhotosModal");
+
       if (modal) modal.classList.add("hidden");
+
     }
 
     function renderTaskItems(tasks) {
+
       const normalizedTasks = calculateDynamicWeights(tasks || []);
+
       tasksCache = normalizedTasks;
 
       // Update KPI Progres Fisik Keseluruhan secara Dinamis & Akurat
+
       updateOverallProgressKPI(normalizedTasks);
 
       const taskSelect = document.getElementById("complaintTaskSelect");
+
       if (taskSelect) {
+
         taskSelect.innerHTML = '<option value="Umum">Umum (Seluruh Area Proyek)</option>';
+
         tasksCache.forEach(item => {
+
           const isArea = item.level === "AREA" || item[0] === "AREA";
+
           const nama = item.nama || item[1] || "";
+
           if (nama) {
+
             const opt = document.createElement("option");
+
             opt.value = nama;
+
             opt.textContent = `${isArea ? '[AREA] ' : ''}${nama}`;
+
             taskSelect.appendChild(opt);
+
           }
+
         });
+
       }
 
       // Update Dua Pekerjaan Utama Monitor M²
+
       updateTwoWorksVolumeUI(normalizedTasks, (projectDataCache && projectDataCache.mediaPerTugas) || []);
 
       // Inisialisasi Tombol Speed Akses Lantai & Kamar
+
       initSpeedAccessSelectors(normalizedTasks);
 
       // Render task items yang terfilter
+
       renderFilteredTasksUI();
+
     }
 
     function renderFilteredTasksUI() {
+
       const container = document.getElementById("taskListContainer");
+
       if (!container) return;
 
       if (!tasksCache || tasksCache.length === 0) {
+
         container.innerHTML = '<div class="text-center py-8 text-slate-400 text-xs">Belum ada struktur rincian pekerjaan.</div>';
+
         return;
+
       }
 
       container.innerHTML = "";
+
       let renderedCount = 0;
+
       let currentArea = "";
 
       // Pra-kalkulasi kecocokan per item dan area
+
       const filteredItems = [];
+
       tasksCache.forEach((item, idx) => {
+
         const isArea = item.level === "AREA" || item[0] === "AREA";
+
         const nama = item.nama || item[1] || `Pekerjaan ${idx+1}`;
+
         if (isArea) {
+
           currentArea = nama;
+
         }
+
         const effectiveArea = (item.area || currentArea || "Umum").toString();
+
         const parsed = parseTaskFloorAndRoom(effectiveArea, nama);
 
         // Filter Lantai
+
         if (selectedTaskFloor !== "ALL") {
+
           const floorMatch = parsed.floor === selectedTaskFloor || 
+
                              effectiveArea.toLowerCase().includes(selectedTaskFloor.toLowerCase()) ||
+
                              nama.toLowerCase().includes(selectedTaskFloor.toLowerCase());
+
           if (!floorMatch) return;
+
         }
 
         // Filter Kamar
+
         if (selectedTaskRoom !== "ALL") {
+
           const roomMatch = parsed.room === selectedTaskRoom ||
+
                             effectiveArea.toUpperCase().includes(selectedTaskRoom) ||
+
                             nama.toUpperCase().includes(selectedTaskRoom);
+
           if (!roomMatch) return;
+
         }
 
         // Filter Pencarian Teks
+
         if (taskSearchRoomQuery.trim()) {
+
           const q = taskSearchRoomQuery.trim().toLowerCase();
+
           const qMatch = nama.toLowerCase().includes(q) ||
+
                          effectiveArea.toLowerCase().includes(q) ||
+
                          parsed.room.toLowerCase().includes(q) ||
+
                          parsed.floor.toLowerCase().includes(q);
+
           if (!qMatch) return;
+
         }
 
         filteredItems.push({ item, idx, isArea, nama, effectiveArea, parsed });
+
       });
 
       if (filteredItems.length === 0) {
+
         container.innerHTML = `
+
           <div class="text-center py-10 bg-slate-50 border border-dashed border-slate-200 rounded-2xl p-6 text-slate-500 text-xs space-y-2">
+
             <i class="fa-solid fa-filter-circle-xmark text-3xl text-slate-400 mb-1"></i>
+
             <p class="font-bold text-slate-700">Tidak ada pekerjaan yang cocok dengan filter yang dipilih.</p>
+
             <p class="text-[11px] text-slate-400">Silakan pilih lantai/kamar lain atau reset filter untuk melihat semua pekerjaan.</p>
+
             <button onclick="resetTaskFocusFilter()" class="mt-2 inline-flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl font-bold transition shadow-sm">
+
               <i class="fa-solid fa-rotate-left text-[11px]"></i>
+
               <span>Reset (Tampilkan Semua Area)</span>
+
             </button>
+
           </div>
+
         `;
+
         return;
+
       }
 
       filteredItems.forEach(({ item, idx, isArea, nama, effectiveArea }) => {
+
         const persen = item.progres !== undefined ? item.progres : (item[2] || 0);
+
         const bobot = item.bobot !== undefined ? item.bobot : (item[3] || 0);
 
         if (isArea) {
+
           const areaMedia = getMediaForTaskItem("", nama);
+
           const areaPhotoCount = areaMedia.roomPhotos.length;
+
           const escapedArea = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
           const areaDiv = document.createElement("div");
+
           areaDiv.className = "pt-3 pb-1.5 text-xs font-extrabold text-nafindo-blue uppercase tracking-wider flex items-center justify-between gap-1.5 border-b border-blue-100 flex-wrap";
+
           areaDiv.innerHTML = `
+
             <div class="flex items-center gap-1.5">
+
               <i class="fa-solid fa-layer-group text-blue-500"></i>
+
               <span>${nama}</span>
+
             </div>
+
             ${areaPhotoCount > 0 ? `
+
               <button onclick="filterAndShowTaskMedia('', '${escapedArea}')" class="normal-case font-bold text-[10px] text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2 py-0.5 rounded-lg transition flex items-center gap-1 shadow-2xs" title="Lihat semua foto di area ${nama}">
+
                 <i class="fa-solid fa-camera text-blue-500"></i>
+
                 <span>Foto Area (${areaPhotoCount})</span>
+
               </button>
+
             ` : ''}
+
           `;
+
           container.appendChild(areaDiv);
+
           renderedCount++;
+
         } else {
+
           const card = document.createElement("div");
+
           card.className = "bg-slate-50/80 border border-slate-200/80 rounded-xl p-3.5 hover:bg-white hover:border-blue-300 transition";
+
           
+
           let statusColor = "bg-slate-200 text-slate-700";
+
           let statusText = "Belum Mulai";
+
           if (persen >= 100) {
+
             statusColor = "bg-emerald-100 text-emerald-700 border border-emerald-300";
+
             statusText = "Selesai 100%";
+
           } else if (persen > 0) {
+
             statusColor = "bg-blue-100 text-blue-700 border border-blue-300";
+
             statusText = `Dikerjakan (${persen}%)`;
+
           }
 
           // Pencarian Media Cerdas (Foto & Video Hasil Kerja)
+
           const mediaInfo = getMediaForTaskItem(nama, effectiveArea);
+
           const hasTaskPhotos = mediaInfo.matchedPhotos.length > 0;
+
           const hasRoomPhotos = mediaInfo.roomPhotos.length > 0;
+
           const escapedNama = nama.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
           const escapedArea = (effectiveArea || "").replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
           let actionBtns = [];
 
           // 1. TOMBOL UTAMA: LIHAT FOTO HASIL KERJA
+
           if (hasTaskPhotos) {
+
             actionBtns.push(`
+
               <button onclick="openTaskMediaModal('${escapedNama}', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 px-3 py-1.5 rounded-xl shadow-sm transition" title="Buka dokumentasi foto pengerjaan tugas ini">
+
                 <i class="fa-solid fa-camera"></i>
+
                 <span>Lihat Foto Hasil Kerja (${mediaInfo.matchedPhotos.length})</span>
+
               </button>
+
             `);
+
           } else if (hasRoomPhotos) {
+
             actionBtns.push(`
+
               <button onclick="filterAndShowTaskMedia('', '${escapedArea}')" class="inline-flex items-center gap-1.5 text-[11px] font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-lg transition" title="Lihat foto kamar / area ini">
+
                 <i class="fa-solid fa-images text-blue-500"></i>
+
                 <span>Foto Kamar Ini (${mediaInfo.roomPhotos.length})</span>
+
               </button>
+
             `);
+
           }
 
           // 2. TOMBOL KOMPLAIN ITEM
+
           actionBtns.push(`
+
             <button onclick="openComplaintForTask('${escapedNama}')" class="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600 hover:text-rose-800 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-lg transition border border-rose-200" title="Laporkan kendala / ajukan catatan untuk pekerjaan ini">
+
               <i class="fa-solid fa-circle-exclamation text-rose-500"></i>
+
               <span>Komplain Item</span>
+
             </button>
+
           `);
 
           // 3. THUMBNAIL PREVIEW STRIP (Jika ada foto tugas)
+
           let thumbnailsHtml = "";
+
           if (hasTaskPhotos) {
+
             const previewSlice = mediaInfo.matchedPhotos.slice(0, 3);
+
             thumbnailsHtml = `
+
               <div class="flex items-center gap-2 mt-2.5 pt-2 border-t border-slate-100">
+
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0 flex items-center gap-1">
+
                   <i class="fa-solid fa-image text-blue-500"></i> Preview:
+
                 </span>
+
                 <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+
                   ${previewSlice.map((pUrl, pIdx) => `
+
                     <div onclick="openLightbox('${pUrl}')" class="w-10 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100 shrink-0 cursor-pointer hover:ring-2 hover:ring-blue-500 transition shadow-2xs group relative" title="Klik perbesar foto ${pIdx+1}">
+
                       <img src="${pUrl}" alt="Thumb ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-110 transition duration-200">
+
                       <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white text-[10px]">
+
                         <i class="fa-solid fa-magnifying-glass-plus"></i>
+
                       </div>
+
                     </div>
+
                   `).join("")}
+
                   ${mediaInfo.matchedPhotos.length > 3 ? `
+
                     <button onclick="openTaskMediaModal('${escapedNama}', '${escapedArea}')" class="w-10 h-10 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 font-extrabold text-[10px] border border-blue-200 flex items-center justify-center shrink-0 transition" title="Lihat semua foto">
+
                       +${mediaInfo.matchedPhotos.length - 3}
+
                     </button>
+
                   ` : ''}
+
                 </div>
+
               </div>
+
             `;
+
           }
 
           card.innerHTML = `
+
             <div class="flex items-center justify-between gap-2">
+
               <span class="text-xs sm:text-sm font-bold text-slate-800">${nama}</span>
+
               <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusColor}">${statusText}</span>
+
             </div>
+
             <div class="flex items-center space-x-2 mt-2">
+
               <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+
                 <div class="bg-blue-600 h-1.5 rounded-full" style="width: ${Math.min(100, persen)}%"></div>
+
               </div>
+
               <span class="text-[11px] font-bold text-slate-500 shrink-0">${persen}%</span>
+
             </div>
+
             ${thumbnailsHtml}
+
             <div class="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-2 flex-wrap">
+
               <div class="flex items-center gap-1.5 flex-wrap">
+
                 ${actionBtns.join("")}
+
               </div>
+
               <span class="text-[10px] text-slate-400 font-semibold shrink-0">Bobot: ${bobot}%</span>
+
             </div>
+
           `;
+
           container.appendChild(card);
+
           renderedCount++;
+
         }
+
       });
+
     }
 
     function openComplaintForTask(taskName) {
+
       switchTab('tab-komplain');
+
       const select = document.getElementById("complaintTaskSelect");
+
       if (select) {
+
         let found = false;
+
         for (let i = 0; i < select.options.length; i++) {
+
           if (select.options[i].value.trim().toLowerCase() === taskName.trim().toLowerCase()) {
+
             select.selectedIndex = i;
+
             found = true;
+
             break;
+
           }
+
         }
+
         if (!found) {
+
           const opt = document.createElement("option");
+
           opt.value = taskName;
+
           opt.textContent = taskName;
+
           opt.selected = true;
+
           select.appendChild(opt);
+
         }
+
       }
+
       const descInput = document.getElementById("complaintDescription");
+
       if (descInput) {
+
         descInput.focus();
+
         descInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
       }
+
     }
 
     // Fallback Flat Gallery
+
     function renderGallery(photos) {
+
       const container = document.getElementById("photoGalleryContainer");
+
       const noPhotos = document.getElementById("noPhotosPlaceholder");
+
       const badgeCount = document.getElementById("badgeFotoCount");
 
       if (!photos || photos.length === 0) {
+
         if (container) container.innerHTML = "";
+
         if (noPhotos) noPhotos.classList.remove("hidden");
+
         if (badgeCount) badgeCount.textContent = "0";
+
         return;
+
       }
 
       if (noPhotos) noPhotos.classList.add("hidden");
+
       if (badgeCount) badgeCount.textContent = photos.length;
+
       if (container) {
+
         container.innerHTML = "";
+
         container.classList.remove("hidden");
 
         photos.forEach((src, idx) => {
+
           const item = document.createElement("div");
+
           item.className = "group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 shadow-sm cursor-pointer hover:shadow-md transition aspect-video sm:aspect-square";
+
           item.onclick = () => openLightbox(src);
 
           item.innerHTML = `
+
             <img src="${src}" alt="Dokumentasi ${idx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300 opacity-90 group-hover:opacity-100">
+
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-3">
+
               <div class="text-white text-[11px] flex items-center justify-between w-full">
+
                 <span class="font-semibold truncate"><i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Nafindo Verified</span>
+
                 <span class="text-[10px] opacity-75">Klik Perbesar</span>
+
               </div>
+
             </div>
+
           `;
+
           container.appendChild(item);
+
         });
+
       }
+
     }
 
     // Demo Mode jika server belum dibuka atau offline
+
     function renderDemoData() {
+
       document.getElementById("metricProgressText").textContent = "65%";
+
       document.getElementById("metricProgressBar").style.width = "65%";
+
       document.getElementById("metricTargetDays").textContent = "45";
+
       document.getElementById("metricRemainingDays").textContent = "Sisa: 16 hari";
+
       document.getElementById("metricDeadlineText").textContent = "28 Oktober 2026";
+
       document.getElementById("metricLastUpdate").textContent = "11:45";
 
       renderTaskItems([
+
         { level: "AREA", nama: "1. PEKERJAAN STRUKTUR & PONDASI" },
+
         { level: "SUB", nama: "Galian & Pasang Batu Kali", progres: 100, bobot: 20 },
+
         { level: "SUB", nama: "Sloof Beton & Kolom Utama", progres: 100, bobot: 25 },
+
         { level: "AREA", nama: "2. PEKERJAAN LANTAI & DINDING" },
+
         { level: "SUB", nama: "Pengecoran Lapangan Padel", progres: 70, bobot: 30 },
+
         { level: "SUB", nama: "Pemasangan Dinding Pembatas", progres: 25, bobot: 15 },
+
         { level: "AREA", nama: "3. FINISHING" },
+
         { level: "SUB", nama: "Pengecatan Lapisan Anti Slip", progres: 0, bobot: 10 }
+
       ]);
+
     }
 
     // =========================================================================
+
     // FITUR LAMPIRAN MEDIA (FOTO/VIDEO) & WATERMARKING PADA CANVAS
+
     // =========================================================================
+
     let selectedMediaBase64 = null;
+
     let selectedMediaType = "image"; // "image" or "video"
+
     let selectedMediaFileName = "";
 
     function handleMediaSelected(input, typeHint) {
+
       if (!input.files || !input.files[0]) return;
+
       const file = input.files[0];
+
       selectedMediaFileName = file.name || "Lampiran Media";
 
       const isVideo = file.type.startsWith("video/") || typeHint === "video";
+
       selectedMediaType = isVideo ? "video" : "image";
 
       const reader = new FileReader();
+
       reader.onload = function(e) {
+
         const result = e.target.result;
+
         const now = new Date();
+
         const timeStr = now.toLocaleDateString("id-ID", { day: '2-digit', month: 'short', year: 'numeric' }) + " " +
+
                         now.toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
 
         const badge = document.getElementById("mediaTypeBadge");
+
         const container = document.getElementById("mediaPreviewContainer");
+
         const imgEl = document.getElementById("photoPreviewImg");
+
         const videoEl = document.getElementById("videoPreviewPlayer");
+
         const labelEl = document.getElementById("mediaPreviewLabel");
+
         const timeEl = document.getElementById("mediaPreviewTimestamp");
+
         const nameEl = document.getElementById("mediaFileName");
 
         if (isVideo) {
+
           // Video Preview
+
           selectedMediaBase64 = result;
+
           imgEl.classList.add("hidden");
+
           videoEl.src = result;
+
           videoEl.classList.remove("hidden");
 
           if (badge) {
+
             badge.textContent = "🎥 Video Terpasang";
+
             badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-purple-100 text-purple-700";
+
             badge.classList.remove("hidden");
+
           }
+
           if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-video text-purple-400 mr-1"></i> Video Siap Dikirim`;
+
           if (timeEl) timeEl.textContent = timeStr;
+
           if (nameEl) nameEl.textContent = selectedMediaFileName;
+
           if (container) container.classList.remove("hidden");
 
         } else {
+
           // Image Preview with Watermark
+
           videoEl.classList.add("hidden");
+
           try { videoEl.pause(); } catch(e) {}
+
           const img = new Image();
+
           img.onload = function() {
+
             applyWatermarkToCanvas(img, timeStr);
+
           };
+
           img.src = result;
+
         }
+
       };
+
       reader.readAsDataURL(file);
+
     }
 
     function applyWatermarkToCanvas(img, timeStr) {
+
       const canvas = document.getElementById("watermarkCanvas");
+
       const ctx = canvas.getContext("2d");
 
       // Batasi resolusi maksimal 1600px agar tidak terlalu berat saat upload
+
       const maxDim = 1600;
+
       let width = img.width;
+
       let height = img.height;
+
       if (width > maxDim || height > maxDim) {
+
         if (width > height) {
+
           height = Math.round((height * maxDim) / width);
+
           width = maxDim;
+
         } else {
+
           width = Math.round((width * maxDim) / height);
+
           height = maxDim;
+
         }
+
       }
 
       canvas.width = width;
+
       canvas.height = height;
 
       // 1. Gambar foto asli
+
       ctx.drawImage(img, 0, 0, width, height);
 
       // 2. Gambar Banner Watermark di Bagian Bawah
+
       const bannerHeight = Math.max(78, Math.round(height * 0.11));
+
       ctx.fillStyle = "rgba(15, 23, 42, 0.90)"; // Slate Dark 900
+
       ctx.fillRect(0, height - bannerHeight, width, bannerHeight);
 
       // Aksen garis emas di atas banner
+
       ctx.fillStyle = "#F59E0B";
+
       ctx.fillRect(0, height - bannerHeight, width, Math.max(4, Math.round(bannerHeight * 0.05)));
 
       // Gambar Lambang / Logo Resmi Nafindo di Kiri
+
       const logoSize = Math.round(bannerHeight * 0.65);
+
       const logoX = 20;
+
       const logoY = height - bannerHeight + Math.round((bannerHeight - logoSize) / 2);
 
       // Background Badge Biru Nafindo
+
       ctx.fillStyle = "#0056B3";
+
       ctx.beginPath();
+
       if (ctx.roundRect) {
+
         ctx.roundRect(logoX, logoY, logoSize, logoSize, 6);
+
       } else {
+
         ctx.rect(logoX, logoY, logoSize, logoSize);
+
       }
+
       ctx.fill();
 
       // Border Emas
+
       ctx.strokeStyle = "#F59E0B";
+
       ctx.lineWidth = 2;
+
       ctx.stroke();
 
       // Huruf Monogram 'N' Putih di Tengah
+
       ctx.fillStyle = "#FFFFFF";
+
       ctx.font = `bold ${Math.round(logoSize * 0.58)}px sans-serif`;
+
       ctx.textAlign = "center";
+
       ctx.textBaseline = "middle";
+
       ctx.fillText("N", logoX + (logoSize / 2), logoY + (logoSize / 2));
+
       ctx.textAlign = "left";
+
       ctx.textBaseline = "alphabetic";
 
       // 3. Tulis Teks Watermark
+
       const textX = logoX + logoSize + 16;
+
       ctx.fillStyle = "#FBBF24"; // Gold Yellow
+
       ctx.font = `bold ${Math.round(bannerHeight * 0.28)}px "Plus Jakarta Sans", sans-serif`;
+
       ctx.fillText(`CV. NAFINDO GROUP`, textX, height - (bannerHeight * 0.55));
 
       ctx.fillStyle = "#FFFFFF";
+
       ctx.font = `bold ${Math.round(bannerHeight * 0.22)}px "Plus Jakarta Sans", sans-serif`;
+
       const nameWidth = ctx.measureText("CV. NAFINDO GROUP ").width;
+
       ctx.fillStyle = "#93C5FD";
+
       ctx.fillText(`• LAPORAN RESMI PROYEK`, textX + nameWidth + 10, height - (bannerHeight * 0.55));
 
       ctx.fillStyle = "#E2E8F0"; // Slate 200
+
       ctx.font = `600 ${Math.round(bannerHeight * 0.20)}px "Plus Jakarta Sans", sans-serif`;
+
       ctx.fillText(`PROYEK: ${currentProject.replace(/_/g, ' ')}   •   WAKTU: ${timeStr} [VERIFIED]`, textX, height - (bannerHeight * 0.22));
 
       // 4. Konversi ke Base64 JPEG
+
       selectedMediaBase64 = canvas.toDataURL("image/jpeg", 0.85);
 
       // Tampilkan Preview
+
       const badge = document.getElementById("mediaTypeBadge");
+
       const container = document.getElementById("mediaPreviewContainer");
+
       const imgEl = document.getElementById("photoPreviewImg");
+
       const videoEl = document.getElementById("videoPreviewPlayer");
+
       const labelEl = document.getElementById("mediaPreviewLabel");
+
       const timeEl = document.getElementById("mediaPreviewTimestamp");
+
       const nameEl = document.getElementById("mediaFileName");
 
       videoEl.classList.add("hidden");
+
       imgEl.src = selectedMediaBase64;
+
       imgEl.classList.remove("hidden");
 
       if (badge) {
+
         badge.textContent = "📸 Foto Terpasang";
+
         badge.className = "text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+
         badge.classList.remove("hidden");
+
       }
+
       if (labelEl) labelEl.innerHTML = `<i class="fa-solid fa-stamp text-amber-400 mr-1"></i> Watermark Applied`;
+
       if (timeEl) timeEl.textContent = timeStr;
+
       if (nameEl) nameEl.textContent = selectedMediaFileName;
+
       if (container) container.classList.remove("hidden");
+
     }
 
     function removeSelectedMedia() {
+
       selectedMediaBase64 = null;
+
       selectedMediaType = "image";
+
       selectedMediaFileName = "";
 
       const container = document.getElementById("mediaPreviewContainer");
+
       const badge = document.getElementById("mediaTypeBadge");
+
       const videoEl = document.getElementById("videoPreviewPlayer");
+
       const imgEl = document.getElementById("photoPreviewImg");
 
       if (container) container.classList.add("hidden");
+
       if (badge) badge.classList.add("hidden");
+
       if (videoEl) {
+
         try { videoEl.pause(); } catch(e) {}
+
         videoEl.src = "";
+
         videoEl.classList.add("hidden");
+
       }
+
       if (imgEl) {
+
         imgEl.src = "";
+
         imgEl.classList.add("hidden");
+
       }
 
       if (document.getElementById("cameraPhotoInput")) document.getElementById("cameraPhotoInput").value = "";
+
       if (document.getElementById("cameraVideoInput")) document.getElementById("cameraVideoInput").value = "";
+
       if (document.getElementById("galleryMediaInput")) document.getElementById("galleryMediaInput").value = "";
+
     }
 
     // =========================================================================
+
     // SUBMIT KOMPLAIN KE GOOGLE APPS SCRIPT
+
     // =========================================================================
+
     async function submitComplaint(e) {
+
       e.preventDefault();
 
       const btn = document.getElementById("btnSubmitComplaint");
+
       const desc = document.getElementById("complaintDescription").value.trim();
+
       const taskVal = document.getElementById("complaintTaskSelect") ? document.getElementById("complaintTaskSelect").value : "Umum";
 
       if (!desc) {
+
         alert("Mohon tuliskan keterangan komplain / bagian yang perlu diperbaiki!");
+
         document.getElementById("complaintDescription").focus();
+
         return;
+
       }
 
       // Animasi Loading
+
       btn.disabled = true;
+
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> <span>Mengirim Laporan...</span>`;
 
       const payload = {
+
         action: "kirimKomplainOwner",
+
         proyek: currentProject,
+
         tugas: taskVal,
+
         taskName: taskVal,
+
         itemTugas: taskVal,
+
         pesan: desc,
+
         keterangan: desc,
+
         catatan: desc,
+
         foto: selectedMediaBase64 || "",
+
         media: selectedMediaBase64 || "",
+
         fileType: selectedMediaType || "image"
+
       };
 
       try {
+
         const response = await fetch(getApiUrl(), {
+
           method: "POST",
+
           headers: { "Content-Type": "text/plain;charset=utf-8" },
+
           body: JSON.stringify(payload)
+
         });
 
         const result = await response.json();
+
         const ticketId = (result && result.idKomplain) ? result.idKomplain : "KMP-" + Date.now().toString().slice(-6);
 
         // Buka Modal Sukses
+
         openSuccessModal(ticketId, desc, taskVal);
+
         document.getElementById("complaintForm").reset();
+
         removeSelectedMedia();
+
         fetchComplaintHistory();
 
       } catch (err) {
+
         console.warn("Gagal POST ke Google Script, menggunakan jalur fallback pesan:", err);
+
         const ticketId = "KMP-" + Date.now().toString().slice(-6);
+
         openSuccessModal(ticketId, desc, taskVal);
+
       } finally {
+
         btn.disabled = false;
+
         btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Kirim Komplain</span>`;
+
       }
+
     }
 
     function openSuccessModal(ticketId, desc, taskName) {
+
       document.getElementById("modalTicketId").textContent = ticketId;
+
       document.getElementById("modalProjectName").textContent = currentProject.replace(/_/g, " ");
+
       if (document.getElementById("modalCategory")) {
+
         document.getElementById("modalCategory").textContent = selectedMediaType === "video" ? "Komplain Video" : "Komplain Lapangan";
+
       }
+
       if (document.getElementById("modalTaskName")) {
+
         document.getElementById("modalTaskName").textContent = taskName || "Umum";
+
       }
+
       document.getElementById("modalDesc").textContent = desc;
 
       // Format WhatsApp Pre-filled message
+
       const taskLine = (taskName && taskName !== "Umum") ? `📋 *Terkait Tugas:* ${taskName}\n` : '';
+
       const waText = encodeURIComponent(
+
         `*LAPORAN KOMPLAIN PROYEK NAFINDO*\n` +
+
         `----------------------------------------\n` +
+
         `📌 *No. Tiket:* ${ticketId}\n` +
+
         `🏗️ *Proyek:* ${currentProject.replace(/_/g, ' ')}\n` +
+
         taskLine +
+
         `📁 *Media:* ${selectedMediaType === 'video' ? 'Video terlampir' : (selectedMediaBase64 ? 'Foto terlampir' : 'Keterangan tertulis')}\n` +
+
         `📝 *Uraian Kendala:*\n${desc}\n` +
+
         `----------------------------------------\n` +
+
         `Mohon segera ditindaklanjuti oleh tim manajemen CV. Nafindo Group. Terima kasih.`
+
       );
+
       document.getElementById("btnForwardWa").href = `https://api.whatsapp.com/send?phone=${ADMIN_WA_NUMBER}&text=${waText}`;
 
       document.getElementById("successModal").classList.remove("hidden");
+
     }
 
     function closeSuccessModal() {
+
       document.getElementById("successModal").classList.add("hidden");
+
     }
 
     // =========================================================================
+
     // AMBIL RIWAYAT KOMPLAIN PROYEK
+
     // =========================================================================
+
     async function fetchComplaintHistory() {
+
       const container = document.getElementById("complaintHistoryContainer");
+
       const noComplaints = document.getElementById("noComplaintPlaceholder");
 
       try {
+
         const url = `${getApiUrl()}?action=getRiwayatKomplainProyek&proyek=${encodeURIComponent(currentProject)}&api=true`;
+
         const res = await fetch(url);
+
         const json = await res.json();
+
         const list = json.data || json.result || [];
 
         if (!list || list.length === 0) {
+
           container.innerHTML = "";
+
           noComplaints.classList.remove("hidden");
+
           return;
+
         }
 
         noComplaints.classList.add("hidden");
+
         container.innerHTML = "";
 
         list.forEach(item => {
+
           const card = document.createElement("div");
+
           card.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 hover:bg-white transition";
 
           let statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
-          if (item.status && item.status.includes("SELESAI")) {
+
+          let statusText = item.status || "Menunggu";
+
+          if (item.status === "DISETUJUI" || item.status === "SELESAI") {
+
             statusBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300";
-          } else if (item.status && item.status.includes("PROSES")) {
+
+            statusText = "✓ Telah Disetujui (Selesai)";
+
+          } else if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
+
             statusBadge = "bg-blue-100 text-blue-800 border border-blue-300";
+
+            statusText = "🔍 Perbaikan Selesai (Menunggu Approval)";
+
+          } else if (item.status === "SEDANG_DIKERJAKAN") {
+
+            statusBadge = "bg-orange-100 text-orange-800 border border-orange-300";
+
+            statusText = "🛠️ Sedang Dikerjakan";
+
+          } else if (item.status === "KOMPLAIN_ULANG") {
+
+            statusBadge = "bg-rose-100 text-rose-800 border border-rose-300";
+
+            statusText = "🔄 Komplain Ulang (Perlu Perbaikan)";
+
+          } else {
+
+            statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
+
+            statusText = "⚠️ Menunggu Respon";
+
           }
 
           const mediaLink = item.linkFoto || item.foto;
+
           let mediaHtml = "";
+
           if (mediaLink && mediaLink !== "-" && mediaLink !== "undefined") {
+
             const isVideo = mediaLink.match(/\.(mp4|mov|webm|avi)(\?.*)?$/i) || 
+
                             (mediaLink.includes("drive.google.com") && item.fileType === "video");
+
             if (isVideo) {
+
               const escLink = mediaLink.replace(/'/g, "\\'");
+
               mediaHtml = `<button onclick="openVideoModal('${escLink}', 'Bukti Komplain ${item.id || ''}')" class="text-purple-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-video"></i> Bukti Video</button>`;
+
             } else if (mediaLink.startsWith("data:image/") || mediaLink.match(/\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i) || mediaLink.includes("drive.google.com")) {
+
               const escLink = mediaLink.replace(/'/g, "\\'");
+
               mediaHtml = `<button onclick="openLightbox('${escLink}')" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-image"></i> Bukti Foto</button>`;
+
             } else {
+
               mediaHtml = `<a href="${mediaLink}" target="_blank" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Lampiran</a>`;
+
             }
+
           }
 
           const taskInfo = (item.tugas && item.tugas !== "Umum" && item.tugas !== "-") 
+
             ? `<div class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-200/70 px-2 py-0.5 rounded"><i class="fa-solid fa-list-check text-blue-500"></i> ${item.tugas}</div>`
+
             : '';
 
+          let perbaikanSection = "";
+
+          if (item.fotoPerbaikan || item.catatanRespon) {
+
+            let perbaikanFotoBtn = "";
+
+            if (item.fotoPerbaikan && item.fotoPerbaikan !== "-") {
+
+              const escFotoPerbaikan = item.fotoPerbaikan.replace(/'/g, "\\'");
+
+              perbaikanFotoBtn = `<button onclick="openLightbox('${escFotoPerbaikan}')" class="text-xs text-emerald-700 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-camera"></i> Foto Bukti Perbaikan</button>`;
+
+            }
+
+            perbaikanSection = `
+
+              <div class="mt-2 p-2.5 bg-emerald-50/80 border border-emerald-200 rounded-lg text-xs space-y-1">
+
+                <div class="font-bold text-emerald-900 flex items-center justify-between">
+
+                  <span>🛠️ Hasil Perbaikan Lapangan:</span>
+
+                  ${perbaikanFotoBtn}
+
+                </div>
+
+                <p class="text-slate-700 italic">${item.catatanRespon || 'Perbaikan telah diselesaikan oleh tim teknis lapangan.'}</p>
+
+              </div>
+
+            `;
+
+          }
+
+          let actionApprovalOwner = "";
+
+          if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
+
+            const escId = (item.id || '').replace(/'/g, "\\'");
+
+            const escTask = (item.tugas || '').replace(/'/g, "\'");
+
+            actionApprovalOwner = `
+
+              <div class="pt-2 flex items-center gap-2">
+
+                <button onclick="ownerApproveComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
+
+                  <i class="fa-solid fa-check"></i> Cocok / Approve
+
+                </button>
+
+                <button onclick="ownerRejectComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
+
+                  <i class="fa-solid fa-rotate-left"></i> Komplain Ulang
+
+                </button>
+
+              </div>
+
+            `;
+
+          }
+
+          const pelaporLabel = item.pelapor ? `<span class="text-[10px] text-slate-500 font-medium bg-slate-200/60 px-2 py-0.5 rounded-full">${item.pelapor}</span>` : '';
+
           card.innerHTML = `
+
             <div class="flex items-center justify-between text-xs">
-              <span class="font-mono font-bold text-slate-500">${item.id || 'KMP'}</span>
-              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusBadge}">${item.status || 'Menunggu Tindak Lanjut'}</span>
+
+              <div class="flex items-center gap-1.5">
+
+                <span class="font-mono font-bold text-slate-500">${item.id || 'KMP'}</span>
+
+                ${pelaporLabel}
+
+              </div>
+
+              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusBadge}">${statusText}</span>
+
             </div>
+
             ${taskInfo}
+
             <h4 class="text-xs sm:text-sm font-bold text-slate-900">${item.kategori || 'Komplain'} ${item.namaKlien ? '• ' + item.namaKlien : ''}</h4>
+
             <p class="text-xs text-slate-600">${item.uraian || item.pesan || '-'}</p>
+
+            ${perbaikanSection}
+
+            ${actionApprovalOwner}
+
             <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-200/60">
+
               <span>Waktu: ${item.waktu || '-'}</span>
+
               ${mediaHtml}
+
             </div>
+
           `;
+
           container.appendChild(card);
+
         });
 
       } catch (e) {
+
         noComplaints.classList.remove("hidden");
+
       }
+
     }
 
     // =========================================================================
+
     // UI HELPERS & TAB SWITCHING
+
     // =========================================================================
+
+    
+
+    // =========================================================================
+
+    // FITUR PETA DENAH AREA & RUANGAN INTERAKTIF PER LANTAI (WEB PORTAL)
+
+    // =========================================================================
+
+    let floorDataList = [];
+
+    let activeFloorIndex = 0;
+
+    let selectedZoneData = null;
+
+    async function fetchFloorMapData() {
+
+      try {
+
+        const url = `${getApiUrl()}?action=getDenahFloorMapDetail&proyek=${encodeURIComponent(currentProject)}&api=true`;
+
+        const res = await fetch(url);
+
+        const json = await res.json();
+
+        const data = json.data || json.result || {};
+
+        floorDataList = data.floors || [];
+
+        renderFloorSwitcher();
+
+        if (floorDataList.length > 0) {
+
+          renderFloorMap(activeFloorIndex);
+
+        } else {
+
+          showEmptyFloorPlaceholder();
+
+        }
+
+      } catch (err) {
+
+        console.error("Gagal memuat denah lantai:", err);
+
+        showEmptyFloorPlaceholder();
+
+      }
+
+    }
+
+    function renderFloorSwitcher() {
+
+      const container = document.getElementById("floorSwitcherContainer");
+
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      if (floorDataList.length === 0) {
+
+        container.innerHTML = `<span class="text-xs text-slate-400 italic">Belum ada denah lantai</span>`;
+
+        return;
+
+      }
+
+      floorDataList.forEach((floor, idx) => {
+
+        const btn = document.createElement("button");
+
+        const isActive = idx === activeFloorIndex;
+
+        btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+
+          isActive 
+
+            ? 'bg-indigo-600 text-white shadow-sm' 
+
+            : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+
+        }`;
+
+        btn.textContent = floor.lantai || `Lantai ${idx + 1}`;
+
+        btn.onclick = () => {
+
+          activeFloorIndex = idx;
+
+          renderFloorSwitcher();
+
+          renderFloorMap(idx);
+
+        };
+
+        container.appendChild(btn);
+
+      });
+
+    }
+
+    function renderFloorMap(floorIdx) {
+
+      const floor = floorDataList[floorIdx];
+
+      const imgEl = document.getElementById("floorMapImage");
+
+      const wrapperEl = document.getElementById("floorMapWrapper");
+
+      const zonesLayer = document.getElementById("floorZonesLayer");
+
+      const placeholderEl = document.getElementById("floorMapPlaceholder");
+
+      if (!floor || !floor.imageUrl) {
+
+        showEmptyFloorPlaceholder();
+
+        return;
+
+      }
+
+      placeholderEl.classList.add("hidden");
+
+      wrapperEl.classList.remove("hidden");
+
+      zonesLayer.innerHTML = "";
+
+      imgEl.src = floor.imageUrl;
+
+      const zones = floor.zones || [];
+
+      zones.forEach(zone => {
+
+        const box = document.createElement("div");
+
+        box.className = "absolute cursor-pointer transition-all duration-200 flex flex-col items-center justify-center p-1 rounded border";
+
+        box.style.left = `${zone.x}%`;
+
+        box.style.top = `${zone.y}%`;
+
+        box.style.width = `${zone.w}%`;
+
+        box.style.height = `${zone.h}%`;
+
+        // Styling berdasarkan status warna
+
+        let bgClass = "bg-slate-400/35 border-slate-500 hover:bg-slate-400/50";
+
+        let textBadgeColor = "bg-slate-700 text-white";
+
+        const st = (zone.status || "").toUpperCase();
+
+        if (st === "KOMPLAIN") {
+
+          bgClass = "bg-rose-500/40 border-rose-600 hover:bg-rose-500/60 animate-pulse";
+
+          textBadgeColor = "bg-rose-600 text-white";
+
+        } else if (st === "SELESAI") {
+
+          bgClass = "bg-emerald-500/40 border-emerald-600 hover:bg-emerald-500/60";
+
+          textBadgeColor = "bg-emerald-700 text-white";
+
+        } else if (st === "PROSES") {
+
+          bgClass = "bg-amber-400/40 border-amber-500 hover:bg-amber-400/60";
+
+          textBadgeColor = "bg-amber-600 text-white";
+
+        }
+
+        box.className += ` ${bgClass}`;
+
+        box.innerHTML = `
+
+          <span class="text-[9px] sm:text-[11px] font-extrabold px-1.5 py-0.5 rounded shadow-sm leading-tight text-center ${textBadgeColor} truncate max-w-full">
+
+            ${zone.nama || 'Ruang'}
+
+          </span>
+
+          <span class="text-[8px] sm:text-[10px] font-bold text-white drop-shadow mt-0.5">
+
+            ${zone.progres || 0}%
+
+          </span>
+
+        `;
+
+        box.onclick = () => openZoneDetailModal(zone, floor.lantai);
+
+        zonesLayer.appendChild(box);
+
+      });
+
+    }
+
+    function showEmptyFloorPlaceholder() {
+
+      document.getElementById("floorMapWrapper").classList.add("hidden");
+
+      document.getElementById("floorMapPlaceholder").classList.remove("hidden");
+
+    }
+
+    function openZoneDetailModal(zone, floorName) {
+
+      selectedZoneData = zone;
+
+      const modal = document.getElementById("modalZoneDetail");
+
+      document.getElementById("zoneModalTitle").textContent = zone.nama || "Area / Ruangan";
+
+      document.getElementById("zoneModalFloorSubtitle").textContent = `${floorName || 'Lantai'} • Proyek ${currentProject.replace(/_/g, ' ')}`;
+
+      // Status Badge
+
+      const badge = document.getElementById("zoneModalStatusBadge");
+
+      const st = (zone.status || "").toUpperCase();
+
+      if (st === "KOMPLAIN") {
+
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-600 text-white";
+
+        badge.textContent = "🔴 Ada Komplain";
+
+      } else if (st === "SELESAI") {
+
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-600 text-white";
+
+        badge.textContent = "🟢 Selesai 100%";
+
+      } else if (st === "PROSES") {
+
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-amber-500 text-white";
+
+        badge.textContent = `🟡 Sedang Dikerjakan (${zone.progres || 0}%)`;
+
+      } else {
+
+        badge.className = "text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-slate-500 text-white";
+
+        badge.textContent = "⚪ Belum Dikerjakan";
+
+      }
+
+      // Progres Bar
+
+      document.getElementById("zoneModalProgressText").textContent = `${zone.progres || 0}%`;
+
+      document.getElementById("zoneModalProgressBar").style.width = `${zone.progres || 0}%`;
+
+      // Task List
+
+      const taskContainer = document.getElementById("zoneModalTaskList");
+
+      taskContainer.innerHTML = "";
+
+      const tasks = zone.tasks || [];
+
+      if (tasks.length === 0) {
+
+        taskContainer.innerHTML = `<div class="p-2.5 bg-slate-50 rounded-lg text-slate-400 italic text-center">Belum ada item pekerjaan terdaftar di area ini.</div>`;
+
+      } else {
+
+        tasks.forEach(t => {
+
+          const item = document.createElement("div");
+
+          item.className = "p-2 bg-slate-50 border border-slate-200/70 rounded-lg flex items-center justify-between";
+
+          const prog = t.progres || 0;
+
+          let dotColor = prog >= 100 ? "text-emerald-500" : (prog > 0 ? "text-amber-500" : "text-slate-400");
+
+          item.innerHTML = `
+
+            <div class="flex items-center gap-2">
+
+              <i class="fa-solid fa-circle text-[8px] ${dotColor}"></i>
+
+              <span class="font-bold text-slate-800 text-xs">${t.namaTugas || t.nama || 'Item Pekerjaan'}</span>
+
+            </div>
+
+            <span class="text-xs font-extrabold text-slate-600">${prog}%</span>
+
+          `;
+
+          taskContainer.appendChild(item);
+
+        });
+
+      }
+
+      // Photo Grid
+
+      const photoGrid = document.getElementById("zoneModalPhotoGrid");
+
+      photoGrid.innerHTML = "";
+
+      const photos = zone.photos || [];
+
+      document.getElementById("zoneModalPhotoCount").textContent = `${photos.length} Foto Dokumentasi`;
+
+      if (photos.length === 0) {
+
+        photoGrid.innerHTML = `<div class="col-span-3 p-3 bg-slate-50 rounded-lg text-slate-400 italic text-center">Belum ada foto laporan dari tukang untuk area ini.</div>`;
+
+      } else {
+
+        photos.forEach(photoUrl => {
+
+          const thumb = document.createElement("div");
+
+          thumb.className = "aspect-square rounded-lg overflow-hidden bg-slate-200 cursor-pointer hover:opacity-90 border border-slate-200 transition";
+
+          thumb.innerHTML = `<img src="${photoUrl}" alt="Foto Lapangan" class="w-full h-full object-cover" />`;
+
+          thumb.onclick = () => openLightbox(photoUrl);
+
+          photoGrid.appendChild(thumb);
+
+        });
+
+      }
+
+      modal.classList.remove("hidden");
+
+    }
+
+    function closeZoneModal() {
+
+      document.getElementById("modalZoneDetail").classList.add("hidden");
+
+      selectedZoneData = null;
+
+    }
+
+    function ajukanKomplainDariRuangan() {
+
+      if (!selectedZoneData) return;
+
+      const roomName = selectedZoneData.nama || "";
+
+      closeZoneModal();
+
+      switchTab('tab-komplain');
+
+      // Pre-fill nama tugas di formulir komplain
+
+      if (document.getElementById("taskSelect")) {
+
+        const sel = document.getElementById("taskSelect");
+
+        // Cari option yang cocok atau set custom
+
+        let found = false;
+
+        for (let i = 0; i < sel.options.length; i++) {
+
+          if (sel.options[i].text.toLowerCase().includes(roomName.toLowerCase())) {
+
+            sel.selectedIndex = i;
+
+            found = true;
+
+            break;
+
+          }
+
+        }
+
+      }
+
+      if (document.getElementById("complaintDesc")) {
+
+        document.getElementById("complaintDesc").value = `Kendala pada area: ${roomName} - `;
+
+        document.getElementById("complaintDesc").focus();
+
+      }
+
+    }
+
     function switchTab(tabId) {
+
+      if (tabId === 'tab-denah') fetchFloorMapData();
+
       document.querySelectorAll(".tab-content").forEach(el => el.classList.add("hidden"));
+
       document.getElementById(tabId).classList.remove("hidden");
 
       document.querySelectorAll(".tab-btn").forEach(el => {
+
         el.classList.remove("bg-nafindo-blue", "text-white", "shadow-sm");
+
         el.classList.add("text-slate-600");
+
       });
 
       const activeBtn = document.getElementById("btn-" + tabId);
+
       if (activeBtn) {
+
         activeBtn.classList.remove("text-slate-600");
+
         activeBtn.classList.add("bg-nafindo-blue", "text-white", "shadow-sm");
+
       }
 
       if (tabId === "tab-riwayat") {
+
         fetchComplaintHistory();
+
       }
+
     }
 
     // =========================================================================
+
     // LIGHTBOX DENGAN FITUR SWIPE GESTURE & NEXT / PREVIOUS (MULTI-FOTO)
+
     // =========================================================================
+
     let lightboxGallery = [];
+
     let currentLightboxIndex = 0;
+
     let touchStartX = 0;
+
     let touchStartY = 0;
 
     /**
+
      * Mengumpulkan semua foto dokumentasi yang ada di halaman web portal
+
      */
+
     function gatherAllPortalPhotos() {
+
       const photos = [];
+
       // 1. Dari allMediaGroupsCache jika sudah terisi (data tugas & dokumentasi terverifikasi)
+
       if (typeof allMediaGroupsCache !== "undefined" && Array.isArray(allMediaGroupsCache)) {
+
         allMediaGroupsCache.forEach(g => {
+
           (g.reports || []).forEach(r => {
+
             (r.photos || []).forEach(p => {
+
               if (p && typeof p === "string" && !photos.includes(p)) photos.push(p);
+
             });
+
           });
+
         });
+
       }
+
       // 2. Dari gambar di DOM (seluruh elemen img dokumentasi yang sedang tampil)
+
       const imgs = document.querySelectorAll('img');
+
       imgs.forEach(im => {
+
         const s = im.src || "";
+
         if (s && (s.includes('cloudinary') || s.includes('drive.google') || s.includes('data:image')) && !photos.includes(s) && !s.includes('logo') && !s.includes('favicon')) {
+
           photos.push(s);
+
         }
+
       });
+
       return photos;
+
     }
 
     function openLightbox(src, customList, initialIndex) {
+
       if (!src && (!customList || customList.length === 0)) return;
 
       // 1. Tentukan playlist galeri foto
+
       if (Array.isArray(customList) && customList.length > 0) {
+
         lightboxGallery = customList.filter(u => typeof u === "string" && u.trim().length > 0);
+
       } else {
+
         const allPhotos = gatherAllPortalPhotos();
+
         if (src && !allPhotos.includes(src)) {
+
           allPhotos.push(src);
+
         }
+
         lightboxGallery = allPhotos.length > 0 ? allPhotos : [src];
+
       }
 
       // 2. Tentukan indeks aktif
+
       if (typeof initialIndex === "number" && initialIndex >= 0 && initialIndex < lightboxGallery.length) {
+
         currentLightboxIndex = initialIndex;
+
       } else {
+
         const found = lightboxGallery.indexOf(src);
+
         currentLightboxIndex = found !== -1 ? found : 0;
+
       }
 
       updateLightboxDisplay();
 
       const modal = document.getElementById("lightboxModal");
+
       if (modal) modal.classList.remove("hidden");
+
       document.body.style.overflow = "hidden"; // Kunci scroll background halaman
+
     }
 
     function updateLightboxDisplay() {
+
       if (!lightboxGallery || lightboxGallery.length === 0) return;
+
       if (currentLightboxIndex < 0) currentLightboxIndex = 0;
+
       if (currentLightboxIndex >= lightboxGallery.length) currentLightboxIndex = lightboxGallery.length - 1;
 
       const currentSrc = lightboxGallery[currentLightboxIndex];
+
       const imgEl = document.getElementById("lightboxImg");
+
       const counterEl = document.getElementById("lightboxCounter");
+
       const downloadEl = document.getElementById("lightboxDownloadBtn");
+
       const prevBtn = document.getElementById("lightboxPrevBtn");
+
       const nextBtn = document.getElementById("lightboxNextBtn");
 
       if (imgEl) {
+
         imgEl.style.opacity = "0.2";
+
         imgEl.src = currentSrc;
+
         setTimeout(() => { imgEl.style.opacity = "1"; }, 40);
+
       }
+
       if (counterEl) {
+
         counterEl.textContent = "Foto " + (currentLightboxIndex + 1) + " dari " + lightboxGallery.length;
+
       }
+
       if (downloadEl) {
+
         downloadEl.href = currentSrc;
+
       }
 
       // Sembunyikan tombol navigasi jika hanya ada 1 foto
+
       const isMulti = lightboxGallery.length > 1;
+
       if (prevBtn) prevBtn.style.display = isMulti ? "flex" : "none";
+
       if (nextBtn) nextBtn.style.display = isMulti ? "flex" : "none";
+
     }
 
     function prevLightbox(e) {
+
       if (e) e.stopPropagation();
+
       if (lightboxGallery.length <= 1) return;
+
       currentLightboxIndex = (currentLightboxIndex - 1 + lightboxGallery.length) % lightboxGallery.length;
+
       updateLightboxDisplay();
+
     }
 
     function nextLightbox(e) {
+
       if (e) e.stopPropagation();
+
       if (lightboxGallery.length <= 1) return;
+
       currentLightboxIndex = (currentLightboxIndex + 1) % lightboxGallery.length;
+
       updateLightboxDisplay();
+
     }
 
     function closeLightbox() {
+
       const modal = document.getElementById("lightboxModal");
+
       if (modal) modal.classList.add("hidden");
+
       document.body.style.overflow = ""; // Pulihkan scroll halaman
+
     }
 
     // Navigasi Keyboard (Panah Kiri, Panah Kanan, Spasi, Escape)
+
     document.addEventListener("keydown", function(e) {
+
       const modal = document.getElementById("lightboxModal");
+
       if (!modal || modal.classList.contains("hidden")) return;
 
       if (e.key === "ArrowLeft") {
+
         prevLightbox(e);
+
       } else if (e.key === "ArrowRight" || e.key === " ") {
+
         nextLightbox(e);
+
       } else if (e.key === "Escape") {
+
         closeLightbox();
+
       }
+
     });
 
     // Touch Swipe Navigation (Geser Layar Sentuh HP Kiri / Kanan)
+
     (function initLightboxSwipeGesture() {
+
       const modal = document.getElementById("lightboxModal");
+
       if (!modal) return;
 
       modal.addEventListener("touchstart", function(e) {
+
         if (!e.changedTouches || e.changedTouches.length === 0) return;
+
         touchStartX = e.changedTouches[0].screenX;
+
         touchStartY = e.changedTouches[0].screenY;
+
       }, { passive: true });
 
       modal.addEventListener("touchend", function(e) {
+
         if (!e.changedTouches || e.changedTouches.length === 0) return;
+
         const touchEndX = e.changedTouches[0].screenX;
+
         const touchEndY = e.changedTouches[0].screenY;
+
         const deltaX = touchEndX - touchStartX;
+
         const deltaY = touchEndY - touchStartY;
 
         // Pastikan gerakan swipe horizontal dominan dan melampaui batas minimal 40px
+
         if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+
           if (deltaX < 0) {
+
             // Geser ke Kiri -> Foto Selanjutnya (Next)
+
             nextLightbox();
+
           } else {
+
             // Geser ke Kanan -> Foto Sebelumnya (Prev)
+
             prevLightbox();
+
           }
+
         }
+
       }, { passive: true });
+
     })();
 
     function openVideoModal(src, title) {
+
       const modal = document.getElementById("videoModal");
+
       const player = document.getElementById("modalVideoPlayer");
+
       const titleEl = document.getElementById("videoModalTitle");
+
       if (titleEl) titleEl.textContent = title || "Video Dokumentasi Lapangan";
+
       player.src = src;
+
       modal.classList.remove("hidden");
+
       try { player.play(); } catch(e) {}
+
     }
 
     function closeVideoModal() {
+
       const modal = document.getElementById("videoModal");
+
       const player = document.getElementById("modalVideoPlayer");
+
       try { player.pause(); } catch(e) {}
+
       player.src = "";
+
       modal.classList.add("hidden");
+
     }
 
     function toggleApiSettingsModal() {
+
       const modal = document.getElementById("apiSettingsModal");
+
       const input = document.getElementById("customApiUrlInput");
+
       input.value = getApiUrl();
+
       modal.classList.toggle("hidden");
+
     }
 
     function saveApiUrlSetting() {
+
       const val = document.getElementById("customApiUrlInput").value.trim();
+
       if (!val) return;
+
       localStorage.setItem("nafindo_custom_api_url", val);
+
       toggleApiSettingsModal();
+
       fetchProjectData();
+
       alert("URL Web App berhasil disimpan!");
+
     }
 
     function resetDefaultApiUrl() {
+
       localStorage.removeItem("nafindo_custom_api_url");
+
       document.getElementById("customApiUrlInput").value = DEFAULT_API_URL;
+
       saveApiUrlSetting();
+
     }
+
   </script>
+
 </body>
+
 </html>
+
