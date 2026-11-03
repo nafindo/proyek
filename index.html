@@ -5789,6 +5789,25 @@
 
     }
 
+    
+    function cleanSubAreaName(rawName, floorName = '') {
+      if (!rawName) return '';
+      let s = String(rawName).trim();
+      if (s.includes(' - ')) {
+        const parts = s.split(' - ');
+        if (parts.length >= 2 && parts[parts.length - 1].trim()) {
+          return parts[parts.length - 1].trim();
+        }
+      }
+      if (floorName && s.toLowerCase().startsWith(floorName.toLowerCase())) {
+        s = s.substring(floorName.length).trim().replace(/^[-:_]+/, '').trim();
+        if (s) return s;
+      }
+      const cleaned = s.replace(/^lantai\s*\d*\s*[-:_]?\s*/i, '').trim();
+      if (cleaned) return cleaned;
+      return s;
+    }
+
     function renderFloorMap(floorIdx) {
       const floor = floorDataList[floorIdx];
       const imgEl = document.getElementById("floorMapImage");
@@ -5859,9 +5878,10 @@
         else if (st === "SELESAI" || zone.progres >= 100) badgeColor = "bg-emerald-600";
         else if (st === "PROSES" || zone.progres > 0) badgeColor = "bg-amber-600";
 
+        const displaySubArea = cleanSubAreaName(zone.nama || 'Ruang', floor.lantai);
         badge.innerHTML = `
           <span class="text-[9px] sm:text-[11px] font-extrabold px-1.5 py-0.5 rounded shadow text-white ${badgeColor} whitespace-nowrap border border-white/60 group-hover:scale-105 transition-transform">
-            ${zone.nama || 'Ruang'}
+            ${displaySubArea}
           </span>
           <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/60 px-1 rounded mt-0.5 shadow-sm">
             ${zone.progres || 0}%
