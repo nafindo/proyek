@@ -5790,101 +5790,100 @@
     }
 
     function renderFloorMap(floorIdx) {
-
       const floor = floorDataList[floorIdx];
-
       const imgEl = document.getElementById("floorMapImage");
-
       const wrapperEl = document.getElementById("floorMapWrapper");
-
       const zonesLayer = document.getElementById("floorZonesLayer");
-
       const placeholderEl = document.getElementById("floorMapPlaceholder");
 
       if (!floor || !floor.imageUrl) {
-
         showEmptyFloorPlaceholder();
-
         return;
-
       }
 
       placeholderEl.classList.add("hidden");
-
       wrapperEl.classList.remove("hidden");
-
       zonesLayer.innerHTML = "";
-
       imgEl.src = floor.imageUrl;
 
       const zones = floor.zones || [];
 
-      zones.forEach(zone => {
-
-        const box = document.createElement("div");
-
-        box.className = "absolute cursor-pointer transition-all duration-200 flex flex-col items-center justify-center p-1 rounded border";
-
-        box.style.left = `${zone.x}%`;
-
-        box.style.top = `${zone.y}%`;
-
-        box.style.width = `${zone.w}%`;
-
-        box.style.height = `${zone.h}%`;
-
-        // Styling berdasarkan status warna
-
-        let bgClass = "bg-slate-400/35 border-slate-500 hover:bg-slate-400/50";
-
-        let textBadgeColor = "bg-slate-700 text-white";
-
+      // 1. Render Layer SVG untuk Poligon Multi-Titik & Kotak
+      const svgElements = zones.map((zone, zIdx) => {
         const st = (zone.status || "").toUpperCase();
-
+        let fillColor = "rgba(148, 163, 184, 0.4)";
+        let strokeColor = "#64748b";
         if (st === "KOMPLAIN") {
-
-          bgClass = "bg-rose-500/40 border-rose-600 hover:bg-rose-500/60 animate-pulse";
-
-          textBadgeColor = "bg-rose-600 text-white";
-
-        } else if (st === "SELESAI") {
-
-          bgClass = "bg-emerald-500/40 border-emerald-600 hover:bg-emerald-500/60";
-
-          textBadgeColor = "bg-emerald-700 text-white";
-
-        } else if (st === "PROSES") {
-
-          bgClass = "bg-amber-400/40 border-amber-500 hover:bg-amber-400/60";
-
-          textBadgeColor = "bg-amber-600 text-white";
-
+          fillColor = "rgba(244, 63, 94, 0.45)";
+          strokeColor = "#e11d48";
+        } else if (st === "SELESAI" || zone.progres >= 100) {
+          fillColor = "rgba(16, 185, 129, 0.45)";
+          strokeColor = "#059669";
+        } else if (st === "PROSES" || zone.progres > 0) {
+          fillColor = "rgba(245, 158, 11, 0.45)";
+          strokeColor = "#d97706";
         }
 
-        box.className += ` ${bgClass}`;
+        if (zone.points && Array.isArray(zone.points) && zone.points.length >= 3) {
+          const ptsStr = zone.points.map(p => `${p.x},${p.y}`).join(" ");
+          return `<polygon points="${ptsStr}" fill="${fillColor}" stroke="${strokeColor}" stroke-width="0.8" class="cursor-pointer transition-all hover:opacity-85 pointer-events-auto" data-zone-idx="${zIdx}" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));" />`;
+        } else if (zone.w > 0 && zone.h > 0) {
+          return `<rect x="${zone.x}" y="${zone.y}" width="${zone.w}" height="${zone.h}" rx="1" fill="${fillColor}" stroke="${strokeColor}" stroke-width="0.8" class="cursor-pointer transition-all hover:opacity-85 pointer-events-auto" data-zone-idx="${zIdx}" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));" />`;
+        }
+        return "";
+      }).join("");
 
-        box.innerHTML = `
+      zonesLayer.innerHTML = `
+        <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+          ${svgElements}
+        </svg>
+      `;
 
-          <span class="text-[9px] sm:text-[11px] font-extrabold px-1.5 py-0.5 rounded shadow-sm leading-tight text-center ${textBadgeColor} truncate max-w-full">
+      // 2. Render Label Nama & Persentase di Titik Tengah Tiap Ruangan
+      zones.forEach((zone, zIdx) => {
+        let cx = zone.x + (zone.w || 10) / 2;
+        let cy = zone.y + (zone.h || 10) / 2;
+        if (zone.points && Array.isArray(zone.points) && zone.points.length > 0) {
+          cx = zone.points.reduce((acc, p) => acc + Number(p.x), 0) / zone.points.length;
+          cy = zone.points.reduce((acc, p) => acc + Number(p.y), 0) / zone.points.length;
+        }
 
+        const badge = document.createElement("div");
+        badge.className = "absolute cursor-pointer flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none group pointer-events-auto z-10";
+        badge.style.left = `${cx}%`;
+        badge.style.top = `${cy}%`;
+
+        let badgeColor = "bg-slate-700";
+        const st = (zone.status || "").toUpperCase();
+        if (st === "KOMPLAIN") badgeColor = "bg-rose-600 animate-pulse";
+        else if (st === "SELESAI" || zone.progres >= 100) badgeColor = "bg-emerald-600";
+        else if (st === "PROSES" || zone.progres > 0) badgeColor = "bg-amber-600";
+
+        badge.innerHTML = `
+          <span class="text-[9px] sm:text-[11px] font-extrabold px-1.5 py-0.5 rounded shadow text-white ${badgeColor} whitespace-nowrap border border-white/60 group-hover:scale-105 transition-transform">
             ${zone.nama || 'Ruang'}
-
           </span>
-
-          <span class="text-[8px] sm:text-[10px] font-bold text-white drop-shadow mt-0.5">
-
+          <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/60 px-1 rounded mt-0.5 shadow-sm">
             ${zone.progres || 0}%
-
           </span>
-
         `;
-
-        box.onclick = () => openZoneDetailModal(zone, floor.lantai);
-
-        zonesLayer.appendChild(box);
-
+        badge.onclick = (e) => {
+          e.stopPropagation();
+          openZoneDetailModal(zone, floor.lantai);
+        };
+        zonesLayer.appendChild(badge);
       });
 
+      // Hubungkan klik pada bidang SVG polygon/rect
+      zonesLayer.querySelectorAll("polygon, rect").forEach(el => {
+        el.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const idx = Number(el.getAttribute("data-zone-idx"));
+          if (!isNaN(idx) && zones[idx]) {
+            openZoneDetailModal(zones[idx], floor.lantai);
+          }
+        });
+      });
     }
 
     function showEmptyFloorPlaceholder() {
