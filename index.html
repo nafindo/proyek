@@ -642,36 +642,26 @@
 
     <div class="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex space-x-1 overflow-x-auto no-scrollbar">
 
-      <button onclick="switchTab('tab-progres')" id="btn-tab-progres" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition bg-nafindo-blue text-white shadow-sm">
+      <button onclick="switchTab('tab-denah')" id="btn-tab-denah" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-2 transition bg-nafindo-blue text-white shadow-sm">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>Peta Denah Progres</span>
+        <span class="bg-amber-400 text-slate-900 text-[10px] font-black px-1.5 py-0.5 rounded-full uppercase ml-1 animate-pulse">Utama</span>
+      </button>
 
+      <button onclick="switchTab('tab-progres')" id="btn-tab-progres" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
         <i class="fa-solid fa-list-check"></i>
-
         <span>Rincian Progres</span>
-
       </button>
 
       <button onclick="switchTab('tab-dokumentasi')" id="btn-tab-dokumentasi" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
-
         <i class="fa-solid fa-photo-film"></i>
-
         <span>Foto & Video</span>
-
         <span id="badgeFotoCount" class="bg-slate-200 text-slate-700 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full ml-1">0</span>
-
       </button>
 
       <button onclick="switchTab('tab-komplain')" id="btn-tab-komplain" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-rose-600 hover:bg-rose-50 flex items-center justify-center space-x-2 transition border border-rose-200/50">
-
         <i class="fa-solid fa-circle-exclamation"></i>
-
         <span>Ajukan Komplain</span>
-
-      </button>
-
-      
-      <button onclick="switchTab('tab-denah')" id="btn-tab-denah" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-indigo-600 hover:bg-indigo-50 flex items-center justify-center space-x-2 transition border border-indigo-200/60">
-        <i class="fa-solid fa-map-location-dot"></i>
-        <span>Peta Denah Area</span>
       </button>
 <button onclick="switchTab('tab-riwayat')" id="btn-tab-riwayat" class="tab-btn flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center justify-center space-x-2 transition">
 
@@ -691,36 +681,62 @@
 
     <!-- ========================================================================= -->
 
-    <section id="tab-denah" class="tab-content hidden space-y-4">
+    <section id="tab-denah" class="tab-content space-y-4">
 
       <div class="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
 
         <!-- Header & Floor Selector -->
 
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
-
           <div>
-
             <div class="flex items-center gap-2">
-
               <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm"><i class="fa-solid fa-map-location-dot"></i></span>
-
-              <h3 class="text-base sm:text-lg font-bold text-slate-900">Peta Denah Area & Ruangan Proyek</h3>
-
+              <h3 class="text-base sm:text-lg font-bold text-slate-900">Peta Denah Area & Progres Ruangan</h3>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-300">Live Visual</span>
             </div>
-
-            <p class="text-xs text-slate-500 mt-0.5">Pantau progres fisik lapangan, status per ruangan, dan foto riil langsung di atas denah fisik</p>
-
+            <p class="text-xs text-slate-500 mt-0.5">Pantau penyelesaian fisik per ruangan, volume opname pekerjaan utama, dan kontrol kualitas lapangan</p>
           </div>
-
           <!-- Floor Switcher Pills -->
-
-          <div id="floorSwitcherContainer" class="flex items-center gap-1.5 overflow-x-auto py-1">
-
-            <!-- Diisi dinamis via JS -->
-
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-400">Lantai:</span>
+            <div id="floorSwitcherContainer" class="flex items-center gap-1.5 overflow-x-auto py-1">
+              <!-- Diisi dinamis via JS -->
+            </div>
           </div>
+        </div>
 
+        <!-- BAR RINGKASAN VOLUME OPNAME & PENYELESAIAN FISIK (BILLABLE VOLUME TRACKER) -->
+        <div class="my-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-4 text-white shadow-md border border-indigo-900/40">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-white/10">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 bg-indigo-500/20 text-indigo-400 rounded-xl text-base"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+              <div>
+                <h4 class="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
+                  <span>Volume Opname & Realisasi Pekerjaan Utama</span>
+                </h4>
+                <p class="text-[11px] text-slate-300">Volume fisik pekerjaan yang menentukan pembayaran, klik kartu untuk memfilter tampilan denah</p>
+              </div>
+            </div>
+            <div id="floorVolumeBadge" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-indigo-600/70 text-indigo-100 border border-indigo-400/30 w-fit">
+              Memuat data...
+            </div>
+          </div>
+          <div id="volumeTrackerGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-3">
+            <!-- Kartu tahapan volume diisi dinamis via JS: Self Leveling, Pasang SPC, Pasang List, Kualitas/Ciping -->
+          </div>
+        </div>
+
+        <!-- FILTER LAYER TAHAPAN PEKERJAAN (PILIH TAHAPAN YANG INGIN DILIHAT DI MAP) -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200 my-2">
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <i class="fa-solid fa-layer-group text-indigo-600"></i>
+              Tampilan Layer Map:
+            </span>
+          </div>
+          <div id="taskLayerFilterContainer" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full">
+            <!-- Diisi dinamis via JS: [Semua] [Self Leveling] [Pasang SPC] [Pasang List] dll -->
+          </div>
         </div>
 
         <!-- Legenda Status Warna -->
@@ -903,7 +919,7 @@
 
     <!-- ========================================================================= -->
 
-    <section id="tab-progres" class="tab-content space-y-4">
+    <section id="tab-progres" class="tab-content hidden space-y-4">
 
       <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
 
@@ -5698,98 +5714,58 @@
     // =========================================================================
 
     let floorDataList = [];
-
     let activeFloorIndex = 0;
-
     let selectedZoneData = null;
+    let activeTaskLayer = 'ALL'; // 'ALL' atau nama tahapan pekerjaan spesifik
 
     async function fetchFloorMapData() {
-
       try {
-
         const url = `${getApiUrl()}?action=getDenahFloorMapDetail&proyek=${encodeURIComponent(currentProject)}&api=true`;
-
         const res = await fetch(url);
-
         const json = await res.json();
-
         const data = json.data || json.result || {};
-
         floorDataList = data.floors || [];
 
         renderFloorSwitcher();
-
         if (floorDataList.length > 0) {
-
           renderFloorMap(activeFloorIndex);
-
         } else {
-
           showEmptyFloorPlaceholder();
-
         }
-
       } catch (err) {
-
         console.error("Gagal memuat denah lantai:", err);
-
         showEmptyFloorPlaceholder();
-
       }
-
     }
 
     function renderFloorSwitcher() {
-
       const container = document.getElementById("floorSwitcherContainer");
-
       if (!container) return;
-
       container.innerHTML = "";
-
       if (floorDataList.length === 0) {
-
-        container.innerHTML = `<span class="text-xs text-slate-400 italic">Belum ada denah lantai</span>`;
-
+        container.innerHTML = `<span class="text-xs text-slate-400 italic">Belum ada denah</span>`;
         return;
-
       }
 
       floorDataList.forEach((floor, idx) => {
-
         const btn = document.createElement("button");
-
         const isActive = idx === activeFloorIndex;
-
         btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap ${
-
           isActive 
-
             ? 'bg-indigo-600 text-white shadow-sm' 
-
             : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-
         }`;
-
         btn.textContent = floor.lantai || `Lantai ${idx + 1}`;
-
         btn.onclick = () => {
-
           activeFloorIndex = idx;
-
+          activeTaskLayer = 'ALL'; // Reset ke ringkasan saat pindah lantai
           renderFloorSwitcher();
-
           renderFloorMap(idx);
-
         };
-
         container.appendChild(btn);
-
       });
-
     }
 
-    
     function cleanSubAreaName(rawName, floorName = '') {
       if (!rawName) return '';
       let s = String(rawName).trim();
@@ -5806,6 +5782,170 @@
       const cleaned = s.replace(/^lantai\s*\d*\s*[-:_]?\s*/i, '').trim();
       if (cleaned) return cleaned;
       return s;
+    }
+
+    // Helper: Menilai apakah suatu tugas tergolong Kontrol Kualitas & Persiapan
+    function isQualityTask(taskName) {
+      const n = (taskName || '').toLowerCase();
+      return n.includes('ciping') || n.includes('chipping') || n.includes('grinding') ||
+             n.includes('dasar') || n.includes('pembersihan') || n.includes('bersih') ||
+             n.includes('primer') || n.includes('bonding') || n.includes('kerapian') ||
+             n.includes('rapi') || n.includes('nat') || n.includes('sealant') ||
+             n.includes('ceking') || n.includes('inspeksi') || n.includes('proteksi');
+    }
+
+    // Ekstraksi tahapan-tahapan pekerjaan unik yang ada di lantai aktif
+    function getFloorTaskStages(zones) {
+      const stageMap = new Map();
+      (zones || []).forEach(z => {
+        (z.tasks || []).forEach(t => {
+          const name = (t.namaTugas || t.nama || t.name || '').trim();
+          if (!name) return;
+          if (!stageMap.has(name)) {
+            stageMap.set(name, {
+              name: name,
+              isQuality: isQualityTask(name),
+              totalCount: 0,
+              doneCount: 0,
+              progressSum: 0,
+              complaintCount: 0
+            });
+          }
+          const info = stageMap.get(name);
+          info.totalCount++;
+          const p = Number(t.progres) || 0;
+          const st = (t.status || '').toUpperCase();
+          if (p >= 100 || st === 'SELESAI') info.doneCount++;
+          if (st === 'KOMPLAIN') info.complaintCount++;
+          info.progressSum += p;
+        });
+      });
+      return Array.from(stageMap.values());
+    }
+
+    // Cari status tahapan tertentu di dalam ruangan
+    function getStageDataForZone(zone, stageName) {
+      if (stageName === 'ALL') {
+        const p = Number(zone.progres) || 0;
+        const st = (zone.status || (p >= 100 ? 'SELESAI' : p > 0 ? 'PROSES' : 'BELUM')).toUpperCase();
+        return { hasTask: true, progres: p, status: st, taskName: 'Semua Tugas' };
+      }
+
+      const tasks = zone.tasks || [];
+      const cat = stageName.toLowerCase().trim();
+      let matched = tasks.find(t => (t.namaTugas || t.nama || t.name || '').trim().toLowerCase() === cat);
+      if (!matched) {
+        matched = tasks.find(t => (t.namaTugas || t.nama || t.name || '').toLowerCase().includes(cat));
+      }
+
+      if (matched) {
+        const p = Number(matched.progres) || 0;
+        const st = (matched.status || (p >= 100 ? 'SELESAI' : p > 0 ? 'PROSES' : 'BELUM')).toUpperCase();
+        return { hasTask: true, progres: p, status: st, taskName: matched.namaTugas || matched.nama || stageName };
+      }
+
+      return { hasTask: false, progres: 0, status: 'NONE', taskName: stageName };
+    }
+
+    // Render Bar Volume & Tracker Kesiapan Opname
+    function renderVolumeTracker(zones, floorName, stages) {
+      const grid = document.getElementById("volumeTrackerGrid");
+      const badge = document.getElementById("floorVolumeBadge");
+      if (!grid || !badge) return;
+
+      badge.innerHTML = `<i class="fa-solid fa-hotel mr-1"></i> ${zones.length} Total Area / Ruangan`;
+      grid.innerHTML = "";
+
+      if (stages.length === 0) {
+        // Fallback jika belum ada rincian tugas spesifik di ruangan
+        const total = zones.length;
+        const done = zones.filter(z => (z.progres || 0) >= 100 || (z.status || '').toUpperCase() === 'SELESAI').length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        grid.innerHTML = `
+          <div class="col-span-full p-3 bg-white/10 rounded-xl border border-white/10 flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-indigo-200">Realisasi Fisik Keseluruhan Lantai:</div>
+              <div class="text-lg font-black text-white">${done} dari ${total} Ruangan Selesai (${pct}%)</div>
+            </div>
+            <div class="text-right">
+              <span class="text-xs px-2 py-1 rounded bg-emerald-500/80 text-white font-extrabold">${pct}% Siap Opname</span>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      stages.forEach(stg => {
+        const pct = stg.totalCount > 0 ? Math.round((stg.doneCount / stg.totalCount) * 100) : 0;
+        const isActive = activeTaskLayer === stg.name;
+        const isComplete = stg.doneCount === stg.totalCount && stg.totalCount > 0;
+
+        const card = document.createElement("div");
+        card.className = `cursor-pointer p-3 rounded-xl border transition-all ${
+          isActive 
+            ? 'bg-indigo-600 text-white border-indigo-400 shadow-lg scale-102 ring-2 ring-indigo-300' 
+            : 'bg-white/10 hover:bg-white/15 text-slate-100 border-white/10'
+        }`;
+        
+        card.onclick = () => {
+          selectTaskLayer(isActive ? 'ALL' : stg.name);
+        };
+
+        const tagText = stg.isQuality ? '🛡️ Kontrol Kualitas' : '💰 Volume Opname';
+        const tagClass = stg.isQuality ? 'text-amber-300' : 'text-emerald-300';
+        const statusLabel = isComplete ? '✅ 100% Tuntas' : (stg.complaintCount > 0 ? `🔴 ${stg.complaintCount} Komplain` : `${stg.doneCount}/${stg.totalCount} Selesai`);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] mb-1">
+            <span class="font-extrabold truncate max-w-[130px]" title="${stg.name}">${stg.name}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded font-black ${isComplete ? 'bg-emerald-500 text-white' : 'bg-white/20 text-white'}">${pct}%</span>
+          </div>
+          <div class="text-base sm:text-lg font-black tracking-tight">${stg.doneCount} / ${stg.totalCount} <span class="text-xs font-normal opacity-80">Ruangan</span></div>
+          <div class="w-full bg-black/30 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div class="${isComplete ? 'bg-emerald-400' : (stg.isQuality ? 'bg-amber-400' : 'bg-indigo-400')} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          </div>
+          <div class="text-[10px] mt-1.5 flex items-center justify-between opacity-90">
+            <span class="${tagClass} font-bold">${tagText}</span>
+            <span class="font-semibold">${statusLabel}</span>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // Render Tombol Switcher Layer Tahapan
+    function renderTaskLayerFilter(stages) {
+      const container = document.getElementById("taskLayerFilterContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      // Tombol 1: Semua Ringkasan
+      const allBtn = document.createElement("button");
+      const isAll = activeTaskLayer === 'ALL';
+      allBtn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+        isAll ? 'bg-slate-900 text-white shadow-sm' : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+      }`;
+      allBtn.innerHTML = `<i class="fa-solid fa-globe"></i> <span>Semua Tugas</span>`;
+      allBtn.onclick = () => selectTaskLayer('ALL');
+      container.appendChild(allBtn);
+
+      stages.forEach(stg => {
+        const btn = document.createElement("button");
+        const isActive = activeTaskLayer === stg.name;
+        btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+          isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
+        }`;
+        const icon = stg.isQuality ? 'fa-screwdriver-wrench text-amber-500' : 'fa-check-double text-emerald-500';
+        btn.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${stg.name}</span> <span class="text-[10px] opacity-75 font-normal">(${stg.doneCount}/${stg.totalCount})</span>`;
+        btn.onclick = () => selectTaskLayer(stg.name);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectTaskLayer(stageName) {
+      activeTaskLayer = stageName;
+      renderFloorMap(activeFloorIndex);
     }
 
     function renderFloorMap(floorIdx) {
@@ -5826,20 +5966,29 @@
       imgEl.src = floor.imageUrl;
 
       const zones = floor.zones || [];
+      const stages = getFloorTaskStages(zones);
 
-      // 1. Render Layer SVG untuk Poligon Multi-Titik & Kotak
+      // Render Bar Tracker & Filter Layer
+      renderVolumeTracker(zones, floor.lantai, stages);
+      renderTaskLayerFilter(stages);
+
+      // 1. Render Layer SVG untuk Poligon Multi-Titik & Kotak Berdasarkan Layer Aktif
       const svgElements = zones.map((zone, zIdx) => {
-        const st = (zone.status || "").toUpperCase();
+        const stageData = getStageDataForZone(zone, activeTaskLayer);
         let fillColor = "rgba(148, 163, 184, 0.4)";
         let strokeColor = "#64748b";
-        if (st === "KOMPLAIN") {
-          fillColor = "rgba(244, 63, 94, 0.45)";
+
+        if (!stageData.hasTask) {
+          fillColor = "rgba(226, 232, 240, 0.25)";
+          strokeColor = "#cbd5e1";
+        } else if (stageData.status === "KOMPLAIN") {
+          fillColor = "rgba(244, 63, 94, 0.55)";
           strokeColor = "#e11d48";
-        } else if (st === "SELESAI" || zone.progres >= 100) {
-          fillColor = "rgba(16, 185, 129, 0.45)";
+        } else if (stageData.status === "SELESAI" || stageData.progres >= 100) {
+          fillColor = "rgba(16, 185, 129, 0.55)";
           strokeColor = "#059669";
-        } else if (st === "PROSES" || zone.progres > 0) {
-          fillColor = "rgba(245, 158, 11, 0.45)";
+        } else if (stageData.status === "PROSES" || stageData.progres > 0) {
+          fillColor = "rgba(245, 158, 11, 0.55)";
           strokeColor = "#d97706";
         }
 
@@ -5858,7 +6007,7 @@
         </svg>
       `;
 
-      // 2. Render Label Nama & Persentase di Titik Tengah Tiap Ruangan
+      // 2. Render Label Nama & Persentase Sesuai Layer Aktif di Titik Tengah Tiap Ruangan
       zones.forEach((zone, zIdx) => {
         let cx = zone.x + (zone.w || 10) / 2;
         let cy = zone.y + (zone.h || 10) / 2;
@@ -5867,24 +6016,44 @@
           cy = zone.points.reduce((acc, p) => acc + Number(p.y), 0) / zone.points.length;
         }
 
+        const stageData = getStageDataForZone(zone, activeTaskLayer);
+        let badgeColor = "bg-slate-700";
+        let statusBadgeText = `${stageData.progres}%`;
+
+        if (!stageData.hasTask) {
+          badgeColor = "bg-slate-400 opacity-60";
+          statusBadgeText = "N/A";
+        } else if (stageData.status === "KOMPLAIN") {
+          badgeColor = "bg-rose-600 animate-pulse";
+          statusBadgeText = "Komplain";
+        } else if (stageData.status === "SELESAI" || stageData.progres >= 100) {
+          badgeColor = "bg-emerald-600";
+          statusBadgeText = "100%";
+        } else if (stageData.status === "PROSES" || stageData.progres > 0) {
+          badgeColor = "bg-amber-600";
+          statusBadgeText = `${stageData.progres}%`;
+        } else {
+          badgeColor = "bg-slate-600";
+          statusBadgeText = "0%";
+        }
+
+        const displaySubArea = cleanSubAreaName(zone.nama || 'Ruang', floor.lantai);
+        const layerInfoTag = activeTaskLayer !== 'ALL' ? `<span class="text-[7px] text-amber-200 font-bold uppercase truncate max-w-[80px]">${activeTaskLayer}</span>` : '';
+
         const badge = document.createElement("div");
         badge.className = "absolute cursor-pointer flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none group pointer-events-auto z-10";
         badge.style.left = `${cx}%`;
         badge.style.top = `${cy}%`;
 
-        let badgeColor = "bg-slate-700";
-        const st = (zone.status || "").toUpperCase();
-        if (st === "KOMPLAIN") badgeColor = "bg-rose-600 animate-pulse";
-        else if (st === "SELESAI" || zone.progres >= 100) badgeColor = "bg-emerald-600";
-        else if (st === "PROSES" || zone.progres > 0) badgeColor = "bg-amber-600";
-
-        const displaySubArea = cleanSubAreaName(zone.nama || 'Ruang', floor.lantai);
         badge.innerHTML = `
-          <span class="text-[9px] sm:text-[11px] font-extrabold px-1.5 py-0.5 rounded shadow text-white ${badgeColor} whitespace-nowrap border border-white/60 group-hover:scale-105 transition-transform">
-            ${displaySubArea}
-          </span>
-          <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/60 px-1 rounded mt-0.5 shadow-sm">
-            ${zone.progres || 0}%
+          <div class="flex flex-col items-center ${badgeColor} px-1.5 py-0.5 rounded shadow border border-white/60 group-hover:scale-105 transition-transform text-white">
+            <span class="text-[9px] sm:text-[10px] font-extrabold whitespace-nowrap leading-tight">
+              ${displaySubArea}
+            </span>
+            ${layerInfoTag}
+          </div>
+          <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/70 px-1 rounded mt-0.5 shadow-sm">
+            ${statusBadgeText}
           </span>
         `;
         badge.onclick = (e) => {
@@ -5907,11 +6076,8 @@
     }
 
     function showEmptyFloorPlaceholder() {
-
       document.getElementById("floorMapWrapper").classList.add("hidden");
-
       document.getElementById("floorMapPlaceholder").classList.remove("hidden");
-
     }
 
     function openZoneDetailModal(zone, floorName) {
@@ -5962,48 +6128,64 @@
 
       document.getElementById("zoneModalProgressBar").style.width = `${zone.progres || 0}%`;
 
-      // Task List
-
+      // Task List (Dipisahkan antara Pekerjaan Utama Opname Volume vs Kontrol Kualitas)
       const taskContainer = document.getElementById("zoneModalTaskList");
-
       taskContainer.innerHTML = "";
-
       const tasks = zone.tasks || [];
 
       if (tasks.length === 0) {
-
         taskContainer.innerHTML = `<div class="p-2.5 bg-slate-50 rounded-lg text-slate-400 italic text-center">Belum ada item pekerjaan terdaftar di area ini.</div>`;
-
       } else {
+        const billableTasks = tasks.filter(t => !isQualityTask(t.namaTugas || t.nama || t.name));
+        const qualityTasks = tasks.filter(t => isQualityTask(t.namaTugas || t.nama || t.name));
 
-        tasks.forEach(t => {
-
-          const item = document.createElement("div");
-
-          item.className = "p-2 bg-slate-50 border border-slate-200/70 rounded-lg flex items-center justify-between";
-
-          const prog = t.progres || 0;
-
-          let dotColor = prog >= 100 ? "text-emerald-500" : (prog > 0 ? "text-amber-500" : "text-slate-400");
-
-          item.innerHTML = `
-
-            <div class="flex items-center gap-2">
-
-              <i class="fa-solid fa-circle text-[8px] ${dotColor}"></i>
-
-              <span class="font-bold text-slate-800 text-xs">${t.namaTugas || t.nama || 'Item Pekerjaan'}</span>
-
+        function renderTaskBlock(title, taskSubList, badgeHeader, isQuality) {
+          if (taskSubList.length === 0) return;
+          const block = document.createElement("div");
+          block.className = "space-y-1.5 mb-2.5";
+          block.innerHTML = `
+            <div class="flex items-center justify-between text-[11px] font-extrabold ${isQuality ? 'text-amber-700 bg-amber-50 border-amber-200' : 'text-indigo-800 bg-indigo-50 border-indigo-200'} px-2.5 py-1 rounded-lg border">
+              <span>${title}</span>
+              <span class="text-[9px] uppercase font-black opacity-80">${badgeHeader}</span>
             </div>
-
-            <span class="text-xs font-extrabold text-slate-600">${prog}%</span>
-
           `;
+          
+          taskSubList.forEach(t => {
+            const item = document.createElement("div");
+            item.className = "p-2.5 bg-white border border-slate-200 rounded-xl space-y-1.5 shadow-xs";
+            const prog = Number(t.progres) || 0;
+            const st = (t.status || (prog >= 100 ? 'SELESAI' : prog > 0 ? 'PROSES' : 'BELUM')).toUpperCase();
+            
+            let badgeHtml = '';
+            if (st === 'KOMPLAIN') {
+              badgeHtml = `<span class="bg-rose-100 text-rose-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-rose-300">🔴 Ada Komplain</span>`;
+            } else if (prog >= 100 || st === 'SELESAI') {
+              badgeHtml = `<span class="bg-emerald-100 text-emerald-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-emerald-300">🟢 Selesai (Siap Opname)</span>`;
+            } else if (prog > 0) {
+              badgeHtml = `<span class="bg-amber-100 text-amber-700 text-[10px] font-black px-2 py-0.5 rounded-full border border-amber-300">🟡 Dikerjakan (${prog}%)</span>`;
+            } else {
+              badgeHtml = `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded-full">⚪ Belum</span>`;
+            }
 
-          taskContainer.appendChild(item);
+            const noteHtml = t.catatan ? `<p class="text-[10px] text-slate-500 italic mt-0.5"><i class="fa-solid fa-comment-dots mr-1"></i>${t.catatan}</p>` : '';
 
-        });
+            item.innerHTML = `
+              <div class="flex items-center justify-between gap-2">
+                <span class="font-extrabold text-slate-800 text-xs">${t.namaTugas || t.nama || 'Tugas'}</span>
+                ${badgeHtml}
+              </div>
+              <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div class="${prog >= 100 ? 'bg-emerald-500' : 'bg-indigo-600'} h-full rounded-full transition-all" style="width: ${prog}%"></div>
+              </div>
+              ${noteHtml}
+            `;
+            block.appendChild(item);
+          });
+          taskContainer.appendChild(block);
+        }
 
+        renderTaskBlock("💰 Pekerjaan Utama (Volume Opname Bayar)", billableTasks, "Penentu Tagihan", false);
+        renderTaskBlock("🛡️ Kontrol Kualitas & Persiapan", qualityTasks, "Syarat ACC", true);
       }
 
       // Photo Grid
