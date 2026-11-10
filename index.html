@@ -478,7 +478,8 @@
 
     <!-- ========================================================================= -->
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+    <!-- Volume Opname card disembunyikan sesuai permintaan klien -->
+<div class="hidden" id="monitorVolumePekerjaan"><div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
 
       <!-- 1. Self-Leveling Lantai -->
 
@@ -634,7 +635,7 @@
 
         </div>
 
-      </div>
+      </div></div>
 
     </div>
 
@@ -706,7 +707,9 @@
         </div>
 
         <!-- BAR RINGKASAN VOLUME OPNAME & PENYELESAIAN FISIK (BILLABLE VOLUME TRACKER) -->
-        <div class="my-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-4 text-white shadow-md border border-indigo-900/40">
+        <!-- Volume Opname Map Bar disembunyikan sesuai permintaan klien -->
+        <div class="hidden" id="volumeTrackerBar">
+<div class="my-3 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-2xl p-4 text-white shadow-md border border-indigo-900/40">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-white/10">
             <div class="flex items-center gap-2.5">
               <span class="p-2 bg-indigo-500/20 text-indigo-400 rounded-xl text-base"><i class="fa-solid fa-file-invoice-dollar"></i></span>
@@ -724,6 +727,7 @@
           <div id="volumeTrackerGrid" class="grid grid-cols-2 md:grid-cols-4 gap-2.5 pt-3">
             <!-- Kartu tahapan volume diisi dinamis via JS: Self Leveling, Pasang SPC, Pasang List, Kualitas/Ciping -->
           </div>
+        </div>
         </div>
 
         <!-- FILTER LAYER TAHAPAN PEKERJAAN (PILIH TAHAPAN YANG INGIN DILIHAT DI MAP) -->
@@ -756,45 +760,52 @@
         </div>
 
         <!-- Canvas / Interactive Map Container -->
+        <!-- TAMPILAN 1: SEMUA LANTAI SEKALIGUS (DEFAULT VIEW) -->
+        <div id="allFloorsContainer" class="space-y-4">
+          <!-- Diisi dinamis via JS -->
+        </div>
 
-        <div class="relative w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-inner flex items-center justify-center min-h-[350px] sm:min-h-[500px]">
+        <!-- TAMPILAN 2: FOKUS SATU LANTAI DETAIL (KETIKA KLIK LANTAI 5, DLL) -->
+        <div id="singleFloorContainer" class="hidden space-y-3">
+          <div class="flex items-center justify-between pb-1">
+            <button onclick="focusSingleFloor('ALL')" class="px-3.5 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-extrabold flex items-center gap-2 shadow-xs transition cursor-pointer">
+              <i class="fa-solid fa-arrow-left"></i> ← Kembali Tampilkan Semua Lantai
+            </button>
+            <span id="singleFloorTitleBadge" class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200">
+              Mode Fokus Detail
+            </span>
+          </div>
 
-          <div id="floorMapWrapper" class="relative inline-block w-full max-w-full">
-
-            <img id="floorMapImage" src="" alt="Denah Lantai" class="w-full h-auto block select-none" />
-
-            <!-- Layer Ruangan Menyala (Zone Overlays) -->
-
-            <div id="floorZonesLayer" class="absolute inset-0 pointer-events-auto">
-
-              <!-- Ruangan di-generate dinamis via JS -->
-
+          <!-- FILTER LAYER TAHAPAN DI SINGLE FLOOR MODE -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-layer-group text-indigo-600"></i>
+                Tampilan Layer Map:
+              </span>
             </div>
-
+            <div id="taskLayerFilterContainer" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full">
+              <!-- Diisi dinamis via JS -->
+            </div>
           </div>
 
-          <!-- Placeholder jika belum ada denah -->
-
-          <div id="floorMapPlaceholder" class="hidden flex flex-col items-center justify-center p-8 text-center text-slate-400 space-y-2">
-
-            <i class="fa-solid fa-map text-4xl text-slate-300"></i>
-
-            <p class="text-sm font-semibold text-slate-600">Denah untuk lantai ini belum diunggah oleh Admin</p>
-
-            <p class="text-xs text-slate-400 max-w-sm">Admin proyek dapat mengunggah gambar denah dan memetakan ruangan melalui menu Denah di aplikasi.</p>
-
+          <div class="relative w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 shadow-inner flex items-center justify-center min-h-[350px] sm:min-h-[500px]">
+            <div id="floorMapWrapper" class="relative inline-block w-full max-w-full">
+              <img id="floorMapImage" src="" alt="Denah Lantai" class="w-full h-auto block select-none" />
+              <div id="floorZonesLayer" class="absolute inset-0 pointer-events-auto">
+                <!-- Ruangan di-generate dinamis via JS -->
+              </div>
+            </div>
           </div>
-
         </div>
 
-        <div class="text-[11px] text-slate-400 text-center pt-2">
-
-          💡 <span class="font-medium text-slate-500">Ketuk ruangan pada denah untuk melihat checklist pekerjaan & foto dokumentasi dari tukang.</span>
-
+        <!-- Placeholder Jika Belum Ada Denah -->
+        <div id="floorMapPlaceholder" class="hidden text-center p-8 text-slate-400">
+          <i class="fa-solid fa-map-location-dot text-4xl mb-2 text-slate-300"></i>
+          <p class="text-sm font-bold text-slate-600">Belum Ada Gambar Denah untuk Lantai Ini</p>
+          <p class="text-xs text-slate-400 mt-1">Admin dapat mengunggah file denah arsitektur melalui menu Pengaturan Denah di APK.</p>
         </div>
-
       </div>
-
     </section>
 
     <!-- MODAL DETAIL RUANGAN / ZONA -->
@@ -2058,144 +2069,120 @@
 
     // Mengambil Data Progres Proyek secara Lengkap
 
+    // FUNGSI AKSELERASI DATA SUPER CEPAT (STALE-WHILE-REVALIDATE + PARALLEL FETCH)
+    let isInitialHydrated = false;
+
+    function hydrateFromLocalStorage() {
+      if (!currentProject) return false;
+      let hasData = false;
+      try {
+        const cachedProj = localStorage.getItem("nafindo_cache_proj_" + currentProject);
+        if (cachedProj) {
+          const data = JSON.parse(cachedProj);
+          renderProjectData(data, true);
+          hasData = true;
+        }
+
+        const cachedMedia = localStorage.getItem("nafindo_cache_media_" + currentProject);
+        if (cachedMedia) {
+          const mediaLogs = JSON.parse(cachedMedia);
+          renderGalleryGrouped(mediaLogs, []);
+          hasData = true;
+        }
+
+        const cachedTasks = localStorage.getItem("nafindo_cache_tasks_" + currentProject);
+        if (cachedTasks) {
+          const tasks = JSON.parse(cachedTasks);
+          renderTaskItems(tasks);
+          hasData = true;
+        }
+
+        const cachedFloors = localStorage.getItem("nafindo_cache_floors_" + currentProject);
+        if (cachedFloors) {
+          floorDataList = JSON.parse(cachedFloors);
+          renderFloorSwitcher();
+          if (activeFloorIndex === 'ALL') {
+            renderAllFloorsOverview();
+          } else {
+            renderFloorMap(activeFloorIndex);
+          }
+          hasData = true;
+        }
+      } catch (e) {
+        console.warn("Gagal membaca cache lokal:", e);
+      }
+      return hasData;
+    }
+
     async function fetchProjectData() {
-      showSyncIndicator("download", "Mengunduh data proyek...");
+      // 1. Render data dari memori cache lokal secara instan (< 50 milidetik!)
+      const hadCache = hydrateFromLocalStorage();
+      if (!hadCache) {
+        showLoadingState();
+      } else {
+        showSyncIndicator("download", "Sinkronisasi data terbaru...");
+      }
 
-      const taskContainer = document.getElementById("taskListContainer");
+      // 2. Pemanggilan Data Super Cepat: Eksekusi SELURUH endpoint secara PARALEL serentak!
+      const apiUrl = getApiUrl();
+      const projParam = encodeURIComponent(currentProject);
+      const timestamp = Date.now();
 
-      const galleryContainer = document.getElementById("photoGalleryContainer");
+      const pProject = fetch(`${apiUrl}?action=ambilDataMonitoring&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
+      const pMedia = fetch(`${apiUrl}?action=ambilLogDetailTukang&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
+      const pTasks = fetch(`${apiUrl}?action=ambilTaskMonitor&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
+      const pFloors = fetch(`${apiUrl}?action=getDenahFloorMapDetail&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
+      const pComplaints = fetch(`${apiUrl}?action=getComplaintHistory&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
 
       try {
+        const [resProj, resMedia, resTasks, resFloors, resComplaints] = await Promise.all([pProject, pMedia, pTasks, pFloors, pComplaints]);
 
-        const apiUrl = `${getApiUrl()}?action=ambilDataMonitoring&proyek=${encodeURIComponent(currentProject)}&api=true&_t=${Date.now()}`;
+        hideSyncIndicator();
 
-        const res = await fetch(apiUrl);
-
-        const json = await res.json();
-
-        if (json.status === "success" && json.data) {
-
-          renderProjectData(json.data);
-
-        } else {
-
-          // Fallback coba endpoint getAdminFullDashboard
-
+        // Update Project Data
+        if (resProj && resProj.status === "success" && resProj.data) {
+          try { localStorage.setItem("nafindo_cache_proj_" + currentProject, JSON.stringify(resProj.data)); } catch(e){}
+          renderProjectData(resProj.data);
+        } else if (!hadCache) {
           fetchFallbackData();
+        }
 
+        // Update Tasks List
+        if (resTasks && resTasks.data) {
+          try { localStorage.setItem("nafindo_cache_tasks_" + currentProject, JSON.stringify(resTasks.data)); } catch(e){}
+          renderTaskItems(resTasks.data);
+        }
+
+        // Update Media Logs
+        if (resMedia && (resMedia.data || resMedia.result)) {
+          const logs = resMedia.data || resMedia.result || [];
+          try { localStorage.setItem("nafindo_cache_media_" + currentProject, JSON.stringify(logs)); } catch(e){}
+          renderGalleryGrouped(logs, (resProj && resProj.data ? resProj.data.listFoto : []));
+        }
+
+        // Update Floor Map
+        if (resFloors && (resFloors.data || resFloors.result)) {
+          const fData = resFloors.data || resFloors.result || {};
+          floorDataList = fData.floors || [];
+          try { localStorage.setItem("nafindo_cache_floors_" + currentProject, JSON.stringify(floorDataList)); } catch(e){}
+          renderFloorSwitcher();
+          if (activeFloorIndex === 'ALL') {
+            renderAllFloorsOverview();
+          } else {
+            renderFloorMap(activeFloorIndex);
+          }
+        }
+
+        // Update Complaints
+        if (resComplaints && resComplaints.data) {
+          renderComplaints(resComplaints.data);
         }
 
       } catch (err) {
-
-        console.warn("Koneksi gagal, mencoba fallback data:", err);
-
-        fetchFallbackData();
-
+        console.warn("Koneksi gagal atau offline, menggunakan cache:", err);
+        hideSyncIndicator();
+        if (!hadCache) fetchFallbackData();
       }
-
-    }
-
-    async function fetchFallbackData() {
-
-      try {
-
-        const apiUrl = `${getApiUrl()}?action=getAdminFullDashboard&proyek=${encodeURIComponent(currentProject)}&api=true`;
-
-        const res = await fetch(apiUrl);
-
-        const json = await res.json();
-
-        if (json && json.data) {
-
-          renderFallbackDashboard(json.data);
-
-        } else {
-
-          renderDemoData();
-
-        }
-
-      } catch (e) {
-
-        renderDemoData();
-
-      }
-
-    }
-
-    function renderProjectData(data) {
-      hideSyncIndicator();
-
-      projectDataCache = data;
-
-      // Status & Header
-
-      document.getElementById("projectStatusBadge").textContent = data.status || "Sedang Berjalan";
-
-      document.getElementById("projectNameHeading").textContent = (data.nama || currentProject).replace(/_/g, " ");
-
-      // Metrik Utama
-
-      let persen = 0;
-
-      if (tasksCache && tasksCache.length > 0) {
-
-        persen = updateOverallProgressKPI(tasksCache);
-
-      } else if (data.persen !== undefined && data.persen !== null && Number(data.persen) !== 50) {
-
-        persen = data.persen;
-
-      }
-
-      document.getElementById("metricProgressText").textContent = persen + "%";
-
-      document.getElementById("metricProgressBar").style.width = persen + "%";
-
-      const targetHariVal = (data.targetHari !== undefined && data.targetHari !== null && data.targetHari !== 0) ? data.targetHari : (data.sisaHari || "--");
-
-      document.getElementById("metricTargetDays").textContent = targetHariVal;
-
-      // Filter tanggal deadline: cegah tanggal 1970 (karena sel kosong di spreadsheet)
-
-      let dl = data.deadline;
-
-      const isInvalidDate = !dl || dl.includes("1970") || dl === "0" || dl === "--" || dl.toLowerCase().includes("undefined");
-
-      
-
-      let sisa = data.sisaHari;
-
-      if (isInvalidDate || sisa === "0" || sisa === 0 || sisa === "--") {
-
-        if (targetHariVal && targetHariVal !== "--") {
-
-          sisa = targetHariVal;
-
-        }
-
-      }
-
-      document.getElementById("metricRemainingDays").textContent = "Sisa: " + (sisa || "--") + " hari";
-
-      if (document.getElementById("metricDeadlineText")) {
-
-        document.getElementById("metricDeadlineText").textContent = isInvalidDate ? "Belum Ditentukan" : dl;
-
-      }
-
-      document.getElementById("metricLastUpdate").textContent = data.waktuUpdate || "--:--";
-
-      // Foto & Video Dokumentasi (Dikelompokkan per Tugas)
-
-      fetchGroupedMedia(data.listFoto || [], data.mediaPerTugas || []);
-
-      // Ambil Task Rincian
-
-      fetchTasksList();
-
-      fetchComplaintHistory();
-
     }
 
     function renderFallbackDashboard(d) {
@@ -2279,149 +2266,131 @@
     }
 
     function parseLogDescription(rawDesc) {
-
       let worker = "Pekerja Lapangan";
-
       let area = "";
-
+      let lantai = "";
+      let kamar = "";
+      let displayArea = "";
+      let shortArea = "";
       let task = "";
-
       let volume = "";
-
       let catatan = "";
-
       let gps = "";
 
-      if (!rawDesc) return { worker, area, task, volume, catatan, gps };
+      if (!rawDesc) return { worker, area, lantai, kamar, displayArea, shortArea, task, volume, catatan, gps };
 
-      let text = String(rawDesc);
+      let text = String(rawDesc).replace(/^[🔨🔧🛠️\s]+/, "").trim();
 
-      // 1. Extract GPS: " | 📍 GPS: -7.123, 112.456"
-
+      // 1. Extract GPS
       const gpsMatch = text.match(/\|\s*(?:📍\s*)?GPS:\s*([^|\n]+)/i);
-
       if (gpsMatch) {
-
         gps = gpsMatch[1].trim();
-
         text = text.replace(gpsMatch[0], "").trim();
-
       }
 
-      // 2. Extract Catatan: " | Ket: ..."
-
+      // 2. Extract Catatan
       const ketMatch = text.match(/\|\s*Ket:\s*([^|\n]+)/i);
-
       if (ketMatch) {
-
         catatan = ketMatch[1].trim();
-
         text = text.replace(ketMatch[0], "").trim();
-
       }
 
-      // 3. Extract Volume: "(+21)" or "(+21m²)" or "(+Update)"
-
+      // 3. Extract Volume: (+21) atau (+14m²) atau (+100%)
       const volMatch = text.match(/\(\+([^)]+)\)/);
-
       if (volMatch) {
-
         volume = volMatch[1].trim();
-
         text = text.replace(volMatch[0], "").trim();
-
       }
 
-      // 4. Extract Session & Worker & Area from bracket tags [...]
-
+      // 4. Extract Brackets [...]
       const bracketRegex = /\[([^\]]+)\]/g;
-
       let match;
-
       const brackets = [];
-
       while ((match = bracketRegex.exec(text)) !== null) {
-
         brackets.push(match[1].trim());
-
       }
 
       if (brackets.length > 0) {
-
         text = text.replace(/\[[^\]]+\]/g, "").trim();
-
         brackets.forEach(b => {
-
           const bLower = b.toLowerCase();
-
           if (b.includes("PAGI") || b.includes("SIANG") || b.includes("SORE") || b.includes("LEMBUR") || b.includes("🌅") || b.includes("☀️") || b.includes("🌆") || b.includes("🌙") || b.includes("🌌")) {
-
             // Sesi SOP
-
           } else if (bLower.startsWith("area:") || bLower.startsWith("area ") || bLower.includes("lantai") || bLower.includes("kamar") || bLower.includes("room") || bLower.includes("ruang") || bLower.includes("zona") || bLower.includes("blok")) {
-
             area = b.replace(/^area:\s*/i, "").trim();
-
           } else if (worker === "Pekerja Lapangan") {
-
             worker = b;
-
           } else if (!area) {
-
             area = b;
-
           }
-
         });
-
       }
 
-      // 5. Area prefix jika tidak memakai bracket
-
+      // 5. Area prefix jika tanpa bracket
       if (!area) {
-
         const areaPrefixMatch = text.match(/^(Lantai\s*[^-\n]+-\s*Kamar\s*\d+|Kamar\s*\d+|Room\s*\d+|Ruang\s*[^-\n]+)\s*[-:•]\s*/i);
-
         if (areaPrefixMatch) {
-
           area = areaPrefixMatch[1].trim();
-
           text = text.slice(areaPrefixMatch[0].length).trim();
-
         }
-
       }
 
-      // 6. Catatan pembatas dash " - "
+      // 6. Inferensi nomor kamar 3-4 digit dari teks (misal 7022, 504) jika area belum ada
+      if (!area) {
+        const roomDigitMatch = text.match(/\b(\d{3,4})\b/);
+        if (roomDigitMatch) {
+          const rNum = roomDigitMatch[1];
+          const fNum = rNum.length === 4 ? rNum.slice(0, 1) : rNum.slice(0, 1);
+          area = `Lantai ${fNum} - Kamar ${rNum}`;
+        }
+      }
 
-      if (!catatan) {
+      // 7. Ekstraksi terstruktur: Lantai dan Kamar
+      if (area) {
+        const lMatch = area.match(/(?:Lantai|Lt\.?)\s*([0-9A-Za-z]+)/i);
+        const kMatch = area.match(/(?:Kamar|Room|Rm\.?)\s*([0-9A-Za-z]+)/i);
+        if (lMatch) lantai = `Lantai ${lMatch[1]}`;
+        if (kMatch) kamar = `Kamar ${kMatch[1]}`;
 
-        const dashIndex = text.indexOf(" - ");
-
-        if (dashIndex !== -1) {
-
-          catatan = text.substring(dashIndex + 3).trim();
-
-          task = text.substring(0, dashIndex).trim();
-
-        } else {
-
-          task = text.trim();
-
+        if (!lantai && kamar) {
+          const numOnly = kamar.replace(/\D/g, "");
+          if (numOnly.length >= 3) {
+            lantai = `Lantai ${numOnly[0]}`;
+          }
         }
 
+        if (lantai && kamar) {
+          displayArea = `🏢 ${lantai} • 🚪 ${kamar}`;
+          shortArea = `${lantai.replace(/lantai/i, "Lt.")} - ${kamar.replace(/kamar/i, "Rm.")}`;
+        } else if (lantai) {
+          displayArea = `🏢 ${lantai}`;
+          shortArea = lantai;
+        } else if (kamar) {
+          displayArea = `🚪 ${kamar}`;
+          shortArea = kamar;
+        } else {
+          displayArea = `📍 ${area}`;
+          shortArea = area;
+        }
+      }
+
+      // 8. Catatan dash " - "
+      if (!catatan) {
+        const dashIndex = text.indexOf(" - ");
+        if (dashIndex !== -1) {
+          catatan = text.substring(dashIndex + 3).trim();
+          task = text.substring(0, dashIndex).trim();
+        } else {
+          task = text.trim();
+        }
       } else {
-
         task = text.trim();
-
       }
 
       if (!task) task = "Pekerjaan Lapangan";
-
       if (!area) area = "Area Umum";
 
-      return { worker, area, task, volume, catatan, gps };
-
+      return { worker, area, lantai, kamar, displayArea, shortArea, task, volume, catatan, gps };
     }
 
     async function fetchGroupedMedia(fallbackListFoto, mediaPerTugas) {
@@ -2561,6 +2530,16 @@
           tanggal: log.tanggal || "--",
 
           worker: parsed.worker,
+
+          area: parsed.area,
+
+          lantai: parsed.lantai,
+
+          kamar: parsed.kamar,
+
+          displayArea: parsed.displayArea,
+
+          shortArea: parsed.shortArea,
 
           volume: parsed.volume,
 
@@ -2908,6 +2887,8 @@
 
                   <span class="text-slate-400">•</span>
 
+                  ${rep.displayArea ? `<span class="bg-indigo-100 text-indigo-900 text-[10px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 border border-indigo-200"><i class="fa-solid fa-hotel text-indigo-600"></i> ${rep.displayArea}</span>` : ''}
+                  <span class="text-slate-400">•</span>
                   <span class="text-slate-600 font-medium text-[11px]"><i class="fa-regular fa-clock mr-1 text-slate-400"></i>${rep.tanggal}</span>
 
                 </div>
@@ -2933,6 +2914,13 @@
               <div onclick="openLightbox('${photoUrl}')" class="group relative rounded-xl overflow-hidden bg-slate-900 border border-slate-200 aspect-square cursor-pointer hover:shadow-md transition">
 
                 <img src="${photoUrl}" alt="Foto ${pIdx+1}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+
+                <!-- OVERLAY BADGE LANTAI & KAMAR LANGSUNG DI FOTO -->
+                ${(rep.shortArea || rep.area && rep.area !== "Area Umum") ? `
+                  <div class="absolute top-1.5 left-1.5 bg-slate-950/85 backdrop-blur-xs text-amber-300 text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-md border border-white/20 shadow-md flex items-center gap-1 z-10 pointer-events-none max-w-[92%] truncate">
+                    <i class="fa-solid fa-hotel text-[9px]"></i> <span>${rep.shortArea || rep.area}</span>
+                  </div>
+                ` : ''}
 
                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-2 opacity-90 group-hover:opacity-100">
 
@@ -5722,31 +5710,45 @@
     // =========================================================================
 
     // FITUR PETA DENAH AREA & RUANGAN INTERAKTIF PER LANTAI (WEB PORTAL)
-
     // =========================================================================
 
     let floorDataList = [];
-    let activeFloorIndex = 0;
+    let activeFloorIndex = 'ALL'; // Default: Tampilkan semua map dalam satu laman
     let selectedZoneData = null;
     let activeTaskLayer = 'ALL'; // 'ALL' atau nama tahapan pekerjaan spesifik
 
-    async function fetchFloorMapData() {
+    async function fetchFloorMapData(silent = false) {
       try {
+        if (!silent) {
+          const switcher = document.getElementById("floorSwitcherContainer");
+          if (switcher && floorDataList.length === 0) {
+            switcher.innerHTML = `<span class="text-xs text-slate-400 italic"><i class="fa-solid fa-spinner fa-spin mr-1"></i> Memuat data denah...</span>`;
+          }
+        }
         const url = `${getApiUrl()}?action=getDenahFloorMapDetail&proyek=${encodeURIComponent(currentProject)}&api=true`;
         const res = await fetch(url);
         const json = await res.json();
         const data = json.data || json.result || {};
         floorDataList = data.floors || [];
 
+        // Simpan ke cache lokal
+        try {
+          localStorage.setItem("nafindo_cache_floors_" + currentProject, JSON.stringify(floorDataList));
+        } catch (e) {}
+
         renderFloorSwitcher();
         if (floorDataList.length > 0) {
-          renderFloorMap(activeFloorIndex);
+          if (activeFloorIndex === 'ALL') {
+            renderAllFloorsOverview();
+          } else {
+            renderFloorMap(activeFloorIndex);
+          }
         } else {
           showEmptyFloorPlaceholder();
         }
       } catch (err) {
         console.error("Gagal memuat denah lantai:", err);
-        showEmptyFloorPlaceholder();
+        if (floorDataList.length === 0) showEmptyFloorPlaceholder();
       }
     }
 
@@ -5759,22 +5761,184 @@
         return;
       }
 
+      // 1. Tombol Overview: Semua Lantai (Default)
+      const allBtn = document.createElement("button");
+      const isAll = (activeFloorIndex === 'ALL');
+      allBtn.className = `py-1.5 px-3.5 rounded-xl text-xs font-black transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+        isAll 
+          ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-300' 
+          : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+      }`;
+      allBtn.innerHTML = `<i class="fa-solid fa-layer-group"></i> 🏢 Semua Lantai (Overview)`;
+      allBtn.onclick = () => focusSingleFloor('ALL');
+      container.appendChild(allBtn);
+
+      // 2. Tombol Tiap Lantai
       floorDataList.forEach((floor, idx) => {
         const btn = document.createElement("button");
-        const isActive = idx === activeFloorIndex;
-        btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap ${
+        const isActive = (activeFloorIndex === idx);
+        btn.className = `py-1.5 px-3 rounded-xl text-xs font-bold transition whitespace-nowrap flex items-center gap-1 cursor-pointer ${
           isActive 
-            ? 'bg-indigo-600 text-white shadow-sm' 
+            ? 'bg-indigo-600 text-white shadow-md ring-2 ring-indigo-300' 
             : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
         }`;
-        btn.textContent = floor.lantai || `Lantai ${idx + 1}`;
-        btn.onclick = () => {
-          activeFloorIndex = idx;
-          activeTaskLayer = 'ALL'; // Reset ke ringkasan saat pindah lantai
-          renderFloorSwitcher();
-          renderFloorMap(idx);
-        };
+        btn.innerHTML = `<span>${floor.lantai || 'Lantai ' + (idx + 1)}</span>`;
+        btn.onclick = () => focusSingleFloor(idx);
         container.appendChild(btn);
+      });
+    }
+
+    function focusSingleFloor(floorIdx) {
+      activeFloorIndex = floorIdx;
+      activeTaskLayer = 'ALL';
+      renderFloorSwitcher();
+
+      const allContainer = document.getElementById("allFloorsContainer");
+      const singleContainer = document.getElementById("singleFloorContainer");
+      const placeholder = document.getElementById("floorMapPlaceholder");
+
+      if (floorIdx === 'ALL') {
+        if (singleContainer) singleContainer.classList.add("hidden");
+        if (placeholder) placeholder.classList.add("hidden");
+        if (allContainer) allContainer.classList.remove("hidden");
+        renderAllFloorsOverview();
+      } else {
+        if (allContainer) allContainer.classList.add("hidden");
+        if (singleContainer) singleContainer.classList.remove("hidden");
+        const floor = floorDataList[floorIdx];
+        const badge = document.getElementById("singleFloorTitleBadge");
+        if (badge && floor) {
+          badge.textContent = `📍 Menampilkan: ${floor.lantai || 'Lantai ' + (floorIdx + 1)}`;
+        }
+        renderFloorMap(floorIdx);
+      }
+    }
+
+    // TAMPILAN AWAL: Render seluruh map lantai dalam satu laman agar sekilas terlihat semua lantai
+    function renderAllFloorsOverview() {
+      const container = document.getElementById("allFloorsContainer");
+      if (!container) return;
+      container.innerHTML = "";
+
+      if (!floorDataList || floorDataList.length === 0) {
+        showEmptyFloorPlaceholder();
+        return;
+      }
+
+      floorDataList.forEach((floor, fIdx) => {
+        const zones = floor.zones || [];
+        const total = zones.length;
+        const done = zones.filter(z => (z.progres || 0) >= 100 || (z.status || '').toUpperCase() === 'SELESAI').length;
+        const inProg = zones.filter(z => (z.progres || 0) > 0 && (z.progres || 0) < 100).length;
+        const complaint = zones.filter(z => (z.status || '').toUpperCase() === 'KOMPLAIN').length;
+        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+        let badgeClass = "bg-slate-100 text-slate-700 border-slate-300";
+        let badgeText = "⚪ Belum Dikerjakan";
+        if (complaint > 0) {
+          badgeClass = "bg-rose-100 text-rose-800 border-rose-300 animate-pulse";
+          badgeText = `🔴 ${complaint} Komplain`;
+        } else if (total > 0 && done === total) {
+          badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
+          badgeText = "🟢 100% Selesai Tuntas";
+        } else if (done > 0 || inProg > 0) {
+          badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
+          badgeText = `🟡 Sedang Dikerjakan (${pct}%)`;
+        }
+
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-md transition overflow-hidden space-y-0";
+
+        // SVG layer untuk preview
+        let zonesSvg = "";
+        let labelsHtml = "";
+        if (zones.length > 0) {
+          zonesSvg = zones.map((zone, zIdx) => {
+            const p = Number(zone.progres) || 0;
+            const st = (zone.status || '').toUpperCase();
+            let fill = "rgba(148, 163, 184, 0.4)";
+            let stroke = "#64748b";
+            if (st === "KOMPLAIN") { fill = "rgba(244, 63, 94, 0.6)"; stroke = "#e11d48"; }
+            else if (st === "SELESAI" || p >= 100) { fill = "rgba(16, 185, 129, 0.6)"; stroke = "#059669"; }
+            else if (st === "PROSES" || p > 0) { fill = "rgba(245, 158, 11, 0.6)"; stroke = "#d97706"; }
+
+            if (zone.points && Array.isArray(zone.points) && zone.points.length >= 3) {
+              const ptsStr = zone.points.map(pt => `${pt.x},${pt.y}`).join(" ");
+              return `<polygon points="${ptsStr}" fill="${fill}" stroke="${stroke}" stroke-width="0.8" />`;
+            } else if (zone.w > 0 && zone.h > 0) {
+              return `<rect x="${zone.x}" y="${zone.y}" width="${zone.w}" height="${zone.h}" rx="1" fill="${fill}" stroke="${stroke}" stroke-width="0.8" />`;
+            }
+            return "";
+          }).join("");
+
+          zones.forEach(zone => {
+            let cx = zone.x + (zone.w || 10) / 2;
+            let cy = zone.y + (zone.h || 10) / 2;
+            if (zone.points && Array.isArray(zone.points) && zone.points.length > 0) {
+              cx = zone.points.reduce((acc, p) => acc + Number(p.x), 0) / zone.points.length;
+              cy = zone.points.reduce((acc, p) => acc + Number(p.y), 0) / zone.points.length;
+            }
+            const p = Number(zone.progres) || 0;
+            const st = (zone.status || '').toUpperCase();
+            let bg = (st === "KOMPLAIN") ? "bg-rose-600" : (p >= 100 || st === "SELESAI") ? "bg-emerald-600" : (p > 0) ? "bg-amber-600" : "bg-slate-700";
+            const dispName = cleanSubAreaName(zone.nama || "Ruang", floor.lantai);
+            labelsHtml += `
+              <div class="absolute -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none text-center" style="left: ${cx}%; top: ${cy}%;">
+                <span class="${bg} text-white font-black text-[8px] sm:text-[9px] px-1 py-0.2 rounded shadow-2xs">${dispName}</span>
+              </div>
+            `;
+          });
+        }
+
+        card.innerHTML = `
+          <div class="p-3.5 sm:p-4 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-sm shadow-xs shrink-0">
+                ${fIdx + 1}
+              </div>
+              <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${floor.lantai || 'Lantai ' + (fIdx + 1)}</h3>
+                <p class="text-[11px] text-slate-500 font-medium">${done} dari ${total} Ruangan Tuntas (${pct}%)</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold px-2.5 py-1 rounded-full border ${badgeClass}">
+                ${badgeText}
+              </span>
+              <button onclick="focusSingleFloor(${fIdx})" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow-xs transition cursor-pointer">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> Fokus Lantai Ini
+              </button>
+            </div>
+          </div>
+
+          <!-- Mini Progres Bar Lantai -->
+          <div class="w-full bg-slate-100 h-1.5">
+            <div class="bg-indigo-600 h-1.5 transition-all duration-500" style="width: ${pct}%"></div>
+          </div>
+
+          <!-- Denah Map Visual -->
+          <div class="p-3 sm:p-4 bg-slate-100/60 flex items-center justify-center">
+            ${floor.imageUrl ? `
+              <div class="relative w-full max-w-4xl bg-white rounded-xl overflow-hidden border border-slate-200 shadow-inner cursor-pointer" onclick="focusSingleFloor(${fIdx})">
+                <img src="${floor.imageUrl}" alt="${floor.lantai}" class="w-full h-auto block select-none pointer-events-none" />
+                <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  ${zonesSvg}
+                </svg>
+                <div class="absolute inset-0 pointer-events-none">
+                  ${labelsHtml}
+                </div>
+                <div class="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-bold px-2.5 py-1 rounded-lg flex items-center gap-1 pointer-events-none">
+                  <i class="fa-solid fa-hand-pointer text-amber-300"></i> Ketuk untuk Rincian Tugas Lantai Ini
+                </div>
+              </div>
+            ` : `
+              <div class="text-center py-6 text-slate-400 text-xs">
+                <p>Denah visual belum diunggah untuk lantai ini</p>
+              </div>
+            `}
+          </div>
+        `;
+        container.appendChild(card);
       });
     }
 
@@ -5796,7 +5960,6 @@
       return s;
     }
 
-    // Helper: Menilai apakah suatu tugas tergolong Kontrol Kualitas & Persiapan
     function isQualityTask(taskName) {
       const n = (taskName || '').toLowerCase();
       return n.includes('ciping') || n.includes('chipping') || n.includes('grinding') ||
@@ -5806,7 +5969,6 @@
              n.includes('ceking') || n.includes('inspeksi') || n.includes('proteksi');
     }
 
-    // Ekstraksi tahapan-tahapan pekerjaan unik yang ada di lantai aktif
     function getFloorTaskStages(zones) {
       const stageMap = new Map();
       (zones || []).forEach(z => {
@@ -5835,7 +5997,6 @@
       return Array.from(stageMap.values());
     }
 
-    // Cari status tahapan tertentu di dalam ruangan
     function getStageDataForZone(zone, stageName) {
       if (stageName === 'ALL') {
         const p = Number(zone.progres) || 0;
@@ -5859,83 +6020,20 @@
       return { hasTask: false, progres: 0, status: 'NONE', taskName: stageName };
     }
 
-    // Render Bar Volume & Tracker Kesiapan Opname
     function renderVolumeTracker(zones, floorName, stages) {
       const grid = document.getElementById("volumeTrackerGrid");
-      const badge = document.getElementById("floorVolumeBadge");
-      if (!grid || !badge) return;
-
-      badge.innerHTML = `<i class="fa-solid fa-hotel mr-1"></i> ${zones.length} Total Area / Ruangan`;
-      grid.innerHTML = "";
-
-      if (stages.length === 0) {
-        // Fallback jika belum ada rincian tugas spesifik di ruangan
-        const total = zones.length;
-        const done = zones.filter(z => (z.progres || 0) >= 100 || (z.status || '').toUpperCase() === 'SELESAI').length;
-        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-
-        grid.innerHTML = `
-          <div class="col-span-full p-3 bg-white/10 rounded-xl border border-white/10 flex items-center justify-between">
-            <div>
-              <div class="text-xs font-bold text-indigo-200">Realisasi Fisik Keseluruhan Lantai:</div>
-              <div class="text-lg font-black text-white">${done} dari ${total} Ruangan Selesai (${pct}%)</div>
-            </div>
-            <div class="text-right">
-              <span class="text-xs px-2 py-1 rounded bg-emerald-500/80 text-white font-extrabold">${pct}% Siap Opname</span>
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      stages.forEach(stg => {
-        const pct = stg.totalCount > 0 ? Math.round((stg.doneCount / stg.totalCount) * 100) : 0;
-        const isActive = activeTaskLayer === stg.name;
-        const isComplete = stg.doneCount === stg.totalCount && stg.totalCount > 0;
-
-        const card = document.createElement("div");
-        card.className = `cursor-pointer p-3 rounded-xl border transition-all ${
-          isActive 
-            ? 'bg-indigo-600 text-white border-indigo-400 shadow-lg scale-102 ring-2 ring-indigo-300' 
-            : 'bg-white/10 hover:bg-white/15 text-slate-100 border-white/10'
-        }`;
-        
-        card.onclick = () => {
-          selectTaskLayer(isActive ? 'ALL' : stg.name);
-        };
-
-        const tagText = stg.isQuality ? '🛡️ Kontrol Kualitas' : '💰 Volume Opname';
-        const tagClass = stg.isQuality ? 'text-amber-300' : 'text-emerald-300';
-        const statusLabel = isComplete ? '✅ 100% Tuntas' : (stg.complaintCount > 0 ? `🔴 ${stg.complaintCount} Komplain` : `${stg.doneCount}/${stg.totalCount} Selesai`);
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between text-[11px] mb-1">
-            <span class="font-extrabold truncate max-w-[130px]" title="${stg.name}">${stg.name}</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded font-black ${isComplete ? 'bg-emerald-500 text-white' : 'bg-white/20 text-white'}">${pct}%</span>
-          </div>
-          <div class="text-base sm:text-lg font-black tracking-tight">${stg.doneCount} / ${stg.totalCount} <span class="text-xs font-normal opacity-80">Ruangan</span></div>
-          <div class="w-full bg-black/30 h-1.5 rounded-full mt-2 overflow-hidden">
-            <div class="${isComplete ? 'bg-emerald-400' : (stg.isQuality ? 'bg-amber-400' : 'bg-indigo-400')} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
-          </div>
-          <div class="text-[10px] mt-1.5 flex items-center justify-between opacity-90">
-            <span class="${tagClass} font-bold">${tagText}</span>
-            <span class="font-semibold">${statusLabel}</span>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
+      if (!grid) return;
+      // Tracker volume disembunyikan sesuai permintaan klien
     }
 
-    // Render Tombol Switcher Layer Tahapan
     function renderTaskLayerFilter(stages) {
       const container = document.getElementById("taskLayerFilterContainer");
       if (!container) return;
       container.innerHTML = "";
 
-      // Tombol 1: Semua Ringkasan
       const allBtn = document.createElement("button");
       const isAll = activeTaskLayer === 'ALL';
-      allBtn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+      allBtn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
         isAll ? 'bg-slate-900 text-white shadow-sm' : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
       }`;
       allBtn.innerHTML = `<i class="fa-solid fa-globe"></i> <span>Semua Tugas</span>`;
@@ -5945,7 +6043,7 @@
       stages.forEach(stg => {
         const btn = document.createElement("button");
         const isActive = activeTaskLayer === stg.name;
-        btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 ${
+        btn.className = `py-1 px-3 rounded-lg text-xs font-bold transition whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
           isActive ? 'bg-indigo-600 text-white shadow-sm' : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
         }`;
         const icon = stg.isQuality ? 'fa-screwdriver-wrench text-amber-500' : 'fa-check-double text-emerald-500';
@@ -5957,9 +6055,12 @@
 
     function selectTaskLayer(stageName) {
       activeTaskLayer = stageName;
-      renderFloorMap(activeFloorIndex);
+      if (typeof activeFloorIndex === 'number') {
+        renderFloorMap(activeFloorIndex);
+      }
     }
 
+    // MODE FOKUS SATU LANTAI DETAIL (Misal ketika klik Lantai 5)
     function renderFloorMap(floorIdx) {
       const floor = floorDataList[floorIdx];
       const imgEl = document.getElementById("floorMapImage");
@@ -5972,19 +6073,17 @@
         return;
       }
 
-      placeholderEl.classList.add("hidden");
-      wrapperEl.classList.remove("hidden");
-      zonesLayer.innerHTML = "";
-      imgEl.src = floor.imageUrl;
+      if (placeholderEl) placeholderEl.classList.add("hidden");
+      if (wrapperEl) wrapperEl.classList.remove("hidden");
+      if (zonesLayer) zonesLayer.innerHTML = "";
+      if (imgEl) imgEl.src = floor.imageUrl;
 
       const zones = floor.zones || [];
       const stages = getFloorTaskStages(zones);
 
-      // Render Bar Tracker & Filter Layer
-      renderVolumeTracker(zones, floor.lantai, stages);
       renderTaskLayerFilter(stages);
 
-      // 1. Render Layer SVG untuk Poligon Multi-Titik & Kotak Berdasarkan Layer Aktif
+      // Render Layer SVG untuk Poligon Multi-Titik & Kotak Berdasarkan Layer Aktif
       const svgElements = zones.map((zone, zIdx) => {
         const stageData = getStageDataForZone(zone, activeTaskLayer);
         let fillColor = "rgba(148, 163, 184, 0.4)";
@@ -6013,83 +6112,85 @@
         return "";
       }).join("");
 
-      zonesLayer.innerHTML = `
-        <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-          ${svgElements}
-        </svg>
-      `;
-
-      // 2. Render Label Nama & Persentase Sesuai Layer Aktif di Titik Tengah Tiap Ruangan
-      zones.forEach((zone, zIdx) => {
-        let cx = zone.x + (zone.w || 10) / 2;
-        let cy = zone.y + (zone.h || 10) / 2;
-        if (zone.points && Array.isArray(zone.points) && zone.points.length > 0) {
-          cx = zone.points.reduce((acc, p) => acc + Number(p.x), 0) / zone.points.length;
-          cy = zone.points.reduce((acc, p) => acc + Number(p.y), 0) / zone.points.length;
-        }
-
-        const stageData = getStageDataForZone(zone, activeTaskLayer);
-        let badgeColor = "bg-slate-700";
-        let statusBadgeText = `${stageData.progres}%`;
-
-        if (!stageData.hasTask) {
-          badgeColor = "bg-slate-400 opacity-60";
-          statusBadgeText = "N/A";
-        } else if (stageData.status === "KOMPLAIN") {
-          badgeColor = "bg-rose-600 animate-pulse";
-          statusBadgeText = "Komplain";
-        } else if (stageData.status === "SELESAI" || stageData.progres >= 100) {
-          badgeColor = "bg-emerald-600";
-          statusBadgeText = "100%";
-        } else if (stageData.status === "PROSES" || stageData.progres > 0) {
-          badgeColor = "bg-amber-600";
-          statusBadgeText = `${stageData.progres}%`;
-        } else {
-          badgeColor = "bg-slate-600";
-          statusBadgeText = "0%";
-        }
-
-        const displaySubArea = cleanSubAreaName(zone.nama || 'Ruang', floor.lantai);
-        const layerInfoTag = activeTaskLayer !== 'ALL' ? `<span class="text-[7px] text-amber-200 font-bold uppercase truncate max-w-[80px]">${activeTaskLayer}</span>` : '';
-
-        const badge = document.createElement("div");
-        badge.className = "absolute cursor-pointer flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none group pointer-events-auto z-10";
-        badge.style.left = `${cx}%`;
-        badge.style.top = `${cy}%`;
-
-        badge.innerHTML = `
-          <div class="flex flex-col items-center ${badgeColor} px-1.5 py-0.5 rounded shadow border border-white/60 group-hover:scale-105 transition-transform text-white">
-            <span class="text-[9px] sm:text-[10px] font-extrabold whitespace-nowrap leading-tight">
-              ${displaySubArea}
-            </span>
-            ${layerInfoTag}
-          </div>
-          <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/70 px-1 rounded mt-0.5 shadow-sm">
-            ${statusBadgeText}
-          </span>
+      if (zonesLayer) {
+        zonesLayer.innerHTML = `
+          <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+            ${svgElements}
+          </svg>
         `;
-        badge.onclick = (e) => {
-          e.stopPropagation();
-          openZoneDetailModal(zone, floor.lantai);
-        };
-        zonesLayer.appendChild(badge);
-      });
 
-      // Hubungkan klik pada bidang SVG polygon/rect
-      zonesLayer.querySelectorAll("polygon, rect").forEach(el => {
-        el.addEventListener("click", (e) => {
-          e.stopPropagation();
-          const idx = Number(el.getAttribute("data-zone-idx"));
-          if (!isNaN(idx) && zones[idx]) {
-            openZoneDetailModal(zones[idx], floor.lantai);
+        zones.forEach((zone, zIdx) => {
+          let cx = zone.x + (zone.w || 10) / 2;
+          let cy = zone.y + (zone.h || 10) / 2;
+          if (zone.points && Array.isArray(zone.points) && zone.points.length > 0) {
+            cx = zone.points.reduce((acc, p) => acc + Number(p.x), 0) / zone.points.length;
+            cy = zone.points.reduce((acc, p) => acc + Number(p.y), 0) / zone.points.length;
           }
+
+          const stageData = getStageDataForZone(zone, activeTaskLayer);
+          let badgeColor = "bg-slate-700";
+          let statusBadgeText = `${stageData.progres}%`;
+
+          if (!stageData.hasTask) {
+            badgeColor = "bg-slate-400 opacity-60";
+            statusBadgeText = "N/A";
+          } else if (stageData.status === "KOMPLAIN") {
+            badgeColor = "bg-rose-600 animate-pulse";
+            statusBadgeText = "Komplain";
+          } else if (stageData.status === "SELESAI" || stageData.progres >= 100) {
+            badgeColor = "bg-emerald-600";
+            statusBadgeText = "100%";
+          } else if (stageData.status === "PROSES" || stageData.progres > 0) {
+            badgeColor = "bg-amber-600";
+            statusBadgeText = `${stageData.progres}%`;
+          } else {
+            badgeColor = "bg-slate-600";
+            statusBadgeText = "0%";
+          }
+
+          const displaySubArea = cleanSubAreaName(zone.nama || 'Ruang', floor.lantai);
+          const layerInfoTag = activeTaskLayer !== 'ALL' ? `<span class="text-[7px] text-amber-200 font-bold uppercase truncate max-w-[80px]">${activeTaskLayer}</span>` : '';
+
+          const badge = document.createElement("div");
+          badge.className = "absolute cursor-pointer flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 select-none group pointer-events-auto z-10";
+          badge.style.left = `${cx}%`;
+          badge.style.top = `${cy}%`;
+
+          badge.innerHTML = `
+            <div class="flex flex-col items-center ${badgeColor} px-1.5 py-0.5 rounded shadow border border-white/60 group-hover:scale-105 transition-transform text-white">
+              <span class="text-[9px] sm:text-[10px] font-extrabold whitespace-nowrap leading-tight">
+                ${displaySubArea}
+              </span>
+              ${layerInfoTag}
+            </div>
+            <span class="text-[8px] sm:text-[9px] font-black text-white bg-black/70 px-1 rounded mt-0.5 shadow-sm">
+              ${statusBadgeText}
+            </span>
+          `;
+          badge.onclick = (e) => {
+            e.stopPropagation();
+            openZoneDetailModal(zone, floor.lantai);
+          };
+          zonesLayer.appendChild(badge);
         });
-      });
+
+        zonesLayer.querySelectorAll("polygon, rect").forEach(el => {
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const idx = Number(el.getAttribute("data-zone-idx"));
+            if (!isNaN(idx) && zones[idx]) {
+              openZoneDetailModal(zones[idx], floor.lantai);
+            }
+          });
+        });
+      }
     }
 
     function showEmptyFloorPlaceholder() {
-      document.getElementById("floorMapWrapper").classList.add("hidden");
-      document.getElementById("floorMapPlaceholder").classList.remove("hidden");
+      const w = document.getElementById("floorMapWrapper");
+      const p = document.getElementById("floorMapPlaceholder");
+      if (w) w.classList.add("hidden");
+      if (p) p.classList.remove("hidden");
     }
 
     function openZoneDetailModal(zone, floorName) {
