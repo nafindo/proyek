@@ -200,6 +200,11 @@
 
           </div>
 
+          <button id="btnSwitchProjectHeader" onclick="switchProjectPrompt()" title="Ganti Proyek Lain" class="hidden bg-white/15 hover:bg-white/25 border border-white/25 px-3 py-2 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-sm active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-layer-group text-amber-300"></i>
+            <span class="inline">Ganti Proyek</span>
+          </button>
+
           <button id="btnCopyShareHeader" onclick="copyProjectShareLink()" title="Salin Tautan Khusus Proyek Ini" class="hidden bg-white/15 hover:bg-white/25 border border-white/25 px-3.5 py-2 rounded-xl text-xs font-semibold text-white transition flex items-center space-x-1.5 shadow-sm active:scale-95">
 
             <i class="fa-solid fa-share-nodes text-blue-300"></i>
@@ -296,6 +301,61 @@
 
         </p>
 
+      </div>
+
+      <!-- Akses Cepat / Pilih Proyek Langsung (Solusi Browser HP) -->
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-2xl p-4 sm:p-5 text-left space-y-3 shadow-sm">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-extrabold text-blue-900 flex items-center gap-1.5">
+            <i class="fa-solid fa-building-circle-check text-blue-600 text-sm"></i> Pilih Proyek Anda:
+          </p>
+          <span class="text-[10px] font-bold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-full">1-Klik Buka</span>
+        </div>
+        
+        <!-- Tombol Cepat Proyek Aktif -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <button type="button" onclick="selectProject('Hotel Horison')" class="w-full text-left bg-white hover:bg-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 rounded-xl p-2.5 transition group shadow-xs cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏢 Hotel Horison</span>
+              <i class="fa-solid fa-arrow-right text-[11px] text-blue-500 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-[10px] text-slate-500 group-hover:text-blue-100 mt-0.5">Renovasi Kamar & Lantai SPC</p>
+          </button>
+          
+          <button type="button" onclick="selectProject('Hotel Pulau Intan Solo')" class="w-full text-left bg-white hover:bg-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 rounded-xl p-2.5 transition group shadow-xs cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏨 Hotel Pulau Intan Solo</span>
+              <i class="fa-solid fa-arrow-right text-[11px] text-blue-500 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-[10px] text-slate-500 group-hover:text-blue-100 mt-0.5">Pemantauan Pekerjaan</p>
+          </button>
+
+          <button type="button" onclick="selectProject('Gudang Tritan Point Sedati')" class="w-full text-left bg-white hover:bg-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 rounded-xl p-2.5 transition group shadow-xs cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏭 Gudang Tritan Point</span>
+              <i class="fa-solid fa-arrow-right text-[11px] text-blue-500 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-[10px] text-slate-500 group-hover:text-blue-100 mt-0.5">Sedati Sidoarjo</p>
+          </button>
+
+          <button type="button" onclick="selectProject('Lab Esse Pasuruan')" class="w-full text-left bg-white hover:bg-blue-600 hover:text-white border border-blue-200 hover:border-blue-600 rounded-xl p-2.5 transition group shadow-xs cursor-pointer">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-slate-800 group-hover:text-white">🧪 Lab Esse Pasuruan</span>
+              <i class="fa-solid fa-arrow-right text-[11px] text-blue-500 group-hover:text-white transition"></i>
+            </div>
+            <p class="text-[10px] text-slate-500 group-hover:text-blue-100 mt-0.5">Pekerjaan Laboratorium</p>
+          </button>
+        </div>
+
+        <!-- Dropdown Semua Proyek Lainnya -->
+        <div class="pt-1">
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Atau pilih dari seluruh proyek resmi:</label>
+          <div class="flex gap-2">
+            <select id="noProjectSelect" onchange="if(this.value) selectProject(this.value)" class="flex-1 bg-white border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <option value="">-- Sedang memuat daftar proyek... --</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <!-- Panduan Untuk Pemilik Proyek -->
@@ -1604,6 +1664,59 @@
 
   <!-- ========================================================================= -->
 
+  <!-- MODAL: GANTI / PILIH PROYEK CEPAT (HP & DESKTOP) -->
+
+  <!-- ========================================================================= -->
+
+  <div id="projectSelectorModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden" onclick="closeProjectModal()">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in duration-200" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-sm font-bold">
+            <i class="fa-solid fa-layer-group"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-900">Pilih / Ganti Proyek</h3>
+        </div>
+        <button onclick="closeProjectModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <p class="text-xs text-slate-500">Pilih proyek yang ingin Anda pantau dari daftar di bawah ini:</p>
+      
+      <!-- Tombol Cepat Proyek Populer -->
+      <div class="grid grid-cols-1 gap-2">
+        <button type="button" onclick="selectProject('Hotel Horison'); closeProjectModal();" class="text-left bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 hover:border-blue-600 rounded-xl p-2.5 transition flex items-center justify-between group cursor-pointer">
+          <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏢 Hotel Horison</span>
+          <span class="text-[10px] bg-blue-100 text-blue-700 group-hover:bg-blue-500 group-hover:text-white px-2 py-0.5 rounded-md font-semibold">Aktif</span>
+        </button>
+        <button type="button" onclick="selectProject('Hotel Pulau Intan Solo'); closeProjectModal();" class="text-left bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 hover:border-blue-600 rounded-xl p-2.5 transition flex items-center justify-between group cursor-pointer">
+          <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏨 Hotel Pulau Intan Solo</span>
+          <span class="text-[10px] bg-slate-200 text-slate-700 group-hover:bg-blue-500 group-hover:text-white px-2 py-0.5 rounded-md font-semibold">Aktif</span>
+        </button>
+        <button type="button" onclick="selectProject('Gudang Tritan Point Sedati'); closeProjectModal();" class="text-left bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 hover:border-blue-600 rounded-xl p-2.5 transition flex items-center justify-between group cursor-pointer">
+          <span class="text-xs font-bold text-slate-800 group-hover:text-white">🏭 Gudang Tritan Point Sedati</span>
+          <span class="text-[10px] bg-slate-200 text-slate-700 group-hover:bg-blue-500 group-hover:text-white px-2 py-0.5 rounded-md font-semibold">Aktif</span>
+        </button>
+        <button type="button" onclick="selectProject('Lab Esse Pasuruan'); closeProjectModal();" class="text-left bg-slate-50 hover:bg-blue-600 hover:text-white border border-slate-200 hover:border-blue-600 rounded-xl p-2.5 transition flex items-center justify-between group cursor-pointer">
+          <span class="text-xs font-bold text-slate-800 group-hover:text-white">🧪 Lab Esse Pasuruan</span>
+          <span class="text-[10px] bg-slate-200 text-slate-700 group-hover:bg-blue-500 group-hover:text-white px-2 py-0.5 rounded-md font-semibold">Aktif</span>
+        </button>
+      </div>
+
+      <!-- Dropdown Proyek Lainnya -->
+      <div>
+        <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Daftar Lengkap:</label>
+        <select id="modalProjectSelect" onchange="if(this.value){ selectProject(this.value); closeProjectModal(); }" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">-- Sedang memuat proyek... --</option>
+        </select>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="closeProjectModal()" class="text-xs text-slate-500 hover:text-slate-800 px-3 py-1.5 rounded-lg">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+
   <!-- MODAL: PREVIEW FOTO PEKERJAAN / TUGAS LAPANGAN -->
 
   <!-- ========================================================================= -->
@@ -1884,6 +1997,7 @@
     document.addEventListener("DOMContentLoaded", () => {
 
       initProjectFromUrl();
+      loadProjectDropdown();
 
     });
 
@@ -1913,6 +2027,14 @@
 
       }
 
+      // Jika URL tidak membawa parameter ?p=, periksa memori penyimpanan di browser HP
+      if (!projParam || projParam.trim() === "") {
+        const saved = safeGetStorage("nafindo_current_project");
+        if (saved && saved.trim() !== "") {
+          projParam = saved;
+        }
+      }
+
       const dashboardEl = document.getElementById("mainDashboardContent");
 
       const noProjectEl = document.getElementById("noProjectScreen");
@@ -1927,7 +2049,9 @@
 
       const privacyBadge = document.getElementById("headerPrivacyBadge");
 
-      // JIKA TIDAK MEMBAWA LINK PROYEK -> TAMPILKAN WELCOME SCREEN RESMI (TERKUNCI)
+      const btnSwitch = document.getElementById("btnSwitchProjectHeader");
+
+      // JIKA TIDAK MEMBAWA LINK PROYEK -> TAMPILKAN WELCOME SCREEN RESMI (TERKUNCI DENGAN PILIHAN PROYEK)
 
       if (!projParam || projParam.trim() === "") {
 
@@ -1937,46 +2061,98 @@
 
         if (titleEl) titleEl.textContent = "Portal CV. Nafindo Group";
 
-        if (subTitleEl) subTitleEl.textContent = "Sistem Pemantauan Lapangan, Progres Real-Time & Layanan Klien Resmi";
+        if (subTitleEl) subTitleEl.textContent = "Silakan pilih salah satu proyek di bawah ini untuk melihat progres lapangan.";
 
-        if (badgeEl) badgeEl.textContent = "Akses Khusus";
+        if (badgeEl) badgeEl.textContent = "Pilih Proyek";
 
         if (privacyBadge) privacyBadge.textContent = "Portal Resmi";
 
         if (btnShare) btnShare.classList.add("hidden");
 
+        if (btnSwitch) btnSwitch.classList.add("hidden");
+
         return;
 
       }
 
-      // KLIEN MEMBAWA LINK RESMI PROYEK: BUKA DASHBOARD EKSKLUSIF PROYEK INI
+      selectProject(projParam, false);
+    }
 
-      currentProject = decodeURIComponent(projParam).replace(/_/g, " ").replace(/\+/g, " ").trim();
-
+    function selectProject(projectName, updateUrl = true) {
+      if (!projectName) return;
+      currentProject = decodeURIComponent(projectName).replace(/_/g, " ").replace(/\+/g, " ").trim();
       safeSetStorage("nafindo_current_project", currentProject);
 
+      if (updateUrl) {
+        try {
+          const newUrl = `${window.location.origin}${window.location.pathname}?p=${encodeURIComponent(currentProject.replace(/\s+/g, '_'))}`;
+          window.history.pushState({ project: currentProject }, "", newUrl);
+        } catch(e) {}
+      }
+
+      const dashboardEl = document.getElementById("mainDashboardContent");
+      const noProjectEl = document.getElementById("noProjectScreen");
+      const titleEl = document.getElementById("projectNameHeading");
+      const subTitleEl = document.getElementById("projectSubtitle");
+      const badgeEl = document.getElementById("projectStatusBadge");
+      const btnShare = document.getElementById("btnCopyShareHeader");
+      const privacyBadge = document.getElementById("headerPrivacyBadge");
+      const btnSwitch = document.getElementById("btnSwitchProjectHeader");
+
       if (noProjectEl) noProjectEl.classList.add("hidden");
-
       if (dashboardEl) dashboardEl.classList.remove("hidden");
-
       if (titleEl) titleEl.textContent = currentProject;
-
       if (subTitleEl) subTitleEl.textContent = "Data progres dan laporan lapangan khusus proyek Anda secara real-time.";
-
       if (badgeEl) badgeEl.textContent = "Sedang Berjalan";
-
       if (privacyBadge) privacyBadge.textContent = "Tautan Privat Klien";
-
       if (btnShare) btnShare.classList.remove("hidden");
+      if (btnSwitch) btnSwitch.classList.remove("hidden");
 
       // Tampilkan indikator loading di layar HP agar user tahu data sedang dimuat
-
       showLoadingState();
 
       // Ambil data progres khusus proyek ini
-
       fetchProjectData();
+    }
 
+    function switchProjectPrompt() {
+      const modal = document.getElementById("projectSelectorModal");
+      if (modal) {
+        modal.classList.remove("hidden");
+        loadProjectDropdown();
+      } else {
+        const p = prompt("Masukkan nama proyek:", currentProject);
+        if (p && p.trim()) selectProject(p.trim(), true);
+      }
+    }
+
+    function closeProjectModal() {
+      const modal = document.getElementById("projectSelectorModal");
+      if (modal) modal.classList.add("hidden");
+    }
+
+    async function loadProjectDropdown() {
+      try {
+        const apiUrl = `${getApiUrl()}?action=getProjects&api=true`;
+        const res = await fetch(apiUrl);
+        const json = await res.json();
+        const list = json.data || json.result || [];
+        if (Array.isArray(list) && list.length > 0) {
+          const selects = [document.getElementById("noProjectSelect"), document.getElementById("modalProjectSelect")];
+          selects.forEach(sel => {
+            if (!sel) return;
+            sel.innerHTML = '<option value="">-- Pilih Nama Proyek Anda --</option>';
+            list.filter(p => p && p !== "DENAH_PROYEK" && !p.startsWith("_")).forEach(p => {
+              const opt = document.createElement("option");
+              opt.value = p;
+              opt.textContent = `🏢 ${p}`;
+              sel.appendChild(opt);
+            });
+          });
+        }
+      } catch (e) {
+        console.warn("Gagal memuat daftar proyek:", e);
+      }
     }
 
     function showLoadingState() {
@@ -2076,28 +2252,28 @@
       if (!currentProject) return false;
       let hasData = false;
       try {
-        const cachedProj = localStorage.getItem("nafindo_cache_proj_" + currentProject);
+        const cachedProj = safeGetStorage("nafindo_cache_proj_" + currentProject);
         if (cachedProj) {
           const data = JSON.parse(cachedProj);
           renderProjectData(data, true);
           hasData = true;
         }
 
-        const cachedMedia = localStorage.getItem("nafindo_cache_media_" + currentProject);
+        const cachedMedia = safeGetStorage("nafindo_cache_media_" + currentProject);
         if (cachedMedia) {
           const mediaLogs = JSON.parse(cachedMedia);
           renderGalleryGrouped(mediaLogs, []);
           hasData = true;
         }
 
-        const cachedTasks = localStorage.getItem("nafindo_cache_tasks_" + currentProject);
+        const cachedTasks = safeGetStorage("nafindo_cache_tasks_" + currentProject);
         if (cachedTasks) {
           const tasks = JSON.parse(cachedTasks);
           renderTaskItems(tasks);
           hasData = true;
         }
 
-        const cachedFloors = localStorage.getItem("nafindo_cache_floors_" + currentProject);
+        const cachedFloors = safeGetStorage("nafindo_cache_floors_" + currentProject);
         if (cachedFloors) {
           floorDataList = JSON.parse(cachedFloors);
           renderFloorSwitcher();
@@ -2123,83 +2299,192 @@
         showSyncIndicator("download", "Sinkronisasi data terbaru...");
       }
 
-      // 2. Pemanggilan Data Super Cepat: Eksekusi SELURUH endpoint secara PARALEL serentak!
+      // 2. Pemanggilan Data Super Cepat: Eksekusi SELURUH endpoint secara PARALEL & PROGRESSIVE!
       const apiUrl = getApiUrl();
       const projParam = encodeURIComponent(currentProject);
       const timestamp = Date.now();
 
-      const pProject = fetch(`${apiUrl}?action=ambilDataMonitoring&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
-      const pMedia = fetch(`${apiUrl}?action=ambilLogDetailTukang&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
-      const pTasks = fetch(`${apiUrl}?action=ambilTaskMonitor&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
-      const pFloors = fetch(`${apiUrl}?action=getDenahFloorMapDetail&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
-      const pComplaints = fetch(`${apiUrl}?action=getComplaintHistory&proyek=${projParam}&api=true&_t=${timestamp}`).then(r => r.json()).catch(e => null);
-
-      try {
-        const [resProj, resMedia, resTasks, resFloors, resComplaints] = await Promise.all([pProject, pMedia, pTasks, pFloors, pComplaints]);
-
-        hideSyncIndicator();
-
-        // Update Project Data
-        if (resProj && resProj.status === "success" && resProj.data) {
-          try { localStorage.setItem("nafindo_cache_proj_" + currentProject, JSON.stringify(resProj.data)); } catch(e){}
-          renderProjectData(resProj.data);
-        } else if (!hadCache) {
-          fetchFallbackData();
-        }
-
-        // Update Tasks List
-        if (resTasks && resTasks.data) {
-          try { localStorage.setItem("nafindo_cache_tasks_" + currentProject, JSON.stringify(resTasks.data)); } catch(e){}
-          renderTaskItems(resTasks.data);
-        }
-
-        // Update Media Logs
-        if (resMedia && (resMedia.data || resMedia.result)) {
-          const logs = resMedia.data || resMedia.result || [];
-          try { localStorage.setItem("nafindo_cache_media_" + currentProject, JSON.stringify(logs)); } catch(e){}
-          renderGalleryGrouped(logs, (resProj && resProj.data ? resProj.data.listFoto : []));
-        }
-
-        // Update Floor Map
-        if (resFloors && (resFloors.data || resFloors.result)) {
-          const fData = resFloors.data || resFloors.result || {};
-          floorDataList = fData.floors || [];
-          try { localStorage.setItem("nafindo_cache_floors_" + currentProject, JSON.stringify(floorDataList)); } catch(e){}
-          renderFloorSwitcher();
-          if (activeFloorIndex === 'ALL') {
-            renderAllFloorsOverview();
-          } else {
-            renderFloorMap(activeFloorIndex);
+      const pProject = fetch(`${apiUrl}?action=ambilDataMonitoring&proyek=${projParam}&api=true&_t=${timestamp}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.status === "success" && res.data) {
+            safeSetStorage("nafindo_cache_proj_" + currentProject, JSON.stringify(res.data));
+            renderProjectData(res.data);
+            return res.data;
+          } else if (!hadCache) {
+            fetchFallbackData();
           }
-        }
+          return null;
+        })
+        .catch(err => {
+          console.warn("Gagal fetch data monitoring:", err);
+          if (!hadCache) fetchFallbackData();
+          return null;
+        });
 
-        // Update Complaints
-        if (resComplaints && resComplaints.data) {
-          renderComplaints(resComplaints.data);
-        }
+      const pTasks = fetch(`${apiUrl}?action=ambilTaskMonitor&proyek=${projParam}&api=true&_t=${timestamp}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res && res.data) {
+            safeSetStorage("nafindo_cache_tasks_" + currentProject, JSON.stringify(res.data));
+            renderTaskItems(res.data);
+            return res.data;
+          }
+          return null;
+        })
+        .catch(err => {
+          console.warn("Gagal fetch tasks:", err);
+          return null;
+        });
 
-      } catch (err) {
-        console.warn("Koneksi gagal atau offline, menggunakan cache:", err);
+      const pMedia = fetch(`${apiUrl}?action=ambilLogDetailTukang&proyek=${projParam}&api=true&_t=${timestamp}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res && (res.data || res.result)) {
+            const logs = res.data || res.result || [];
+            safeSetStorage("nafindo_cache_media_" + currentProject, JSON.stringify(logs));
+            renderGalleryGrouped(logs, (projectDataCache && projectDataCache.listFoto ? projectDataCache.listFoto : []));
+            return logs;
+          }
+          return null;
+        })
+        .catch(err => {
+          console.warn("Gagal fetch media logs:", err);
+          return null;
+        });
+
+      const pFloors = fetch(`${apiUrl}?action=getDenahFloorMapDetail&proyek=${projParam}&api=true&_t=${timestamp}`)
+        .then(r => r.json())
+        .then(res => {
+          if (res && (res.data || res.result)) {
+            const fData = res.data || res.result || {};
+            floorDataList = fData.floors || [];
+            safeSetStorage("nafindo_cache_floors_" + currentProject, JSON.stringify(floorDataList));
+            renderFloorSwitcher();
+            if (activeFloorIndex === 'ALL') {
+              renderAllFloorsOverview();
+            } else {
+              renderFloorMap(activeFloorIndex);
+            }
+            return floorDataList;
+          }
+          return null;
+        })
+        .catch(err => {
+          console.warn("Gagal fetch floor map:", err);
+          return null;
+        });
+
+      const pComplaints = fetch(`${apiUrl}?action=getRiwayatKomplainProyek&proyek=${projParam}&api=true&_t=${timestamp}`)
+        .then(r => r.json())
+        .then(res => {
+          const list = (res && (res.data || res.result)) ? (res.data || res.result) : [];
+          renderComplaints(list);
+          return list;
+        })
+        .catch(err => {
+          console.warn("Gagal fetch complaints:", err);
+          return null;
+        });
+
+      Promise.allSettled([pProject, pTasks, pMedia, pFloors, pComplaints]).finally(() => {
         hideSyncIndicator();
-        if (!hadCache) fetchFallbackData();
+      });
+    }
+
+    async function fetchFallbackData() {
+      try {
+        const apiUrl = `${getApiUrl()}?action=getAdminFullDashboard&proyek=${encodeURIComponent(currentProject)}&api=true`;
+        const res = await fetch(apiUrl);
+        const json = await res.json();
+        if (json && json.data) {
+          renderFallbackDashboard(json.data);
+        } else {
+          renderDemoData();
+        }
+      } catch (e) {
+        console.warn("Fallback dashboard gagal:", e);
+        renderDemoData();
+      }
+    }
+
+    function renderProjectData(data, isFromCache = false) {
+      if (!isFromCache) hideSyncIndicator();
+      if (!data) return;
+
+      projectDataCache = data;
+
+      // Status & Header
+      const badgeStatus = document.getElementById("projectStatusBadge");
+      if (badgeStatus) badgeStatus.textContent = data.status || "Sedang Berjalan";
+
+      const heading = document.getElementById("projectNameHeading");
+      if (heading) heading.textContent = (data.nama || currentProject).replace(/_/g, " ");
+
+      // Metrik Utama
+      let persen = 0;
+      if (tasksCache && tasksCache.length > 0) {
+        persen = updateOverallProgressKPI(tasksCache);
+      } else if (data.persen !== undefined && data.persen !== null && Number(data.persen) !== 50) {
+        persen = data.persen;
+      }
+
+      const pText = document.getElementById("metricProgressText");
+      if (pText) pText.textContent = persen + "%";
+
+      const pBar = document.getElementById("metricProgressBar");
+      if (pBar) pBar.style.width = persen + "%";
+
+      const targetHariVal = (data.targetHari !== undefined && data.targetHari !== null && data.targetHari !== 0) ? data.targetHari : (data.sisaHari || "--");
+      const tText = document.getElementById("metricTargetDays");
+      if (tText) tText.textContent = targetHariVal;
+
+      // Filter tanggal deadline: cegah tanggal 1970
+      let dl = data.deadline;
+      const isInvalidDate = !dl || dl.includes("1970") || dl === "0" || dl === "--" || dl.toLowerCase().includes("undefined");
+
+      let sisa = data.sisaHari;
+      if (isInvalidDate || sisa === "0" || sisa === 0 || sisa === "--") {
+        if (targetHariVal && targetHariVal !== "--") {
+          sisa = targetHariVal;
+        }
+      }
+
+      const rText = document.getElementById("metricRemainingDays");
+      if (rText) rText.textContent = "Sisa: " + (sisa || "--") + " hari";
+
+      const dText = document.getElementById("metricDeadlineText");
+      if (dText) dText.textContent = isInvalidDate ? "Belum Ditentukan" : dl;
+
+      const uText = document.getElementById("metricLastUpdate");
+      if (uText) uText.textContent = data.waktuUpdate || "--:--";
+
+      // Foto & Video fallback jika galeri masih kosong
+      if (!isFromCache && (!allMediaGroupsCache || allMediaGroupsCache.length === 0) && data.listFoto && data.listFoto.length > 0) {
+        fetchGroupedMedia(data.listFoto || [], data.mediaPerTugas || []);
       }
     }
 
     function renderFallbackDashboard(d) {
+      if (!d) return;
 
       const p = (d.progres !== undefined && d.progres !== null && Number(d.progres) !== 50) ? d.progres : 0;
 
-      document.getElementById("metricProgressText").textContent = p + "%";
+      const pText = document.getElementById("metricProgressText");
+      if (pText) pText.textContent = p + "%";
 
-      document.getElementById("metricProgressBar").style.width = p + "%";
+      const pBar = document.getElementById("metricProgressBar");
+      if (pBar) pBar.style.width = p + "%";
 
-      document.getElementById("metricTargetDays").textContent = d.targetHari || "--";
+      const tText = document.getElementById("metricTargetDays");
+      if (tText) tText.textContent = d.targetHari || "--";
 
       let dl = d.deadline;
 
       const isInvalid = !dl || dl.includes("1970") || dl === "0" || dl === "--";
 
-      document.getElementById("metricDeadlineText").textContent = isInvalid ? "Belum Ditentukan" : dl;
+      const dText = document.getElementById("metricDeadlineText");
+      if (dText) dText.textContent = isInvalid ? "Belum Ditentukan" : dl;
 
       if (d.tasks) {
 
@@ -5473,230 +5758,175 @@
 
     // =========================================================================
 
-    // AMBIL RIWAYAT KOMPLAIN PROYEK
+    // AMBIL & RENDER RIWAYAT KOMPLAIN PROYEK
 
     // =========================================================================
 
-    async function fetchComplaintHistory() {
-
+    function renderComplaints(list) {
       const container = document.getElementById("complaintHistoryContainer");
-
       const noComplaints = document.getElementById("noComplaintPlaceholder");
+      if (!container) return;
 
-      try {
-
-        const url = `${getApiUrl()}?action=getRiwayatKomplainProyek&proyek=${encodeURIComponent(currentProject)}&api=true`;
-
-        const res = await fetch(url);
-
-        const json = await res.json();
-
-        const list = json.data || json.result || [];
-
-        if (!list || list.length === 0) {
-
-          container.innerHTML = "";
-
-          noComplaints.classList.remove("hidden");
-
-          return;
-
-        }
-
-        noComplaints.classList.add("hidden");
-
+      list = list || [];
+      if (!Array.isArray(list) || list.length === 0) {
         container.innerHTML = "";
-
-        list.forEach(item => {
-
-          const card = document.createElement("div");
-
-          card.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 hover:bg-white transition";
-
-          let statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
-
-          let statusText = item.status || "Menunggu";
-
-          if (item.status === "DISETUJUI" || item.status === "SELESAI") {
-
-            statusBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300";
-
-            statusText = "✓ Telah Disetujui (Selesai)";
-
-          } else if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
-
-            statusBadge = "bg-blue-100 text-blue-800 border border-blue-300";
-
-            statusText = "🔍 Perbaikan Selesai (Menunggu Approval)";
-
-          } else if (item.status === "SEDANG_DIKERJAKAN") {
-
-            statusBadge = "bg-orange-100 text-orange-800 border border-orange-300";
-
-            statusText = "🛠️ Sedang Dikerjakan";
-
-          } else if (item.status === "KOMPLAIN_ULANG") {
-
-            statusBadge = "bg-rose-100 text-rose-800 border border-rose-300";
-
-            statusText = "🔄 Komplain Ulang (Perlu Perbaikan)";
-
-          } else {
-
-            statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
-
-            statusText = "⚠️ Menunggu Respon";
-
-          }
-
-          const mediaLink = item.linkFoto || item.foto;
-
-          let mediaHtml = "";
-
-          if (mediaLink && mediaLink !== "-" && mediaLink !== "undefined") {
-
-            const isVideo = mediaLink.match(/\.(mp4|mov|webm|avi)(\?.*)?$/i) || 
-
-                            (mediaLink.includes("drive.google.com") && item.fileType === "video");
-
-            if (isVideo) {
-
-              const escLink = mediaLink.replace(/'/g, "\\'");
-
-              mediaHtml = `<button onclick="openVideoModal('${escLink}', 'Bukti Komplain ${item.id || ''}')" class="text-purple-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-video"></i> Bukti Video</button>`;
-
-            } else if (mediaLink.startsWith("data:image/") || mediaLink.match(/\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i) || mediaLink.includes("drive.google.com")) {
-
-              const escLink = mediaLink.replace(/'/g, "\\'");
-
-              mediaHtml = `<button onclick="openLightbox('${escLink}')" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-image"></i> Bukti Foto</button>`;
-
-            } else {
-
-              mediaHtml = `<a href="${mediaLink}" target="_blank" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Lampiran</a>`;
-
-            }
-
-          }
-
-          const taskInfo = (item.tugas && item.tugas !== "Umum" && item.tugas !== "-") 
-
-            ? `<div class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-200/70 px-2 py-0.5 rounded"><i class="fa-solid fa-list-check text-blue-500"></i> ${item.tugas}</div>`
-
-            : '';
-
-          let perbaikanSection = "";
-
-          if (item.fotoPerbaikan || item.catatanRespon) {
-
-            let perbaikanFotoBtn = "";
-
-            if (item.fotoPerbaikan && item.fotoPerbaikan !== "-") {
-
-              const escFotoPerbaikan = item.fotoPerbaikan.replace(/'/g, "\\'");
-
-              perbaikanFotoBtn = `<button onclick="openLightbox('${escFotoPerbaikan}')" class="text-xs text-emerald-700 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-camera"></i> Foto Bukti Perbaikan</button>`;
-
-            }
-
-            perbaikanSection = `
-
-              <div class="mt-2 p-2.5 bg-emerald-50/80 border border-emerald-200 rounded-lg text-xs space-y-1">
-
-                <div class="font-bold text-emerald-900 flex items-center justify-between">
-
-                  <span>🛠️ Hasil Perbaikan Lapangan:</span>
-
-                  ${perbaikanFotoBtn}
-
-                </div>
-
-                <p class="text-slate-700 italic">${item.catatanRespon || 'Perbaikan telah diselesaikan oleh tim teknis lapangan.'}</p>
-
-              </div>
-
-            `;
-
-          }
-
-          let actionApprovalOwner = "";
-
-          if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
-
-            const escId = (item.id || '').replace(/'/g, "\\'");
-
-            const escTask = (item.tugas || '').replace(/'/g, "\'");
-
-            actionApprovalOwner = `
-
-              <div class="pt-2 flex items-center gap-2">
-
-                <button onclick="ownerApproveComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm">
-
-                  <i class="fa-solid fa-check"></i> Cocok / Approve
-
-                </button>
-
-                <button onclick="ownerRejectComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5">
-
-                  <i class="fa-solid fa-rotate-left"></i> Komplain Ulang
-
-                </button>
-
-              </div>
-
-            `;
-
-          }
-
-          const pelaporLabel = item.pelapor ? `<span class="text-[10px] text-slate-500 font-medium bg-slate-200/60 px-2 py-0.5 rounded-full">${item.pelapor}</span>` : '';
-
-          card.innerHTML = `
-
-            <div class="flex items-center justify-between text-xs">
-
-              <div class="flex items-center gap-1.5">
-
-                <span class="font-mono font-bold text-slate-500">${item.id || 'KMP'}</span>
-
-                ${pelaporLabel}
-
-              </div>
-
-              <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusBadge}">${statusText}</span>
-
-            </div>
-
-            ${taskInfo}
-
-            <h4 class="text-xs sm:text-sm font-bold text-slate-900">${item.kategori || 'Komplain'} ${item.namaKlien ? '• ' + item.namaKlien : ''}</h4>
-
-            <p class="text-xs text-slate-600">${item.uraian || item.pesan || '-'}</p>
-
-            ${perbaikanSection}
-
-            ${actionApprovalOwner}
-
-            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-200/60">
-
-              <span>Waktu: ${item.waktu || '-'}</span>
-
-              ${mediaHtml}
-
-            </div>
-
-          `;
-
-          container.appendChild(card);
-
-        });
-
-      } catch (e) {
-
-        noComplaints.classList.remove("hidden");
-
+        if (noComplaints) noComplaints.classList.remove("hidden");
+        return;
       }
 
+      if (noComplaints) noComplaints.classList.add("hidden");
+      container.innerHTML = "";
+
+      list.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2 hover:bg-white transition";
+
+        let statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
+        let statusText = item.status || "Menunggu";
+
+        if (item.status === "DISETUJUI" || item.status === "SELESAI") {
+          statusBadge = "bg-emerald-100 text-emerald-800 border border-emerald-300";
+          statusText = "✓ Telah Disetujui (Selesai)";
+        } else if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
+          statusBadge = "bg-blue-100 text-blue-800 border border-blue-300";
+          statusText = "🔍 Perbaikan Selesai (Menunggu Approval)";
+        } else if (item.status === "SEDANG_DIKERJAKAN") {
+          statusBadge = "bg-orange-100 text-orange-800 border border-orange-300";
+          statusText = "🛠️ Sedang Dikerjakan";
+        } else if (item.status === "KOMPLAIN_ULANG") {
+          statusBadge = "bg-rose-100 text-rose-800 border border-rose-300";
+          statusText = "🔄 Komplain Ulang (Perlu Perbaikan)";
+        } else {
+          statusBadge = "bg-amber-100 text-amber-800 border border-amber-300";
+          statusText = "⚠️ Menunggu Respon";
+        }
+
+        const mediaLink = item.linkFoto || item.foto;
+        let mediaHtml = "";
+
+        if (mediaLink && mediaLink !== "-" && mediaLink !== "undefined") {
+          const isVideo = mediaLink.match(/\.(mp4|mov|webm|avi)(\?.*)?$/i) || 
+                          (mediaLink.includes("drive.google.com") && item.fileType === "video");
+          if (isVideo) {
+            const escLink = mediaLink.replace(/'/g, "\\'");
+            mediaHtml = `<button onclick="openVideoModal('${escLink}', 'Bukti Komplain ${item.id || ''}')" class="text-purple-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-video"></i> Bukti Video</button>`;
+          } else if (mediaLink.startsWith("data:image/") || mediaLink.match(/\.(jpg|jpeg|png|webp|gif)(\?.*)?$/i) || mediaLink.includes("drive.google.com")) {
+            const escLink = mediaLink.replace(/'/g, "\\'");
+            mediaHtml = `<button onclick="openLightbox('${escLink}')" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-image"></i> Bukti Foto</button>`;
+          } else {
+            mediaHtml = `<a href="${mediaLink}" target="_blank" class="text-blue-600 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Lampiran</a>`;
+          }
+        }
+
+        const taskInfo = (item.tugas && item.tugas !== "Umum" && item.tugas !== "-") 
+          ? `<div class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-700 bg-slate-200/70 px-2 py-0.5 rounded"><i class="fa-solid fa-list-check text-blue-500"></i> ${item.tugas}</div>`
+          : '';
+
+        let perbaikanSection = "";
+
+        if (item.fotoPerbaikan || item.catatanRespon) {
+          let perbaikanFotoBtn = "";
+          if (item.fotoPerbaikan && item.fotoPerbaikan !== "-") {
+            const escFotoPerbaikan = item.fotoPerbaikan.replace(/'/g, "\\'");
+            perbaikanFotoBtn = `<button onclick="openLightbox('${escFotoPerbaikan}')" class="text-xs text-emerald-700 font-bold hover:underline inline-flex items-center gap-1"><i class="fa-solid fa-camera"></i> Foto Bukti Perbaikan</button>`;
+          }
+          perbaikanSection = `
+            <div class="mt-2 p-2.5 bg-emerald-50/80 border border-emerald-200 rounded-lg text-xs space-y-1">
+              <div class="font-bold text-emerald-900 flex items-center justify-between">
+                <span>🛠️ Hasil Perbaikan Lapangan:</span>
+                ${perbaikanFotoBtn}
+              </div>
+              <p class="text-slate-700 italic">${item.catatanRespon || 'Perbaikan telah diselesaikan oleh tim teknis lapangan.'}</p>
+            </div>
+          `;
+        }
+
+        let actionApprovalOwner = "";
+
+        if (item.status === "SELESAI_PERBAIKAN" || item.status === "PENGECEKAN") {
+          const escId = (item.id || '').replace(/'/g, "\\'");
+          const escTask = (item.tugas || '').replace(/'/g, "\\'");
+          actionApprovalOwner = `
+            <div class="pt-2 flex items-center gap-2">
+              <button onclick="ownerApproveComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer">
+                <i class="fa-solid fa-check"></i> Cocok / Approve
+              </button>
+              <button onclick="ownerRejectComplaint('${escId}', '${escTask}')" class="flex-1 py-1.5 px-3 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-rotate-left"></i> Komplain Ulang
+              </button>
+            </div>
+          `;
+        }
+
+        const pelaporLabel = item.pelapor ? `<span class="text-[10px] text-slate-500 font-medium bg-slate-200/60 px-2 py-0.5 rounded-full">${item.pelapor}</span>` : '';
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-xs">
+            <div class="flex items-center gap-1.5">
+              <span class="font-mono font-bold text-slate-500">${item.id || 'KMP'}</span>
+              ${pelaporLabel}
+            </div>
+            <span class="text-[10px] font-extrabold px-2 py-0.5 rounded-full ${statusBadge}">${statusText}</span>
+          </div>
+          ${taskInfo}
+          <h4 class="text-xs sm:text-sm font-bold text-slate-900">${item.kategori || 'Komplain'} ${item.namaKlien ? '• ' + item.namaKlien : ''}</h4>
+          <p class="text-xs text-slate-600">${item.uraian || item.pesan || '-'}</p>
+          ${perbaikanSection}
+          ${actionApprovalOwner}
+          <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-200/60">
+            <span>Waktu: ${item.waktu || '-'}</span>
+            ${mediaHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function fetchComplaintHistory() {
+      try {
+        const url = `${getApiUrl()}?action=getRiwayatKomplainProyek&proyek=${encodeURIComponent(currentProject)}&api=true`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const list = json.data || json.result || [];
+        renderComplaints(list);
+      } catch (e) {
+        console.warn("Gagal fetch riwayat komplain:", e);
+        const noComplaints = document.getElementById("noComplaintPlaceholder");
+        if (noComplaints) noComplaints.classList.remove("hidden");
+      }
+    }
+
+    async function ownerApproveComplaint(id, taskName) {
+      if (!confirm("Konfirmasi bahwa perbaikan komplain ini sudah sesuai dan disetujui?")) return;
+      showSyncIndicator("upload", "Menyimpan persetujuan komplain...");
+      try {
+        const url = `${getApiUrl()}?action=updateStatusPerbaikan&proyek=${encodeURIComponent(currentProject)}&namaTask=${encodeURIComponent(taskName || '')}&pesan=${encodeURIComponent('Disetujui oleh Owner via Web Portal')}&statusBaru=DISETUJUI&api=true`;
+        const res = await fetch(url);
+        const json = await res.json();
+        alert("✅ Komplain berhasil disetujui (Selesai)!");
+        fetchComplaintHistory();
+      } catch (e) {
+        alert("Gagal menyetujui komplain: " + e.message);
+      } finally {
+        hideSyncIndicator();
+      }
+    }
+
+    async function ownerRejectComplaint(id, taskName) {
+      const alasan = prompt("Masukkan catatan komplain ulang / hal yang masih perlu diperbaiki:");
+      if (alasan === null || alasan.trim() === "") return;
+      showSyncIndicator("upload", "Mengirim catatan komplain ulang...");
+      try {
+        const url = `${getApiUrl()}?action=updateStatusPerbaikan&proyek=${encodeURIComponent(currentProject)}&namaTask=${encodeURIComponent(taskName || '')}&pesan=${encodeURIComponent(alasan)}&statusBaru=KOMPLAIN_ULANG&api=true`;
+        const res = await fetch(url);
+        const json = await res.json();
+        alert("🔄 Catatan komplain ulang telah dikirim ke tim mandor!");
+        fetchComplaintHistory();
+      } catch (e) {
+        alert("Gagal mengirim komplain ulang: " + e.message);
+      } finally {
+        hideSyncIndicator();
+      }
     }
 
     // =========================================================================
