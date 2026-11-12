@@ -1,0 +1,8 @@
+{
+  "versionCode": 12,
+  "versionName": "1.5.4",
+  "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
+  "changelog": "• Fitur Auto-Update In-App otomatis tanpa buka browser\n• Perbaikan peta denah interaktif menyala (semua lantai)\n• Perbaikan histori foto laporan area dan sesi lembur malam",
+  "fileSizeMb": 12.2,
+  "forceUpdate": false
+}
