@@ -391,21 +391,21 @@
 
       </div>
 
-      <!-- Tombol Hubungi Admin via WhatsApp -->
+      <!-- Akses Resmi Portal (Tanpa Chat Pribadi) -->
 
-      <div class="pt-1 space-y-2">
+      <div class="pt-2 text-center">
 
-        <a href="https://api.whatsapp.com/send?phone=6281234567890&text=Halo%20Admin%20Nafindo,%20saya%20klien%20ingin%20meminta%20link%20monitoring%20resmi%20proyek%20saya" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm py-3.5 px-5 rounded-2xl shadow-lg shadow-emerald-600/25 flex items-center justify-center space-x-2.5 transition active:scale-95">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl text-xs font-semibold">
 
-          <i class="fa-brands fa-whatsapp text-lg"></i>
+          <i class="fa-solid fa-shield-halved text-indigo-600"></i>
 
-          <span>Hubungi Admin untuk Mendapatkan Link Proyek</span>
+          <span>Portal Monitoring Resmi CV. Nafindo Group</span>
 
-        </a>
+        </div>
 
-        <p class="text-[11px] text-slate-400">
+        <p class="text-[11px] text-slate-400 mt-2">
 
-          Tim Manajemen CV. Nafindo Group siap melayani Anda.
+          Gunakan tautan resmi yang telah dibagikan oleh Manajemen CV. Nafindo Group untuk mengakses dashboard proyek Anda.
 
         </p>
 
@@ -751,21 +751,30 @@
 
         <!-- Header & Floor Selector -->
 
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-4 border-b border-slate-100">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg text-sm"><i class="fa-solid fa-map-location-dot"></i></span>
-              <h3 class="text-base sm:text-lg font-bold text-slate-900">Peta Denah Area & Progres Ruangan</h3>
-              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-emerald-300">Live Visual</span>
+        <!-- Header Peta Denah: Judul Luas Tanpa Tergencet -->
+        <div class="pb-3 border-b border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="p-2 bg-indigo-50 text-indigo-600 rounded-xl text-base shadow-2xs"><i class="fa-solid fa-map-location-dot"></i></span>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">Peta Denah Area & Progres Ruangan</h3>
+                  <span class="bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border border-emerald-300 shadow-2xs">Live Visual</span>
+                </div>
+                <p class="text-xs text-slate-500 mt-0.5">Pantau penyelesaian fisik per ruangan, volume opname pekerjaan utama, dan kontrol kualitas lapangan</p>
+              </div>
             </div>
-            <p class="text-xs text-slate-500 mt-0.5">Pantau penyelesaian fisik per ruangan, volume opname pekerjaan utama, dan kontrol kualitas lapangan</p>
           </div>
-          <!-- Floor Switcher Pills -->
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-slate-400">Lantai:</span>
-            <div id="floorSwitcherContainer" class="flex items-center gap-1.5 overflow-x-auto py-1">
-              <!-- Diisi dinamis via JS -->
-            </div>
+        </div>
+
+        <!-- Floor Switcher Bar: Wadah Khusus Pilihan Lantai Rapi & Bernapas -->
+        <div class="py-2.5 px-3 bg-slate-50/80 rounded-xl border border-slate-200/80 my-2.5 flex flex-col sm:flex-row sm:items-center gap-2">
+          <div class="flex items-center gap-1.5 shrink-0 text-xs font-bold text-slate-600">
+            <i class="fa-solid fa-building text-indigo-600"></i>
+            <span>Pilih Lantai:</span>
+          </div>
+          <div id="floorSwitcherContainer" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 w-full">
+            <!-- Diisi dinamis via JS -->
           </div>
         </div>
 
@@ -794,7 +803,7 @@
         </div>
 
         <!-- FILTER LAYER TAHAPAN PEKERJAAN (PILIH TAHAPAN YANG INGIN DILIHAT DI MAP) -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200 my-2">
+        <div id="taskLayerFilterWrapper" class="hidden flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3 bg-slate-50 rounded-xl border border-slate-200 my-2">
           <div class="flex items-center gap-2 shrink-0">
             <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
               <i class="fa-solid fa-layer-group text-indigo-600"></i>
@@ -1337,17 +1346,17 @@
 
               <label class="block text-xs font-bold text-slate-800 uppercase tracking-wider">
 
-                <i class="fa-solid fa-camera-retro text-rose-600 mr-1.5"></i> Lampirkan Bukti Foto atau Video <span class="text-rose-500">*</span>
+                <i class="fa-solid fa-camera-retro text-indigo-600 mr-1.5"></i> Lampirkan Bukti Foto atau Video <span class="text-slate-400 font-normal text-[11px] lowercase">(Opsional - Jika Owner di Lokasi)</span>
 
               </label>
 
-              <span id="mediaTypeBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-rose-100 text-rose-700">Lampiran Siap</span>
+              <span id="mediaTypeBadge" class="hidden text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">Lampiran Siap</span>
 
             </div>
 
             <p class="text-xs text-slate-500 mb-3">
 
-              Ambil foto/video langsung di lokasi proyek atau pilih file dari galeri HP Anda.
+              <i class="fa-solid fa-circle-info text-indigo-500 mr-1"></i> Jika Anda sedang tidak di lokasi proyek, Anda tetap dapat mengirimkan komplain tertulis tanpa melampirkan foto/video.
 
             </p>
 
@@ -1591,21 +1600,37 @@
 
       </div>
 
-      <div class="space-y-2 pt-2">
+      <div class="space-y-2.5 pt-2">
 
-        <!-- Tombol WhatsApp Langsung -->
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center space-y-1">
 
-        <a id="btnForwardWa" href="#" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/20 flex items-center justify-center space-x-2 transition">
+          <p class="text-xs font-bold text-emerald-800 flex items-center justify-center gap-1.5">
 
-          <i class="fa-brands fa-whatsapp text-lg"></i>
+            <i class="fa-solid fa-circle-check text-emerald-600"></i>
 
-          <span>Kirim Salinan via WhatsApp ke Admin</span>
+            Tercatat Resmi di Sistem CV. Nafindo Group
 
-        </a>
+          </p>
 
-        <button onclick="closeSuccessModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs py-2.5 px-4 rounded-xl transition">
+          <p class="text-[11px] text-emerald-700">
 
-          Tutup Jendela Ini
+            Laporan Anda langsung terdistribusi ke sistem mandor dan tim manajemen untuk ditindaklanjuti secara terpusat tanpa komunikasi pribadi.
+
+          </p>
+
+        </div>
+
+        <button onclick="closeSuccessModalAndSwitchToRiwayat()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/20 flex items-center justify-center space-x-2 transition cursor-pointer">
+
+          <i class="fa-solid fa-list-check"></i>
+
+          <span>Buka Riwayat & Status Penanganan</span>
+
+        </button>
+
+        <button onclick="closeSuccessModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs py-2 px-4 rounded-xl transition cursor-pointer">
+
+          Tutup
 
         </button>
 
@@ -1955,7 +1980,6 @@
 
     const DEFAULT_API_URL = "https://script.google.com/macros/s/AKfycbyLYhugu3r1oibh5giHX3YQdzgw4MTxqomsVhcYrY7TlxcW3vrwlfs1bXbLJT_44r-efQ/exec";
 
-    const ADMIN_WA_NUMBER = "6281234567890"; // Ganti dengan nomor WhatsApp resmi Admin CV Nafindo
 
     let currentProject = "";
 
@@ -5721,34 +5745,6 @@
 
       document.getElementById("modalDesc").textContent = desc;
 
-      // Format WhatsApp Pre-filled message
-
-      const taskLine = (taskName && taskName !== "Umum") ? `📋 *Terkait Tugas:* ${taskName}\n` : '';
-
-      const waText = encodeURIComponent(
-
-        `*LAPORAN KOMPLAIN PROYEK NAFINDO*\n` +
-
-        `----------------------------------------\n` +
-
-        `📌 *No. Tiket:* ${ticketId}\n` +
-
-        `🏗️ *Proyek:* ${currentProject.replace(/_/g, ' ')}\n` +
-
-        taskLine +
-
-        `📁 *Media:* ${selectedMediaType === 'video' ? 'Video terlampir' : (selectedMediaBase64 ? 'Foto terlampir' : 'Keterangan tertulis')}\n` +
-
-        `📝 *Uraian Kendala:*\n${desc}\n` +
-
-        `----------------------------------------\n` +
-
-        `Mohon segera ditindaklanjuti oleh tim manajemen CV. Nafindo Group. Terima kasih.`
-
-      );
-
-      document.getElementById("btnForwardWa").href = `https://api.whatsapp.com/send?phone=${ADMIN_WA_NUMBER}&text=${waText}`;
-
       document.getElementById("successModal").classList.remove("hidden");
 
     }
@@ -5756,6 +5752,14 @@
     function closeSuccessModal() {
 
       document.getElementById("successModal").classList.add("hidden");
+
+    }
+
+    function closeSuccessModalAndSwitchToRiwayat() {
+
+      closeSuccessModal();
+
+      switchTab('tab-riwayat');
 
     }
 
@@ -6030,12 +6034,15 @@
       const singleContainer = document.getElementById("singleFloorContainer");
       const placeholder = document.getElementById("floorMapPlaceholder");
 
+      const layerWrapper = document.getElementById("taskLayerFilterWrapper");
       if (floorIdx === 'ALL') {
         if (singleContainer) singleContainer.classList.add("hidden");
         if (placeholder) placeholder.classList.add("hidden");
         if (allContainer) allContainer.classList.remove("hidden");
+        if (layerWrapper) layerWrapper.classList.add("hidden");
         renderAllFloorsOverview();
       } else {
+        if (layerWrapper) layerWrapper.classList.remove("hidden");
         if (allContainer) allContainer.classList.add("hidden");
         if (singleContainer) singleContainer.classList.remove("hidden");
         const floor = floorDataList[floorIdx];
@@ -6065,18 +6072,30 @@
         const inProg = zones.filter(z => (z.progres || 0) > 0 && (z.progres || 0) < 100).length;
         const complaint = zones.filter(z => (z.status || '').toUpperCase() === 'KOMPLAIN').length;
         const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+        const avgProg = total > 0 ? Math.round(zones.reduce((acc, z) => acc + (Number(z.progres) || 0), 0) / total) : 0;
 
         let badgeClass = "bg-slate-100 text-slate-700 border-slate-300";
         let badgeText = "⚪ Belum Dikerjakan";
+        let subtitleText = `${done} dari ${total} Ruangan Tuntas (${pct}%)`;
+
         if (complaint > 0) {
           badgeClass = "bg-rose-100 text-rose-800 border-rose-300 animate-pulse";
           badgeText = `🔴 ${complaint} Komplain`;
+          subtitleText = `${complaint} Ruangan Komplain • ${done}/${total} Selesai`;
         } else if (total > 0 && done === total) {
           badgeClass = "bg-emerald-100 text-emerald-800 border-emerald-300";
           badgeText = "🟢 100% Selesai Tuntas";
+          subtitleText = `Seluruh ${total} Ruangan Selesai 100%`;
         } else if (done > 0 || inProg > 0) {
           badgeClass = "bg-amber-100 text-amber-800 border-amber-300";
-          badgeText = `🟡 Sedang Dikerjakan (${pct}%)`;
+          badgeText = inProg > 0 && done === 0 ? `🟡 ${inProg} Ruang Dikerjakan (${avgProg}%)` : `🟡 Sedang Dikerjakan (${avgProg}%)`;
+          if (done > 0 && inProg > 0) {
+            subtitleText = `${done} Selesai • ${inProg} Dikerjakan (${avgProg}%)`;
+          } else if (inProg > 0) {
+            subtitleText = `${inProg} dari ${total} Ruangan Sedang Dikerjakan (${avgProg}%)`;
+          } else {
+            subtitleText = `${done} dari ${total} Ruangan Tuntas (${pct}%)`;
+          }
         }
 
         const card = document.createElement("div");
@@ -6131,7 +6150,7 @@
               </div>
               <div>
                 <h3 class="text-sm sm:text-base font-extrabold text-slate-900">${floor.lantai || 'Lantai ' + (fIdx + 1)}</h3>
-                <p class="text-[11px] text-slate-500 font-medium">${done} dari ${total} Ruangan Tuntas (${pct}%)</p>
+                <p class="text-[11px] text-slate-500 font-medium">${subtitleText}</p>
               </div>
             </div>
             <div class="flex items-center gap-2">
@@ -6146,7 +6165,7 @@
 
           <!-- Mini Progres Bar Lantai -->
           <div class="w-full bg-slate-100 h-1.5">
-            <div class="bg-indigo-600 h-1.5 transition-all duration-500" style="width: ${pct}%"></div>
+            <div class="bg-indigo-600 h-1.5 transition-all duration-500" style="width: ${done > 0 ? pct : avgProg}%"></div>
           </div>
 
           <!-- Denah Map Visual -->
@@ -6474,10 +6493,29 @@
 
       document.getElementById("zoneModalProgressBar").style.width = `${zone.progres || 0}%`;
 
-      // Task List (Dipisahkan antara Pekerjaan Utama Opname Volume vs Kontrol Kualitas)
+      // Task List (HANYA tampilkan pekerjaan yang terkait spesifik dengan ruangan ini)
       const taskContainer = document.getElementById("zoneModalTaskList");
       taskContainer.innerHTML = "";
-      const tasks = zone.tasks || [];
+      const rawTasks = zone.tasks || [];
+
+      // Filter ketat: Ruangan dengan digit (misal 5001) HANYA menampilkan tugas yang memuat nomor digit tersebut
+      const roomDigits = (zone.nama || "").replace(/[^0-9]/g, "");
+      const cleanZoneName = (zone.nama || "").trim().toLowerCase();
+
+      let tasks = rawTasks.filter(t => {
+        const tArea = (t.area || "").trim().toLowerCase();
+        const tName = (t.namaTugas || t.nama || t.name || "").trim().toLowerCase();
+        const tDesc = (t.catatan || t.keterangan || "").trim().toLowerCase();
+        const combined = `${tArea} ${tName} ${tDesc}`;
+
+        if (roomDigits && roomDigits.length >= 3) {
+          return combined.includes(roomDigits);
+        }
+        if (cleanZoneName && cleanZoneName.length >= 3) {
+          return tArea.includes(cleanZoneName) || tName.includes(cleanZoneName);
+        }
+        return tArea === cleanZoneName || tName === cleanZoneName;
+      });
 
       if (tasks.length === 0) {
         taskContainer.innerHTML = `<div class="p-2.5 bg-slate-50 rounded-lg text-slate-400 italic text-center">Belum ada item pekerjaan terdaftar di area ini.</div>`;
