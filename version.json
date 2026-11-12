@@ -1,8 +1,8 @@
 {
-  "versionCode": 12,
-  "versionName": "1.5.4",
+  "versionCode": 13,
+  "versionName": "1.5.5",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Fitur Auto-Update In-App otomatis tanpa buka browser\n• Perbaikan peta denah interaktif menyala (semua lantai)\n• Perbaikan histori foto laporan area dan sesi lembur malam",
+  "changelog": "• Kuota lembur max 4 jam (1x lembur admin)\n• Koreksi lupa checkout lembur semalam otomatis potong 30 mnt (diakui 3.5 jam)\n• Perbaikan kalkulasi jam presensi anti 24j/32j\n• Peta denah interaktif semua lantai aktif menyala\n• Histori laporan foto area kamar & sesi waktu akurat",
   "fileSizeMb": 12.2,
   "forceUpdate": false
 }
