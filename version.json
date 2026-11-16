@@ -1,8 +1,8 @@
 {
-  "versionCode": 14,
-  "versionName": "1.5.6",
+  "versionCode": 15,
+  "versionName": "1.6.0",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Koreksi carryover sisa kasbon & kurang bayar: hanya dilimpahkan ke 1 periode persis setelahnya (tidak diteruskan ke semua periode di depan)\n• Hilangkan duplikasi baris kasbon periode lalu pada rincian potongan slip gaji\n• Bersihkan pengulangan catatan lembur pada slip gaji harian",
+  "changelog": "• Arsitektur Multi-Spreadsheet Mandiri: Setiap proyek baru otomatis dibuat sebagai 1 File Google Spreadsheet tersendiri di Google Drive lengkap dengan tab modular (Ringkasan, Absensi, Laporan, Tugas, Kasbon, Komplain)\n• Eliminasi Batasan 31 Hari: Database absensi berbasis baris (Row-Append) tanpa batas baris dan anti-saling menimpa jika tukang libur\n• Sinkronisasi Otomatis Upah: Gaji dan uang makan langsung terhubung ke DATA_ABSENSI sehingga tidak ada lagi gaji kosong jika sheet proyek penuh\n• Kecepatan Akses Tinggi (< 1 detik) untuk kapasitas ribuan proyek di masa depan",
   "fileSizeMb": 12.2,
   "forceUpdate": false
 }
