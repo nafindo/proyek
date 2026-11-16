@@ -1,8 +1,8 @@
 {
-  "versionCode": 15,
-  "versionName": "1.6.0",
+  "versionCode": 16,
+  "versionName": "1.6.1",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Arsitektur Multi-Spreadsheet Mandiri: Setiap proyek baru otomatis dibuat sebagai 1 File Google Spreadsheet tersendiri di Google Drive lengkap dengan tab modular (Ringkasan, Absensi, Laporan, Tugas, Kasbon, Komplain)\n• Eliminasi Batasan 31 Hari: Database absensi berbasis baris (Row-Append) tanpa batas baris dan anti-saling menimpa jika tukang libur\n• Sinkronisasi Otomatis Upah: Gaji dan uang makan langsung terhubung ke DATA_ABSENSI sehingga tidak ada lagi gaji kosong jika sheet proyek penuh\n• Kecepatan Akses Tinggi (< 1 detik) untuk kapasitas ribuan proyek di masa depan",
+  "changelog": "• Histori Foto & Video Lengkap: Menampilkan seluruh foto (hingga 5 foto) dan video per laporan lapangan secara utuh dari Google Sheets\n• Galeri Media Interaktif (Zoom & Swipe): Mendukung Pinch-to-zoom (cubit perbesar/perkecil hingga 5x), Double-tap zoom, dan Geser Kiri-Kanan (Swipe) antar foto/video\n• Rekaman Video Mute & Watermark Permanen: Audio otomatis di-mute (tanpa suara) dan watermark resmi Nafindo menyatu permanen pada pixel video saat dilihat maupun diunduh\n• Kamera Foto Beruntun Otomatis: Buka kamera langsung bisa ambil beberapa foto berturut-turut seperti WhatsApp tanpa tombol atau centang tambahan yang membingungkan",
   "fileSizeMb": 12.2,
   "forceUpdate": false
 }
