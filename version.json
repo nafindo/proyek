@@ -1,8 +1,8 @@
 {
-  "versionCode": 17,
-  "versionName": "1.6.2",
+  "versionCode": 18,
+  "versionName": "1.6.3",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Kamera Multi-Foto Gaya WhatsApp: Tray preview foto kecil di bawah dengan icon centang yang bisa dipilih/lewati, tombol centang hijau utama untuk konfirmasi, dan tombol '✕' batal\n• Pembersihan Cache Otomatis: Foto yang tidak dicentang otomatis dihapus dari memori HP sehingga penyimpanan tetap lega\n• Media Berjajar ke Samping: Seluruh foto dan video tersusun rapi berjajar ke samping dalam 1 baris scroll horizontal agar kartu laporan tetap ringkas dan tidak memanjang ke bawah\n• Pemutar Video In-App (Play & Stop): Video lapangan dapat diputar, dijeda, dan di-stop langsung di dalam dialog pratinjau dengan audio otomatis ter-mute\n• Galeri Zoom & Swipe Interaktif: Cubit perbesar/perkecil hingga 5x dan geser kiri/kanan antar seluruh media laporan",
+  "changelog": "• Fasilitas Tambah Karyawan (Helper, Tukang, Mandor): Tombol cepat '+ Tambah Karyawan' hadir langsung di Presensi Tim dan Tim Harian untuk input pekerja baru atau pilih dari database master perusahaan\n• Manajemen Kontrak Borongan: Sub-tab Borongan dapat diakses lancar dengan tombol '+ Tambah Kontrak Borongan / Kepala Tukang', validasi form, dan pencatatan termin pembayaran\n• Pengaturan Pekerja Tidak Lanjut Kerja (Dilepas): Status pekerja aktif vs tidak lanjut kerja dapat difilter dan diubah sewaktu-waktu. Riwayat gaji, absensi, dan kasbon masa lalu tetap aman 100%\n• Kejelasan Tim Proyek vs Master Pusat: Visualisasi status penugasan yang jelas (Aktif di Proyek, Standby Bebas, Di Proyek Lain, atau Dilepas) beserta tombol 'Tugaskan Lagi'",
   "fileSizeMb": 12.2,
   "forceUpdate": false
 }
