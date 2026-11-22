@@ -1,8 +1,8 @@
 {
-  "versionCode": 18,
-  "versionName": "1.6.3",
+  "versionCode": 19,
+  "versionName": "1.6.4",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Fasilitas Tambah Karyawan (Helper, Tukang, Mandor): Tombol cepat '+ Tambah Karyawan' hadir langsung di Presensi Tim dan Tim Harian untuk input pekerja baru atau pilih dari database master perusahaan\n• Manajemen Kontrak Borongan: Sub-tab Borongan dapat diakses lancar dengan tombol '+ Tambah Kontrak Borongan / Kepala Tukang', validasi form, dan pencatatan termin pembayaran\n• Pengaturan Pekerja Tidak Lanjut Kerja (Dilepas): Status pekerja aktif vs tidak lanjut kerja dapat difilter dan diubah sewaktu-waktu. Riwayat gaji, absensi, dan kasbon masa lalu tetap aman 100%\n• Kejelasan Tim Proyek vs Master Pusat: Visualisasi status penugasan yang jelas (Aktif di Proyek, Standby Bebas, Di Proyek Lain, atau Dilepas) beserta tombol 'Tugaskan Lagi'",
-  "fileSizeMb": 12.2,
+  "changelog": "• Input Bonus Pribadi & Tim: Admin kini dapat memberikan bonus langsung ke pekerja individu atau bonus tim dengan pembagian otomatis sama rata ke seluruh anggota tim aktif\n• Pengelompokan Tim Mandor/Tukang/Helper: Kelola pembagian tim kerja (Tim A, Tim B, Tim Plafon, Tim Finishing, dll.) secara terpusat dengan sinkronisasi instan\n• Terintegrasi Penuh Baris 5 Master Sheet: Nilai bonus otomatis tersimpan di Baris 5 kolom pekerja, menambah upah bersih di Baris 7, dan tercatat di riwayat audit DATA_LOG_BONUS\n• Akses Cepat Tombol Bonus: Tombol '+ Bonus' hadir di Presensi Tim dan kartu pekerja untuk input dan cek bonus instan",
+  "fileSizeMb": 12.3,
   "forceUpdate": false
 }
