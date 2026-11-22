@@ -1,8 +1,8 @@
 {
-  "versionCode": 20,
-  "versionName": "1.6.5",
+  "versionCode": 21,
+  "versionName": "1.6.6",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Presisi Alarm Tepat Waktu (WIB): Alarm pengingat kerja (Masuk 08:00, Istirahat 11:00/12:00, Lanjut 13:00, Pulang 17:00, Lembur 21:00 WIB) kini menggunakan AlarmManager.setAlarmClock() dengan patokan resmi Asia/Jakarta\n• Anti-Doze Mode & Bebas Delay: Kebal 100% dari penghemat baterai Android sehingga alarm berbunyi tepat detik 00 tanpa terlambat semenit pun\n• Izin USE_EXACT_ALARM: Dukungan penuh Android 13, 14, dan 15 tanpa memerlukan izin manual sistem\n• Bonus Pribadi & Tim Bagi Rata: Fasilitas pemberian bonus terintegrasi Baris 5 dan pengelolaan tim kerja",
+  "changelog": "• Setting Tanggal Terbit Bonus & Target Tim: Admin dapat menentukan tanggal terbit bonus (pribadi/tim). Bonus terisolasi cut-off mingguan (seperti uang makan) sehingga TIDAK AKAN terbawa ke periode minggu berikutnya\n• Presets Capaian Target Kamar: Shortcut praktis target seperti 'Target Leveling (5 Kamar)' dengan kalkulator bagi rata instan (misal Rp 75rb dibagi 3 orang = @ Rp 25rb)\n• Integrasi Slip Gaji Mingguan: Item bonus tampil rapi di rincian slip gaji periode berjalan lengkap dengan keterangan target\n• Presisi Alarm Anti-Doze Mode: Jam kerja resmi dikunci WIB (Asia/Jakarta) dengan setAlarmClock",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
