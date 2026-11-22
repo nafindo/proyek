@@ -1,8 +1,8 @@
 {
-  "versionCode": 19,
-  "versionName": "1.6.4",
+  "versionCode": 20,
+  "versionName": "1.6.5",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Input Bonus Pribadi & Tim: Admin kini dapat memberikan bonus langsung ke pekerja individu atau bonus tim dengan pembagian otomatis sama rata ke seluruh anggota tim aktif\n• Pengelompokan Tim Mandor/Tukang/Helper: Kelola pembagian tim kerja (Tim A, Tim B, Tim Plafon, Tim Finishing, dll.) secara terpusat dengan sinkronisasi instan\n• Terintegrasi Penuh Baris 5 Master Sheet: Nilai bonus otomatis tersimpan di Baris 5 kolom pekerja, menambah upah bersih di Baris 7, dan tercatat di riwayat audit DATA_LOG_BONUS\n• Akses Cepat Tombol Bonus: Tombol '+ Bonus' hadir di Presensi Tim dan kartu pekerja untuk input dan cek bonus instan",
+  "changelog": "• Presisi Alarm Tepat Waktu (WIB): Alarm pengingat kerja (Masuk 08:00, Istirahat 11:00/12:00, Lanjut 13:00, Pulang 17:00, Lembur 21:00 WIB) kini menggunakan AlarmManager.setAlarmClock() dengan patokan resmi Asia/Jakarta\n• Anti-Doze Mode & Bebas Delay: Kebal 100% dari penghemat baterai Android sehingga alarm berbunyi tepat detik 00 tanpa terlambat semenit pun\n• Izin USE_EXACT_ALARM: Dukungan penuh Android 13, 14, dan 15 tanpa memerlukan izin manual sistem\n• Bonus Pribadi & Tim Bagi Rata: Fasilitas pemberian bonus terintegrasi Baris 5 dan pengelolaan tim kerja",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
