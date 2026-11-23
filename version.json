@@ -1,8 +1,8 @@
 {
-  "versionCode": 25,
-  "versionName": "1.6.9",
+  "versionCode": 26,
+  "versionName": "1.7.0",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Navigasi Periode Geser: Diagram progres kini bisa digeser ke belakang/depan dengan tombol (<) dan (>) untuk Mingguan (Minggu Ini, 1 Minggu Lalu, dst.) & Bulanan (Bulan Ini, 1 Bulan Lalu, dst.) serta Semua Riwayat.\n- Rincian Capaian Harian di Chart: Angka penyelesaian harian (+% progres / volume m² / jumlah laporan) kini tertulis langsung di atas tiap batang diagram & label tanggal di bawah batang.\n- Detail Interaktif: Klik pada batang diagram untuk melihat rincian capaian %, m², pekerja hadir, dan catatan pekerjaan.",
+  "changelog": "- Diagram 3 Garis Progres Ruangan: Grafik penyelesaian harian kini menyajikan 3 garis terpisah untuk Leveling (Hijau), Pasang SPC (Biru), dan Asesoris (Ungu) berbasis jumlah kamar/ruangan nyata.\n- Rincian Ruangan & Validasi Data: Mengeliminasi data volume keliru, kini menghitung jumlah kamar riil per hari lengkap dengan daftar nomor kamar.\n- Tabel Rincian Harian: Tabel breakdown lengkap per hari untuk Leveling, SPC, Asesoris, total kamar, dan pekerja hadir.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
