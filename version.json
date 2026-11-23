@@ -1,8 +1,8 @@
 {
-  "versionCode": 24,
-  "versionName": "1.6.8",
+  "versionCode": 25,
+  "versionName": "1.6.9",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Galeri Laporan Foto & Video: Multi-foto (hingga 5 foto) & 1 video kini tampil rapi menyamping (horizontal scrollable) dalam satu kartu laporan.\n- Zoom & Playback: Foto dapat di-zoom/pan dan di-swipe kanan-kiri, video dilengkapi tombol Play, Pause, dan Stop.\n- Diagram Stabilitas Progres Harian: Dashboard Admin dengan filter Mingguan (7 Hari), Bulanan (30 Hari), dan Semua (Proyek) serta status Stabil/Fluktuatif/Stagnan.",
+  "changelog": "- Navigasi Periode Geser: Diagram progres kini bisa digeser ke belakang/depan dengan tombol (<) dan (>) untuk Mingguan (Minggu Ini, 1 Minggu Lalu, dst.) & Bulanan (Bulan Ini, 1 Bulan Lalu, dst.) serta Semua Riwayat.\n- Rincian Capaian Harian di Chart: Angka penyelesaian harian (+% progres / volume m² / jumlah laporan) kini tertulis langsung di atas tiap batang diagram & label tanggal di bawah batang.\n- Detail Interaktif: Klik pada batang diagram untuk melihat rincian capaian %, m², pekerja hadir, dan catatan pekerjaan.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
