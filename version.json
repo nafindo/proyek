@@ -1,8 +1,8 @@
 {
-  "versionCode": 22,
-  "versionName": "1.6.7",
+  "versionCode": 23,
+  "versionName": "1.6.8",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Sinkronisasi Penuh Log Bonus & Reset Otomatis: DATA_LOG_BONUS menjadi single source of truth. Jika baris log bonus dihapus dari spreadsheet, nilai bonus di profil & slip gaji otomatis kembali 0 (tidak ada angka hantu/sisa data lama).\n• Isolasi Mingguan Bonus Akurat: Bonus hanya muncul pada slip gaji periode tanggal diterbitkannya. Di minggu-minggu lain bonus bernilai 0 murni.\n• Riwayat Pengajuan Kasbon Terkini di Paling Atas: Daftar kasbon diurutkan transaksi terbaru paling atas agar respon admin & mandor lebih cepat.",
+  "changelog": "- Diagram Chart Stabilitas Progres Harian: Dashboard Admin kini dilengkapi grafik tren harian dengan filter Mingguan (7 Hari), Bulanan (30 Hari), dan Semua (Proyek).\n- Indikator Stabilitas Ritme Kerja: Deteksi instan status STABIL, FLUKTUATIF, atau STAGNAN lengkap dengan rasio hari aktif & deteksi hari kerja tanpa progres.\n- Interaktif & Rincian Harian: Klik pada batang grafik untuk melihat rincian tanggal, jumlah laporan, capaian m2/volume, dan pekerja hadir.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
