@@ -1,8 +1,8 @@
 {
-  "versionCode": 21,
-  "versionName": "1.6.6",
+  "versionCode": 22,
+  "versionName": "1.6.7",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "• Setting Tanggal Terbit Bonus & Target Tim: Admin dapat menentukan tanggal terbit bonus (pribadi/tim). Bonus terisolasi cut-off mingguan (seperti uang makan) sehingga TIDAK AKAN terbawa ke periode minggu berikutnya\n• Presets Capaian Target Kamar: Shortcut praktis target seperti 'Target Leveling (5 Kamar)' dengan kalkulator bagi rata instan (misal Rp 75rb dibagi 3 orang = @ Rp 25rb)\n• Integrasi Slip Gaji Mingguan: Item bonus tampil rapi di rincian slip gaji periode berjalan lengkap dengan keterangan target\n• Presisi Alarm Anti-Doze Mode: Jam kerja resmi dikunci WIB (Asia/Jakarta) dengan setAlarmClock",
+  "changelog": "• Sinkronisasi Penuh Log Bonus & Reset Otomatis: DATA_LOG_BONUS menjadi single source of truth. Jika baris log bonus dihapus dari spreadsheet, nilai bonus di profil & slip gaji otomatis kembali 0 (tidak ada angka hantu/sisa data lama).\n• Isolasi Mingguan Bonus Akurat: Bonus hanya muncul pada slip gaji periode tanggal diterbitkannya. Di minggu-minggu lain bonus bernilai 0 murni.\n• Riwayat Pengajuan Kasbon Terkini di Paling Atas: Daftar kasbon diurutkan transaksi terbaru paling atas agar respon admin & mandor lebih cepat.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
