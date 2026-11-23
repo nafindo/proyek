@@ -1,8 +1,8 @@
 {
-  "versionCode": 23,
+  "versionCode": 24,
   "versionName": "1.6.8",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Diagram Chart Stabilitas Progres Harian: Dashboard Admin kini dilengkapi grafik tren harian dengan filter Mingguan (7 Hari), Bulanan (30 Hari), dan Semua (Proyek).\n- Indikator Stabilitas Ritme Kerja: Deteksi instan status STABIL, FLUKTUATIF, atau STAGNAN lengkap dengan rasio hari aktif & deteksi hari kerja tanpa progres.\n- Interaktif & Rincian Harian: Klik pada batang grafik untuk melihat rincian tanggal, jumlah laporan, capaian m2/volume, dan pekerja hadir.",
+  "changelog": "- Galeri Laporan Foto & Video: Multi-foto (hingga 5 foto) & 1 video kini tampil rapi menyamping (horizontal scrollable) dalam satu kartu laporan.\n- Zoom & Playback: Foto dapat di-zoom/pan dan di-swipe kanan-kiri, video dilengkapi tombol Play, Pause, dan Stop.\n- Diagram Stabilitas Progres Harian: Dashboard Admin dengan filter Mingguan (7 Hari), Bulanan (30 Hari), dan Semua (Proyek) serta status Stabil/Fluktuatif/Stagnan.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
