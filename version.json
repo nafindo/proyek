@@ -1,8 +1,8 @@
 {
-  "versionCode": 26,
-  "versionName": "1.7.0",
+  "versionCode": 27,
+  "versionName": "1.7.1",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Diagram 3 Garis Progres Ruangan: Grafik penyelesaian harian kini menyajikan 3 garis terpisah untuk Leveling (Hijau), Pasang SPC (Biru), dan Asesoris (Ungu) berbasis jumlah kamar/ruangan nyata.\n- Rincian Ruangan & Validasi Data: Mengeliminasi data volume keliru, kini menghitung jumlah kamar riil per hari lengkap dengan daftar nomor kamar.\n- Tabel Rincian Harian: Tabel breakdown lengkap per hari untuk Leveling, SPC, Asesoris, total kamar, dan pekerja hadir.",
+  "changelog": "- Proteksi Ketat Pekerja Dilepas dari Proyek: Pekerja yang telah dilepas oleh Admin tidak dapat lagi login, mengakses tugas/laporan, atau melakukan absensi masuk/pulang/lembur.\n- Auto-Nonaktif Status & Alarm: Menghilangkan pekerja yang dilepas dari status aktif 'ON' (Bekerja) dan mematikan alarm pengingat absensi seketika.\n- Pemisahan Roster Tim: Roster absensi harian kini murni menampilkan tim pekerja aktif, dengan accordion terpisah untuk pekerja yang dilepas.",
   "fileSizeMb": 12.3,
   "forceUpdate": false
 }
