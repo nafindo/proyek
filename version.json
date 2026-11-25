@@ -1,8 +1,8 @@
 {
-  "versionCode": 27,
-  "versionName": "1.7.1",
+  "versionCode": 28,
+  "versionName": "1.7.2",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Proteksi Ketat Pekerja Dilepas dari Proyek: Pekerja yang telah dilepas oleh Admin tidak dapat lagi login, mengakses tugas/laporan, atau melakukan absensi masuk/pulang/lembur.\n- Auto-Nonaktif Status & Alarm: Menghilangkan pekerja yang dilepas dari status aktif 'ON' (Bekerja) dan mematikan alarm pengingat absensi seketika.\n- Pemisahan Roster Tim: Roster absensi harian kini murni menampilkan tim pekerja aktif, dengan accordion terpisah untuk pekerja yang dilepas.",
-  "fileSizeMb": 12.3,
+  "changelog": "- Aliran Kas Dasbor Lengkap: Menampilkan 3 kartu seimbang dan menonjol untuk Uang Masuk, Uang Keluar, dan Sisa Kas.\n- Estimasi Laba/Rugi Presisi Dinamis: Menghitung burn rate harian dari tarif aktual masing-masing tukang aktif, dilengkapi simulasi dual skenario (Tanpa Lembur vs Dengan Lembur).\n- Sinkronisasi Sisa Hutang & Upah: Meluruskan kalkulasi Upah Terbayar, Sisa Hutang, dan Kasbon Berjalan agar matematis dan akurat.\n- Menu Keuangan Terpadu: Distribusi pengeluaran presisi (Bahan, Upah, Kasbon Menggantung, Operasional) & Rincian Arus Kas (Uang Masuk & Keluar) dengan filter.",
+  "fileSizeMb": 12.4,
   "forceUpdate": false
 }
