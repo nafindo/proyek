@@ -1,8 +1,8 @@
 {
-  "versionCode": 28,
-  "versionName": "1.7.2",
+  "versionCode": 29,
+  "versionName": "1.7.3",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Aliran Kas Dasbor Lengkap: Menampilkan 3 kartu seimbang dan menonjol untuk Uang Masuk, Uang Keluar, dan Sisa Kas.\n- Estimasi Laba/Rugi Presisi Dinamis: Menghitung burn rate harian dari tarif aktual masing-masing tukang aktif, dilengkapi simulasi dual skenario (Tanpa Lembur vs Dengan Lembur).\n- Sinkronisasi Sisa Hutang & Upah: Meluruskan kalkulasi Upah Terbayar, Sisa Hutang, dan Kasbon Berjalan agar matematis dan akurat.\n- Menu Keuangan Terpadu: Distribusi pengeluaran presisi (Bahan, Upah, Kasbon Menggantung, Operasional) & Rincian Arus Kas (Uang Masuk & Keluar) dengan filter.",
+  "changelog": "- Pemisahan Laman Super Cepat: Data dipecah per halaman (Ringkasan, Presensi, Tugas, Keuangan, Media) sehingga aplikasi memuat instan < 1 detik.\n- Offline Auto-Retry & Anti-Duplikat: Sinkronisasi otomatis di latar belakang saat online; popup peringatan jika absen/kasbon sebelumnya masih tertunda di antrean HP.\n- Format Presisi Jam Kerja Slip Gaji: Format resmi jam masuk - jam pulang(xjam) +lbr jam masuk lembur-jam pulang lembur(xjam).\n- Bagikan Slip Gaji via WhatsApp (JPG/PDF): Tombol share WhatsApp menghasilkan gambar jernih (JPG) atau dokumen resmi (PDF) persis dengan tampilan layar APK.",
   "fileSizeMb": 12.4,
   "forceUpdate": false
 }
