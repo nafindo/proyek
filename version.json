@@ -1,8 +1,8 @@
 {
-  "versionCode": 31,
-  "versionName": "1.7.5",
+  "versionCode": 32,
+  "versionName": "1.7.6",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Pembenahan Sisa Hutang Upah Riil: Hanya menghitung periode aktif berjalan belum terbayar (15 Nov s/d sekarang) untuk Dani, Jaya, Pratama, Roi, dan Rehan (Total Rp 4.059.842). Sugi tercatat Lunas (Rp 0).\n- Penghapusan Banner Kasbon Menggantung: Menghilangkan banner saldo menggantung 10jt yang keliru dan membingungkan.\n- Presisi Distribusi Realisasi Pengeluaran: Menampilkan pengeluaran riil material, upah kerja, dan kasbon aktif tanpa pembengkakan semu.",
+  "changelog": "- Perbaikan Gagal Muat Proyek Utama: Perlindungan menyeluruh dari error interface method saat membaca cache lokal proyek, layar langsung terbuka mulus.\n- Dukungan WhatsApp Bisnis & WA Reguler: Berbagi slip gaji (JPG, PDF, Teks) kini mendukung penuh WhatsApp Business dan WhatsApp Reguler dengan pemilih aplikasi otomatis.\n- Pembenahan Sisa Hutang Upah Riil: Hanya menghitung periode berjalan 15 Nov s/d sekarang (Total Rp 4.059.842) dan menghapus banner kasbon menggantung.",
   "fileSizeMb": 12.4,
   "forceUpdate": false
 }
