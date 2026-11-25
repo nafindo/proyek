@@ -1,8 +1,8 @@
 {
-  "versionCode": 30,
-  "versionName": "1.7.4",
+  "versionCode": 31,
+  "versionName": "1.7.5",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Histori Foto Ringan & Anti-Crash: Memuat batch awal 25 laporan terbaru secara instan (<300ms) dan hemat RAM HP 95% dengan thumbnail downsampling.\n- Paginasi Otomatis (Infinite Scroll): Scroll ke bawah untuk memuat histori foto/video lebih lama tanpa lag atau freeze.\n- Pengelompokan Super Cepat: Optimasi algoritma penggabungan foto/video dari O(N^2) ke O(N) instan 5ms.\n- Pemisahan Laman & Auto-Retry Lengkap: Laman termodularisasi, format jam kerja lembur presisi, dan fitur share WhatsApp resmi JPG/PDF.",
+  "changelog": "- Pembenahan Sisa Hutang Upah Riil: Hanya menghitung periode aktif berjalan belum terbayar (15 Nov s/d sekarang) untuk Dani, Jaya, Pratama, Roi, dan Rehan (Total Rp 4.059.842). Sugi tercatat Lunas (Rp 0).\n- Penghapusan Banner Kasbon Menggantung: Menghilangkan banner saldo menggantung 10jt yang keliru dan membingungkan.\n- Presisi Distribusi Realisasi Pengeluaran: Menampilkan pengeluaran riil material, upah kerja, dan kasbon aktif tanpa pembengkakan semu.",
   "fileSizeMb": 12.4,
   "forceUpdate": false
 }
