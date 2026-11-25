@@ -1,8 +1,8 @@
 {
-  "versionCode": 34,
-  "versionName": "1.7.8",
+  "versionCode": 35,
+  "versionName": "1.7.9",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Perbaikan Fatal Startup NPE & Sinkronisasi Data: Memperbaiki inisialisasi urutan StateFlow offline pending count & tab metrics yang memicu toast gagal muat pada peluncuran awal.\n- Fallback Cerdas Tab Ringkasan & Presensi: Menjamin daftar mandor/tukang dan progres fisik tetap tampil seketika meskipun jaringan lambat atau backend Google Apps Script timeout.\n- Kompatibilitas Multi-Device Stabil: Performa antarmuka instan pada pembukaan pertama dan setelah hapus cache data aplikasi.",
-  "fileSizeMb": 12.4,
+  "changelog": "- Integrasi Penuh WhatsApp Business: Tombol bagikan slip gaji langsung mendukung WhatsApp Business dengan izin berkas (ClipData URI) untuk format gambar JPG jernih dan dokumen PDF resmi.\n- Tampilan Anggaran & Pekerja Instan: Plafon Anggaran Rp 100 Juta, Target Hari, dan Daftar 8 Pekerja tampil kilat dalam 2-3 detik saat buka aplikasi atau setelah hapus data APK.\n- Fallback Mandiri Multi-Tab: Tab Presensi dan Keuangan otomatis memuat data presensi riil dan kasbon proyek secara mandiri tanpa menunggu rekap backend.",
+  "fileSizeMb": 12.5,
   "forceUpdate": false
 }
