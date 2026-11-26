@@ -1,8 +1,8 @@
 {
-  "versionCode": 35,
-  "versionName": "1.7.9",
+  "versionCode": 36,
+  "versionName": "1.8.0",
   "apkUrl": "https://raw.githubusercontent.com/nafindo/proyek/main/Nafindo_Latest.apk",
-  "changelog": "- Integrasi Penuh WhatsApp Business: Tombol bagikan slip gaji langsung mendukung WhatsApp Business dengan izin berkas (ClipData URI) untuk format gambar JPG jernih dan dokumen PDF resmi.\n- Tampilan Anggaran & Pekerja Instan: Plafon Anggaran Rp 100 Juta, Target Hari, dan Daftar 8 Pekerja tampil kilat dalam 2-3 detik saat buka aplikasi atau setelah hapus data APK.\n- Fallback Mandiri Multi-Tab: Tab Presensi dan Keuangan otomatis memuat data presensi riil dan kasbon proyek secara mandiri tanpa menunggu rekap backend.",
+  "changelog": "- Perbaikan Total Sinkronisasi Data & Presensi: Mencegah race condition antar tab agar Total Upah, Plafon Budget, Tugas Selesai, Tukang Aktif, dan Keuangan tampil utuh termasuk setelah hapus data APK.\n- Filter Sheet Sistem & Anti Duplikat Request: Menyaring sheet sistem (DENAH_PROYEK, DATA_TIM, DATA_LOG_BONUS) dan mencegah permintaan API ganda saat startup.\n- Perbaikan Tampilan UI & Paginasi: Memperbaiki tombol terpotong di Keuangan & Denah, jarak header tabel Slip Gaji, serta kelancaran scroll muat ulang histori foto.",
   "fileSizeMb": 12.5,
   "forceUpdate": false
 }
